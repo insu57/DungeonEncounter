@@ -1037,13 +1037,32 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9500000, guid: 13a16f60da4245c45a865b2136ba272c, type: 3}
+      propertyPath: m_Avatar
+      value: 
+      objectReference: {fileID: 9000000, guid: dd6ec75974b69a3409711f8110698bbb, type: 3}
+    - target: {fileID: 9500000, guid: 13a16f60da4245c45a865b2136ba272c, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 3d3b4ef47541e974aa349ea82939ba99, type: 2}
+    - target: {fileID: 9500000, guid: 13a16f60da4245c45a865b2136ba272c, type: 3}
+      propertyPath: m_WarningMessage
+      value: "\nBinding warning: Some generic clip(s) animate transforms that are
+        already bound by a Humanoid avatar. These transforms can only be changed
+        by Humanoid clips.\n\tTransform 'Character1_Reference'\n\tTransform 'Character1_Reference'\n\tTransform
+        'Character1_Reference'\n\tFrom animation clip 'Standing@loop'"
+      objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 13a16f60da4245c45a865b2136ba272c, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11400002, guid: 13a16f60da4245c45a865b2136ba272c, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400004, guid: 13a16f60da4245c45a865b2136ba272c, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11400084, guid: 13a16f60da4245c45a865b2136ba272c, type: 3}
       propertyPath: m_Enabled
@@ -1114,6 +1133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f69262100badc88439649e2026b4726f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 0}
 --- !u!114 &1638474140
 MonoBehaviour:
   m_ObjectHideFlags: 0

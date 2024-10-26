@@ -7,7 +7,6 @@ using UnityEngine.SceneManagement;
 public class GameManager : Singleton<GameManager> //½Ì±ÛÅæ °ÔÀÓ ¸Å´ÏÀú 
 {
     public GameObject PanelPause;
-    
     bool GamePaused;
 
     void Update()
