@@ -10,7 +10,8 @@ namespace PlayerAnimState
 
         public override void Enter(PlayerManager player)
         {
-            
+            player.animator.Play("Idle");
+            //Debug.Log("idle");
         }
 
         public override void Execute(PlayerManager player)
@@ -28,7 +29,7 @@ namespace PlayerAnimState
     {
         public override void Enter(PlayerManager player)
         {
-            //
+            player.animator.Play("Run");
         }
 
         public override void Execute(PlayerManager player)
