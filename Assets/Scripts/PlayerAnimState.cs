@@ -11,12 +11,14 @@ namespace PlayerAnimState
         public override void Enter(PlayerManager player)
         {
             player.animator.Play("Idle");
-            //Debug.Log("idle");
         }
 
         public override void Execute(PlayerManager player)
         {
-            
+            if (player.IsMove)
+            {
+                player.ChangeState(PlayerStates.Run);
+            }
         }
 
         public override void Exit(PlayerManager player)
@@ -34,7 +36,10 @@ namespace PlayerAnimState
 
         public override void Execute(PlayerManager player)
         {
-
+            if (!player.IsMove)
+            {
+                player.ChangeState(PlayerStates.Idle);
+            }
         }
 
         public override void Exit(PlayerManager player)
@@ -47,17 +52,25 @@ namespace PlayerAnimState
     {
         public override void Enter(PlayerManager player)
         {
-            //
+            player.animator.Play("Attack");
+            Debug.Log("Enter Attack");
         }
 
         public override void Execute(PlayerManager player)
         {
-
+            //Attack 애니메이션 종료시?? 
+            if (player.animator.GetCurrentAnimatorStateInfo(0).IsName("Attack") 
+                &&  player.animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
+                
+            {
+                player.IsAttack = false;
+                player.ChangeState(PlayerStates.Idle); 
+            }
         }
 
         public override void Exit(PlayerManager player)
         {
-
+            Debug.Log("Exit Attack");
         }
     }
 
@@ -96,4 +109,24 @@ namespace PlayerAnimState
 
         }
     }
+
+    public class StateGlobal : State<PlayerManager>
+    {
+        public override void Enter(PlayerManager player)
+        {
+            
+        }
+        public override void Execute(PlayerManager player)
+        {
+            if (player.IsAttack && player.CurrentState != PlayerStates.Attack)
+            {
+                player.ChangeState(PlayerStates.Attack);
+            }
+        }
+        public override void Exit(PlayerManager player)
+        {
+
+        }
+    }
+
 }
