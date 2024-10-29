@@ -16,7 +16,7 @@ public class PlayerManager : MonoBehaviour //진행중 상태머신?????? 애니메이션->S
     private CharacterMove charMove;
     private float hAxis; //x축
     private float vAxis; //z축
-    //private Vector3 moveVec;
+    //private Vector3 moveVec; //animState에 넘기기???
     public Animator animator;
 
     private State<PlayerManager>[] states;
@@ -60,12 +60,14 @@ public class PlayerManager : MonoBehaviour //진행중 상태머신?????? 애니메이션->S
 
     public void ChangeState(PlayerStates newState)
     {
+        CurrentState = newState; //변경된 상태 저장
         stateMachine.ChangeState(states[(int)newState]);
     }
     public void RevertToPreviousState()
     {
         stateMachine.RevertToPreviousState();
     }
+
 
     void Awake()
     {
@@ -88,6 +90,7 @@ public class PlayerManager : MonoBehaviour //진행중 상태머신?????? 애니메이션->S
         energy = 100;
         dodgeGauge = 100;
         isMove = false;
+        isAttack = false;
     }
 
     private void Start()
@@ -105,10 +108,11 @@ public class PlayerManager : MonoBehaviour //진행중 상태머신?????? 애니메이션->S
         vAxis = Input.GetAxisRaw("Vertical");
         moveVec = new Vector3(hAxis, 0, vAxis).normalized;
 
-        if (!isAttack)//공격등 행동시 이동x 진행중
+        if (!isAttack)//공격등 행동시 이동x 진행중... 공격할때는 이동x 근데 이동하다 공격하면 미끄러지며 공격...
         {
             charMove.MoveTo(moveVec);
             transform.LookAt(transform.position + moveVec); //캐릭터 방향
+
             if (moveVec != Vector3.zero) //이동 체크
             {
                 isMove = true;

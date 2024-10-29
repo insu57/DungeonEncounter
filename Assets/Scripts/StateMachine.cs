@@ -26,7 +26,7 @@ public  class StateMachine<T> where T : class //상태머신 제네릭
             globalState.Execute(ownerCharacter);
         }
 
-        if(currentState!= null)
+        if(currentState != null)
         {
             currentState.Execute(ownerCharacter);
         }
