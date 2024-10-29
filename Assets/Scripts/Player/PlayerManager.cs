@@ -4,25 +4,25 @@ using UnityEngine;
 
 public enum PlayerStates { Idle = 0, Run, Attack, Dodge, UseItem, Global }
 
-public class PlayerManager : MonoBehaviour //진행중 상태머신?????? 애니메이션->StateMachine 플레이어 Move 분리????
+public class PlayerManager : MonoBehaviour 
 {
     private int health;
     private int energy;
     private int dodgeGauge;
     private bool isMove;
     private bool isAttack;
-    private Vector3 moveVec;
 
+    private Vector3 moveVec;
     private CharacterMove charMove;
     private float hAxis; //x축
     private float vAxis; //z축
-    //private Vector3 moveVec; //animState에 넘기기???
-    public Animator animator;
+    private Animator animator;
 
     private State<PlayerManager>[] states;
     private StateMachine<PlayerManager> stateMachine;
 
     public PlayerStates CurrentState { private set; get; }
+    public Animator PlayerAnimator { private set; get; }
 
     public int Health
     {
@@ -51,12 +51,6 @@ public class PlayerManager : MonoBehaviour //진행중 상태머신?????? 애니메이션->S
         get => isAttack;
     }
 
-    public Vector3 MoveVec
-    {
-        set => moveVec = value;
-        get => moveVec;
-    }
-
 
     public void ChangeState(PlayerStates newState)
     {
@@ -73,6 +67,7 @@ public class PlayerManager : MonoBehaviour //진행중 상태머신?????? 애니메이션->S
     {
         charMove = GetComponent<CharacterMove>();
         animator = GetComponentInChildren<Animator>();
+        PlayerAnimator = animator;
 
         states = new State<PlayerManager>[6];
         states[(int)PlayerStates.Idle] = new PlayerAnimState.Idle();
@@ -108,9 +103,15 @@ public class PlayerManager : MonoBehaviour //진행중 상태머신?????? 애니메이션->S
         vAxis = Input.GetAxisRaw("Vertical");
         moveVec = new Vector3(hAxis, 0, vAxis).normalized;
 
-        if (!isAttack)//공격등 행동시 이동x 진행중... 공격할때는 이동x 근데 이동하다 공격하면 미끄러지며 공격...
+        if (!isAttack) //공격 등 행동 시 이동제한
         {
-            charMove.MoveTo(moveVec);
+            if (Input.GetMouseButtonDown(0)) //마우스좌클릭 시 공격
+            {
+                isAttack = true;
+                moveVec = Vector3.zero;
+            }
+
+            charMove.MoveTo(moveVec); //키입력 기준으로 이동
             transform.LookAt(transform.position + moveVec); //캐릭터 방향
 
             if (moveVec != Vector3.zero) //이동 체크
@@ -120,14 +121,7 @@ public class PlayerManager : MonoBehaviour //진행중 상태머신?????? 애니메이션->S
             else
             {
                 isMove = false;
-            }
-
-            if (Input.GetMouseButtonDown(0))
-            {
-                isAttack = true;
-            }
+            }   
         }
-
-        
     }
 }

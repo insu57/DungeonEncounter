@@ -10,7 +10,7 @@ namespace PlayerAnimState
 
         public override void Enter(PlayerManager player)
         {
-            player.animator.Play("Idle");
+            player.PlayerAnimator.Play("Idle");
         }
 
         public override void Execute(PlayerManager player)
@@ -31,8 +31,7 @@ namespace PlayerAnimState
     {
         public override void Enter(PlayerManager player)
         {
-            player.animator.Play("Run");
-            Debug.Log("Run....current state " + player.CurrentState);
+            player.PlayerAnimator.Play("Run");
         }
 
         public override void Execute(PlayerManager player)
@@ -53,17 +52,16 @@ namespace PlayerAnimState
     {
         public override void Enter(PlayerManager player)
         {
-            player.animator.Play("Attack");
+            player.PlayerAnimator.Play("Attack");
         }
 
         public override void Execute(PlayerManager player)
         {
-            if (player.animator.GetCurrentAnimatorStateInfo(0).IsName("Attack") 
-                &&  player.animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
-                
+            if (player.PlayerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Attack")  
+                &&  player.PlayerAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
+            //공격 애니메이션 끝나면 상태종료 Idle로 돌아감
             {
                 player.IsAttack = false;
-                Debug.Log("IsAttack false");
                 player.ChangeState(PlayerStates.Idle); 
             }
         }
