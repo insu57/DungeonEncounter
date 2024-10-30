@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameManager : Singleton<GameManager> //½Ì±ÛÅæ °ÔÀÓ ¸Å´ÏÀú 
+public class GameManager : Singleton<GameManager> //Singleton Game Manager ì‹±ê¸€í†¤ ê²Œìž„ ë§¤ë‹ˆì €
 {
     public GameObject PanelPause;
     bool GamePaused;
@@ -12,7 +12,7 @@ public class GameManager : Singleton<GameManager> //½Ì±ÛÅæ °ÔÀÓ ¸Å´ÏÀú
     void Update()
     {
         //if(SceneManager.)
-        if (Input.GetButtonDown("Cancel")) //ESC ¼³Á¤Ã¢. 
+        if (Input.GetButtonDown("Cancel")) //ESC->Setting Window ì„¤ì •ì°½
         {
             if(!GamePaused) 
             {

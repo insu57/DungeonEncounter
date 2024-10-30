@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public  class StateMachine<T> where T : class //»óÅÂ¸Ó½Å Á¦³×¸¯
+public  class StateMachine<T> where T : class //StateMachine Generic ìƒíƒœë¨¸ì‹  ì œë„¤ë¦­
 {
     private T ownerCharacter;
     private State<T> currentState;
@@ -35,18 +35,18 @@ public  class StateMachine<T> where T : class //»óÅÂ¸Ó½Å Á¦³×¸¯
 
     public void ChangeState(State<T> newState)
     {
-        if (newState == null) return; //»õ·Î¿î »óÅÂ°¡ ¾øÀ¸¸é ±×´ë·Î
+        if (newState == null) return; //No new state, leave it  ìƒˆë¡œìš´ ìƒíƒœê°€ ì—†ìœ¼ë©´ ê·¸ëŒ€ë¡œ
 
-        if(currentState != null) //ÇöÀç »óÅÂ Exit
+        if(currentState != null) //CurrentState í˜„ì¬ìƒíƒœ Exit
         {
-            previousState = currentState; //ÀÌÀü»óÅÂ¿¡ ÀúÀå
+            previousState = currentState; //PreviousState save ì´ì „ìƒíƒœ ì €ì¥
 
             currentState.Exit(ownerCharacter);
         }
 
         currentState = newState;
         currentState.Enter(ownerCharacter);
-        //»õ·Î¿î »óÅÂ·Î Enter
+        //New State Enter ìƒˆë¡œìš´ ìƒíƒœ Enter
     }
 
     public void SetGlobalState(State<T> newState)

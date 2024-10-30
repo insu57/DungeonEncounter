@@ -14,8 +14,8 @@ public class PlayerManager : MonoBehaviour
 
     private Vector3 moveVec;
     private CharacterMove charMove;
-    private float hAxis; //xÃà
-    private float vAxis; //zÃà
+    private float hAxis; //x axis xì¶•
+    private float vAxis; //z axis zì¶•
     private Animator animator;
 
     private State<PlayerManager>[] states;
@@ -40,21 +40,12 @@ public class PlayerManager : MonoBehaviour
         get => dodgeGauge;
     }
 
-    public  bool IsMove
-    {
-        set => isMove = value;
-        get => isMove;
-    }
-    public bool IsAttack
-    {
-        set => isAttack = value;
-        get => isAttack;
-    }
-
+    public  bool IsMove { get; set; }
+    public bool IsAttack { get; set; }
 
     public void ChangeState(PlayerStates newState)
     {
-        CurrentState = newState; //º¯°æµÈ »óÅÂ ÀúÀå
+        CurrentState = newState;
         stateMachine.ChangeState(states[(int)newState]);
     }
     public void RevertToPreviousState()
@@ -78,7 +69,7 @@ public class PlayerManager : MonoBehaviour
         states[(int)PlayerStates.Global] =  new PlayerAnimState.StateGlobal();
 
         stateMachine = new StateMachine<PlayerManager>();
-        stateMachine.Setup(this, states[(int)PlayerStates.Idle]); //ÃÊ±â ¾Ö´Ï¸ŞÀÌ¼Ç »óÅÂ Idle
+        stateMachine.Setup(this, states[(int)PlayerStates.Idle]); //Beginning Animation Idle ì´ˆê¸° ì• ë‹ˆë©”ì´ì…˜ Idle
         stateMachine.SetGlobalState(states[(int)PlayerStates.Global]);
 
         health = 100;
@@ -98,30 +89,23 @@ public class PlayerManager : MonoBehaviour
     {
         stateMachine.Execute();
 
-        //x,zÃà ¹æÇâ ÀÌµ¿
+        //x,z axis move
         hAxis = Input.GetAxisRaw("Horizontal");
         vAxis = Input.GetAxisRaw("Vertical");
         moveVec = new Vector3(hAxis, 0, vAxis).normalized;
 
-        if (!isAttack) //°ø°İ µî Çàµ¿ ½Ã ÀÌµ¿Á¦ÇÑ
+        if (!isAttack) //Take Action(such as Attack) movement restriction ê³µê²© ë“± í–‰ë™ ì‹œ ì´ë™ ì œí•œ 
         {
-            if (Input.GetMouseButtonDown(0)) //¸¶¿ì½ºÁÂÅ¬¸¯ ½Ã °ø°İ
+            if (Input.GetMouseButtonDown(0)) //Mouse left click Attack ë§ˆìš°ìŠ¤ ì¢Œí´ë¦­ ê³µê²©
             {
                 isAttack = true;
                 moveVec = Vector3.zero;
             }
 
-            charMove.MoveTo(moveVec); //Å°ÀÔ·Â ±âÁØÀ¸·Î ÀÌµ¿
-            transform.LookAt(transform.position + moveVec); //Ä³¸¯ÅÍ ¹æÇâ
+            charMove.MoveTo(moveVec); //WASD KeyInput Move í‚¤ì…ë ¥ ê¸°ì¤€ ì´ë™
+            transform.LookAt(transform.position + moveVec); //Player Direction í”Œë ˆì´ì–´ ë°©í–¥
 
-            if (moveVec != Vector3.zero) //ÀÌµ¿ Ã¼Å©
-            {
-                isMove = true;
-            }
-            else
-            {
-                isMove = false;
-            }   
+            isMove = moveVec != Vector3.zero; //Movement Check ì´ë™ ì²´í¬
         }
     }
 }

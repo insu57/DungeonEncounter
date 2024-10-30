@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Singleton<T> : MonoBehaviour where T: Component //½Ì±ÛÅæ Á¦³×¸¯
+public class Singleton<T> : MonoBehaviour where T: Component //Singleton Generic ì‹±ê¸€í†¤ ì œë„¤ë¦­
 {
     private static T instance;
     public static T Instance

@@ -59,7 +59,7 @@ namespace PlayerAnimState
         {
             if (player.PlayerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Attack")  
                 &&  player.PlayerAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
-            //°ø°İ ¾Ö´Ï¸ŞÀÌ¼Ç ³¡³ª¸é »óÅÂÁ¾·á Idle·Î µ¹¾Æ°¨
+            //Attack Animation End, State return to Idle. ê³µê²© ì• ë‹ˆë©”ì´ì…˜ ì¢…ë£Œ ì‹œ ìƒíƒœì¢…ë£Œ Idleë¡œ ëŒì•„ê°
             {
                 player.IsAttack = false;
                 player.ChangeState(PlayerStates.Idle); 

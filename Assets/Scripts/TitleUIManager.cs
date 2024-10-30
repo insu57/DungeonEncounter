@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -7,43 +8,55 @@ using UnityEngine.UI;
 
 public class TitleUIManager : MonoBehaviour
 {
-    public Button BtnPlay;
-    public Button BtnSetting;
-    public Button BtnExit;
-    public GameObject PlayTab;
-    public Button BtnBack;
-    public Button BtnContinue;
+    //구조 수정
+    private Button _btnPlay;
+    private Button _btnSetting;
+    private Button _btnExit;
+    private GameObject _playTab;
+    private Button _btnBack;
+    private Button _btnContinue;
 
-
-    void Start()
+    private void Awake()
     {
-        BtnPlay.onClick.AddListener(OpenPlayTab);
-        BtnBack.onClick.AddListener(ClosePlayTab);
-        BtnContinue.onClick.AddListener(ChangeMainScene);
+        /* public->private인한 수정...
+        _btnPlay = transform.GetChild(1);
+        _btnSetting = GetComponentInChildren<Button>();
+        _btnExit = GetComponentInChildren<Button>();
+        _playTab = GameObject.Find("PlayTab");
+        _btnBack = GameObject.Find("BackButton");
+        */
+    }
+
+    private void Start()
+    {
+        _btnPlay.onClick.AddListener(OpenPlayTab);
+        _btnBack.onClick.AddListener(ClosePlayTab);
+        _btnContinue.onClick.AddListener(ChangeMainScene);
     }
 
     private void Update()
     {
         if (Input.GetButtonDown("Cancel"))
         {
-            if (PlayTab.activeSelf)
+            if (_playTab.activeSelf)
             {
-                PlayTab.SetActive(false);
+                _playTab.SetActive(false);
             }
         }
     }
 
 
-    void OpenPlayTab()
+    private void OpenPlayTab()
     {
-        PlayTab.SetActive(true);
-    }
-    void ClosePlayTab()
-    {
-        PlayTab.SetActive(false);
+        _playTab.SetActive(true);
     }
 
-    void ChangeMainScene()
+    private void ClosePlayTab()
+    {
+        _playTab.SetActive(false);
+    }
+
+    private void ChangeMainScene()
     {
         SceneManager.LoadScene("MainScene");
     }
