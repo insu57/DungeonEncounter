@@ -8,12 +8,12 @@ public class FollowCamera : MonoBehaviour //Player Follow Camera(Quarter view) í
     public Transform target;
     [SerializeField]
     private Vector3 offset;
-    void Start()
+    private void Start()
     {
         offset = new Vector3(0, 3, -3);
     }
     
-    void Update()
+    private void Update()
     {
         transform.position = target.position + offset;
     }

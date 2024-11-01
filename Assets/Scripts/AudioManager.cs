@@ -2,14 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 
 public class AudioManager : Singleton<AudioManager>
 {
-    public enum BGM {
-        TitleBGM,
-        MainBGM,
-        Stage1BGM
+    //진행중 오디오 매니저 싱글톤...
+    public enum Bgm {
+        TitleBgm,
+        MainBgm,
+        Stage1Bgm
     }  
     public enum Sfx 
     {
@@ -21,8 +23,13 @@ public class AudioManager : Singleton<AudioManager>
     [SerializeField] private AudioClip[] sfxs;
     [SerializeField] private AudioSource audioBgm;
     [SerializeField] private AudioSource audioSfx;
-
-    public void PlayBGM(BGM bgmIdx)
+    
+    [SerializeField] private AudioMixer audioMixer;
+    
+    private float _bgmVolume;
+    private float _sfxVolume;
+    
+    public void PlayBGM(Bgm bgmIdx)
     {
         audioBgm.clip = bgms[(int)bgmIdx];
         audioBgm.Play();
@@ -32,20 +39,16 @@ public class AudioManager : Singleton<AudioManager>
     {
         audioSfx.PlayOneShot(sfxs[(int)sfxIdx]);
     }
+
     public override void Awake()
     {
         base.Awake();
-        GameObject bgmObject = new GameObject("bgmPlayer");
-        bgmObject.transform.parent = transform;
-        audioBgm = bgmObject.AddComponent<AudioSource>();
+        //audioBgm = transform.Find("").GetComponent<AudioSource>();
+        audioSfx = GetComponent<AudioSource>();
     }
-    void Update()
+    private void Start()
     {
-        //if(Scene
-        if (SceneManager.loadedSceneCount == 0)
-        {
-            PlayBGM(BGM.TitleBGM);
-        }
+        //
         
     }
 }

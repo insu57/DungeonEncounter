@@ -40,8 +40,17 @@ public class PlayerManager : MonoBehaviour
         get => dodgeGauge;
     }
 
-    public  bool IsMove { get; set; }
-    public bool IsAttack { get; set; }
+    public bool IsMove
+    {
+        set => isMove = value; 
+        get => isMove;
+    }
+
+    public bool IsAttack
+    {
+        set => isAttack = value;
+        get => isAttack;
+    }
 
     public void ChangeState(PlayerStates newState)
     {
@@ -54,7 +63,7 @@ public class PlayerManager : MonoBehaviour
     }
 
 
-    void Awake()
+    private void Awake()
     {
         charMove = GetComponent<CharacterMove>();
         animator = GetComponentInChildren<Animator>();
@@ -79,13 +88,8 @@ public class PlayerManager : MonoBehaviour
         isAttack = false;
     }
 
-    private void Start()
-    {
-        
-    }
-
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         stateMachine.Execute();
 
@@ -93,7 +97,7 @@ public class PlayerManager : MonoBehaviour
         hAxis = Input.GetAxisRaw("Horizontal");
         vAxis = Input.GetAxisRaw("Vertical");
         moveVec = new Vector3(hAxis, 0, vAxis).normalized;
-
+        
         if (!isAttack) //Take Action(such as Attack) movement restriction 공격 등 행동 시 이동 제한 
         {
             if (Input.GetMouseButtonDown(0)) //Mouse left click Attack 마우스 좌클릭 공격
@@ -107,5 +111,6 @@ public class PlayerManager : MonoBehaviour
 
             isMove = moveVec != Vector3.zero; //Movement Check 이동 체크
         }
+        
     }
 }

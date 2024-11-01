@@ -48,7 +48,7 @@ namespace UnityChan
             {
                 Rect rect1 = new Rect(Screen.width - 120, Screen.height - 40, 100, 30);
                 //GUILayout.Label("Activate Look at IK");
-                ikActive = GUI.Toggle(rect1, ikActive, "Look at Target");
+                ikActive = UnityEngine.GUI.Toggle(rect1, ikActive, "Look at Target");
             }
 		}
 

@@ -3,35 +3,39 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 public class GameManager : Singleton<GameManager> //Singleton Game Manager 싱글톤 게임 매니저
 {
-    public GameObject PanelPause;
-    bool GamePaused;
+    public GameObject panelPause;
+    private bool _gamePaused;
 
-    void Update()
+    public override void Awake()
     {
-        //if(SceneManager.)
-        if (Input.GetButtonDown("Cancel")) //ESC->Setting Window 설정창
+        base.Awake();
+        //
+    }
+    private void Update()
+    {
+        //Debug.Log(SceneManager.sceneCount); //????
+    
+        if (!Input.GetButtonDown("Cancel")) return; //ESC->Setting Window 설정창
+        if(!_gamePaused) 
         {
-            if(!GamePaused) 
-            {
-                GamePaused = true;
-                PanelPause.SetActive(true);
-                Time.timeScale = 0f;
-            }
-            else
-            {
-                PanelPause.SetActive(false);
-                GamePaused = false;
-                Time.timeScale = 1f;
-            }
+            _gamePaused = true;
+            panelPause.SetActive(true);
+            Time.timeScale = 0f;
         }
-        /*
-        if (GamePaused && )
+        else
         {
+            panelPause.SetActive(false);
+            _gamePaused = false;
+            Time.timeScale = 1f;
+        }
+        
 
-        }*/
+
+
 
     }
     

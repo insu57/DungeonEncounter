@@ -57,8 +57,8 @@ namespace PlayerAnimState
 
         public override void Execute(PlayerManager player)
         {
-            if (player.PlayerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Attack")  
-                &&  player.PlayerAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
+            if (player.PlayerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Attack")  // 공격 애니메이션 체크
+                &&  player.PlayerAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f) //애니메이션 종료 체크
             //Attack Animation End, State return to Idle. 공격 애니메이션 종료 시 상태종료 Idle로 돌아감
             {
                 player.IsAttack = false;
