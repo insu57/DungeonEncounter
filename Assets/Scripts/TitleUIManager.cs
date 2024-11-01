@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using NUnit.Framework.Constraints;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -38,6 +39,7 @@ public class TitleUIManager : MonoBehaviour
         //PlayTab
         _btnBack.onClick.AddListener(ClosePlayTab);
         _btnContinue.onClick.AddListener(ChangeMainScene);
+        AudioManager.Instance.PlayBGM(AudioManager.Bgm.TitleBgm);
     }
 
     private void Update()
@@ -67,6 +69,7 @@ public class TitleUIManager : MonoBehaviour
     private void ChangeMainScene()
     {
         SceneManager.LoadScene("MainScene");
+        AudioManager.Instance.PlayBGM(AudioManager.Bgm.MainBgm);
     }
 
     private void GameQuit() //나중에 진짜 게임 종료로 수정

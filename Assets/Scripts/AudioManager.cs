@@ -10,8 +10,7 @@ public class AudioManager : Singleton<AudioManager>
     //진행중 오디오 매니저 싱글톤...
     public enum Bgm {
         TitleBgm,
-        MainBgm,
-        Stage1Bgm
+        MainBgm
     }  
     public enum Sfx 
     {
@@ -21,8 +20,8 @@ public class AudioManager : Singleton<AudioManager>
     }
     [SerializeField] private AudioClip[] bgms;
     [SerializeField] private AudioClip[] sfxs;
-    [SerializeField] private AudioSource audioBgm;
-    [SerializeField] private AudioSource audioSfx;
+    private AudioSource _audioBgm;
+    private AudioSource _audioSfx;
     
     [SerializeField] private AudioMixer audioMixer;
     
@@ -31,24 +30,19 @@ public class AudioManager : Singleton<AudioManager>
     
     public void PlayBGM(Bgm bgmIdx)
     {
-        audioBgm.clip = bgms[(int)bgmIdx];
-        audioBgm.Play();
+        _audioBgm.clip = bgms[(int)bgmIdx];
+        _audioBgm.Play();
     }
 
     public void PlaySfx(Sfx sfxIdx)
     {
-        audioSfx.PlayOneShot(sfxs[(int)sfxIdx]);
+        _audioSfx.PlayOneShot(sfxs[(int)sfxIdx]);
     }
 
     public override void Awake()
     {
         base.Awake();
-        //audioBgm = transform.Find("").GetComponent<AudioSource>();
-        audioSfx = GetComponent<AudioSource>();
-    }
-    private void Start()
-    {
-        //
-        
+        _audioBgm = transform.Find("AudioBGM").GetComponent<AudioSource>();
+        _audioSfx = transform.Find("AudioSfx").GetComponent<AudioSource>();
     }
 }
