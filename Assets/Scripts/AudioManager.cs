@@ -16,10 +16,18 @@ public class AudioManager : Singleton<AudioManager>
     {
         ButtonSfx,
         AttackSfx,
-        RunSfx
+        RunSfx,
+        AttackVoice
+    }
+    
+    public enum Voice
+    {  
+        AttackVoice,
+        DamagedVoice,
     }
     [SerializeField] private AudioClip[] bgms;
     [SerializeField] private AudioClip[] sfxs;
+   
     private AudioSource _audioBgm;
     private AudioSource _audioSfx;
     

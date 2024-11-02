@@ -4,19 +4,21 @@ using UnityEngine;
 
 public enum PlayerStates { Idle = 0, Run, Attack, Dodge, UseItem, Global }
 
-public class PlayerManager : MonoBehaviour 
+public class PlayerManager : MonoBehaviour
 {
     private int health;
     private int energy;
     private int dodgeGauge;
     private bool isMove;
     private bool isAttack;
-
+    private float moveSpeed;
     private Vector3 moveVec;
-    private CharacterMove charMove;
     private float hAxis; //x axis x축
     private float vAxis; //z axis z축
     private Animator animator;
+    private CharacterController _characterController;
+    private Camera _mainCamera;
+    private Vector3 _lookVec;
 
     private State<PlayerManager>[] states;
     private StateMachine<PlayerManager> stateMachine;
@@ -65,10 +67,11 @@ public class PlayerManager : MonoBehaviour
 
     private void Awake()
     {
-        charMove = GetComponent<CharacterMove>();
         animator = GetComponentInChildren<Animator>();
         PlayerAnimator = animator;
-
+        _characterController = GetComponent<CharacterController>();
+        _mainCamera = Camera.main;
+        
         states = new State<PlayerManager>[6];
         states[(int)PlayerStates.Idle] = new PlayerAnimState.Idle();
         states[(int)PlayerStates.Run] = new PlayerAnimState.Run();
@@ -86,29 +89,42 @@ public class PlayerManager : MonoBehaviour
         dodgeGauge = 100;
         isMove = false;
         isAttack = false;
+        moveSpeed = 5f;
+        
     }
 
     // Update is called once per frame
     private void Update()
     {
         stateMachine.Execute();
-
         //x,z axis move
         hAxis = Input.GetAxisRaw("Horizontal");
         vAxis = Input.GetAxisRaw("Vertical");
         moveVec = new Vector3(hAxis, 0, vAxis).normalized;
         
+        //_lookVec = _mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 4));
+        //원거리 플레이어 캐릭터 회전용... 마우스 기준 회전 (수정필요...회전 부드럽고 빠르게)
+       
         if (!isAttack) //Take Action(such as Attack) movement restriction 공격 등 행동 시 이동 제한 
         {
             if (Input.GetMouseButtonDown(0)) //Mouse left click Attack 마우스 좌클릭 공격
             {
                 isAttack = true;
-                moveVec = Vector3.zero;
+                moveVec = Vector3.zero; //공격 시 정지
+                AudioManager.Instance.PlaySfx(AudioManager.Sfx.AttackSfx); //Sfx Play
+                AudioManager.Instance.PlaySfx(AudioManager.Sfx.AttackVoice);
             }
 
-            charMove.MoveTo(moveVec); //WASD KeyInput Move 키입력 기준 이동
+            _characterController.Move(moveVec * (moveSpeed * Time.deltaTime)); //Player Move 이동
             transform.LookAt(transform.position + moveVec); //Player Direction 플레이어 방향
-
+            //부드러운 회전 수정필요... 하단처럼 Quaternion 이용
+            
+            /* 원거리 플레이어 회전... 마우스기준 회전
+            _lookVec -= transform.position;
+            _lookVec.y = 0;
+            Quaternion newRotation = Quaternion.LookRotation(_lookVec, Vector3.up);
+            transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, 8f * Time.deltaTime);
+            */
             isMove = moveVec != Vector3.zero; //Movement Check 이동 체크
         }
         

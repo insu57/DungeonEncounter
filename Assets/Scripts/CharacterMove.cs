@@ -2,23 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterMove : MonoBehaviour
+public abstract class CharacterMove : MonoBehaviour //상속?? 일단 남기기 Player 내부에 구현... 
 {
-    [SerializeField]
-    float charSpeed = 5.0f;
-    Vector3 charDirection;
-    CharacterController characterController;
+    [SerializeField] private float charSpeed = 5.0f;
+    private Vector3 charDirection;
+    private CharacterController characterController;
 
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Awake()
     {
         characterController = GetComponent<CharacterController>();
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
-        characterController.Move(charDirection*charSpeed*Time.deltaTime);
+        characterController.Move(charDirection * (charSpeed * Time.deltaTime));
     }
     
     public void MoveTo(Vector3 direction)
