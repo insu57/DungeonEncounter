@@ -9,17 +9,21 @@ public class PlayerManager : MonoBehaviour
     private int health;
     private int energy;
     private int dodgeGauge;
-    private bool isMove;
-    private bool isAttack;
+    private bool _isMove;
+    private bool _isAttack;
+    private bool _isDodge;
+    
     private float moveSpeed;
-    private Vector3 moveVec;
+    private Vector3 moveVector;
     private float hAxis; //x axis x축
     private float vAxis; //z axis z축
-    private Animator animator;
+    private Animator _animator;
     private CharacterController _characterController;
     private Camera _mainCamera;
-    private Vector3 _lookVec;
-
+    private Vector3 _lookVector;
+    private Quaternion _lookRotation;
+    private float _dodgeDuration = 2f;
+    
     private State<PlayerManager>[] states;
     private StateMachine<PlayerManager> stateMachine;
 
@@ -44,16 +48,22 @@ public class PlayerManager : MonoBehaviour
 
     public bool IsMove
     {
-        set => isMove = value; 
-        get => isMove;
+        set => _isMove = value; 
+        get => _isMove;
     }
 
     public bool IsAttack
     {
-        set => isAttack = value;
-        get => isAttack;
+        set => _isAttack = value;
+        get => _isAttack;
     }
 
+    public bool IsDodge
+    {
+        set => _isDodge = value;
+        get => _isDodge;
+    }
+    
     public void ChangeState(PlayerStates newState)
     {
         CurrentState = newState;
@@ -67,8 +77,8 @@ public class PlayerManager : MonoBehaviour
 
     private void Awake()
     {
-        animator = GetComponentInChildren<Animator>();
-        PlayerAnimator = animator;
+        _animator = GetComponentInChildren<Animator>();
+        PlayerAnimator = _animator;
         _characterController = GetComponent<CharacterController>();
         _mainCamera = Camera.main;
         
@@ -87,10 +97,13 @@ public class PlayerManager : MonoBehaviour
         health = 100;
         energy = 100;
         dodgeGauge = 100;
-        isMove = false;
-        isAttack = false;
+        _isMove = false;
+        _isAttack = false;
+        _isDodge = false;
         moveSpeed = 5f;
         
+        _lookRotation = Quaternion.LookRotation(Vector3.back);
+        _lookVector = Vector3.back;
     }
 
     // Update is called once per frame
@@ -100,24 +113,37 @@ public class PlayerManager : MonoBehaviour
         //x,z axis move
         hAxis = Input.GetAxisRaw("Horizontal");
         vAxis = Input.GetAxisRaw("Vertical");
-        moveVec = new Vector3(hAxis, 0, vAxis).normalized;
-        
-        //_lookVec = _mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 4));
-        //원거리 플레이어 캐릭터 회전용... 마우스 기준 회전 (수정필요...회전 부드럽고 빠르게)
-       
-        if (!isAttack) //Take Action(such as Attack) movement restriction 공격 등 행동 시 이동 제한 
+        moveVector = new Vector3(hAxis, 0, vAxis).normalized;
+        if (moveVector != Vector3.zero)
         {
+            _lookVector = moveVector;//입력이 없을때 필요한 플레이어 방향 저장
+            AudioManager.Instance.PlayFootstep(AudioManager.Footstep.RockFootstep); //Footstep Play
+        }
+        _lookRotation = Quaternion.LookRotation(_lookVector);
+        
+        if (!_isAttack && !_isDodge) //Take Action...movement restriction 공격 등 행동 시 이동 제한 
+        {
+            //transform.LookAt(transform.position + moveVec); //Player Direction 플레이어 방향
+            transform.rotation = Quaternion.Slerp(transform.rotation, _lookRotation, 8f * Time.deltaTime);
+            // Slerp 부드러운 회전...8f:회전속도
+            
             if (Input.GetMouseButtonDown(0)) //Mouse left click Attack 마우스 좌클릭 공격
             {
-                isAttack = true;
-                moveVec = Vector3.zero; //공격 시 정지
+                _isAttack = true;
+                moveVector = Vector3.zero; //공격 시 정지
                 AudioManager.Instance.PlaySfx(AudioManager.Sfx.AttackSfx); //Sfx Play
                 AudioManager.Instance.PlaySfx(AudioManager.Sfx.AttackVoice);
             }
 
-            _characterController.Move(moveVec * (moveSpeed * Time.deltaTime)); //Player Move 이동
-            transform.LookAt(transform.position + moveVec); //Player Direction 플레이어 방향
-            //부드러운 회전 수정필요... 하단처럼 Quaternion 이용
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                _characterController.Move(_lookVector * (30f * Time.deltaTime));
+                //선형보간Lerp? 코루틴? 1~3초??
+                
+            }
+            
+            
+            _characterController.Move(moveVector * (moveSpeed * Time.deltaTime)); //Player Move 이동
             
             /* 원거리 플레이어 회전... 마우스기준 회전
             _lookVec -= transform.position;
@@ -125,8 +151,15 @@ public class PlayerManager : MonoBehaviour
             Quaternion newRotation = Quaternion.LookRotation(_lookVec, Vector3.up);
             transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, 8f * Time.deltaTime);
             */
-            isMove = moveVec != Vector3.zero; //Movement Check 이동 체크
+            _isMove = moveVector != Vector3.zero; //Movement Check 이동 체크
         }
         
     }
+
+    IEnumerable DodgePosition() //회피 코루틴
+    {
+
+        yield return null;
+    }
+    
 }

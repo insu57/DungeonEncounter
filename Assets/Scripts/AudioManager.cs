@@ -25,11 +25,21 @@ public class AudioManager : Singleton<AudioManager>
         AttackVoice,
         DamagedVoice,
     }
+
+    public enum Footstep
+    {
+        RockFootstep,
+        ForestFootstep
+    }
+    
     [SerializeField] private AudioClip[] bgms;
     [SerializeField] private AudioClip[] sfxs;
-   
+    //[SerializeField] private AudioClip[] voices;
+    [SerializeField] private AudioClip[] footsteps;
+    
     private AudioSource _audioBgm;
     private AudioSource _audioSfx;
+    private AudioSource _audioFootstep;
     
     [SerializeField] private AudioMixer audioMixer;
     
@@ -47,10 +57,19 @@ public class AudioManager : Singleton<AudioManager>
         _audioSfx.PlayOneShot(sfxs[(int)sfxIdx]);
     }
 
+    public void PlayFootstep(Footstep footstepIdx)
+    {
+        if (_audioFootstep.isPlaying) return;
+        _audioFootstep.clip = footsteps[(int)footstepIdx];
+        _audioFootstep.Play();
+
+    }
+    
     public override void Awake()
     {
         base.Awake();
         _audioBgm = transform.Find("AudioBGM").GetComponent<AudioSource>();
         _audioSfx = transform.Find("AudioSfx").GetComponent<AudioSource>();
+        _audioFootstep = transform.Find("AudioFootstep").GetComponent<AudioSource>();
     }
 }
