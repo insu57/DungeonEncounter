@@ -6,9 +6,10 @@ public enum PlayerStates { Idle = 0, Run, Attack, Dodge, UseItem, Global }
 
 public class PlayerManager : MonoBehaviour
 {
-    private int health;
-    private int energy;
-    private int dodgeGauge;
+    private float maxHealth;
+    private float health;
+    private float maxEnergy;
+    private float energy;
     private bool _isMove;
     private bool _isAttack;
     private bool _isDodge;
@@ -22,47 +23,23 @@ public class PlayerManager : MonoBehaviour
     private Camera _mainCamera;
     private Vector3 _lookVector;
     private Quaternion _lookRotation;
-    private float _dodgeDuration = 2f;
+    private float _dodgeDuration;
+    private float _dodgeDistance;
+    private float _dodgeCoolTime;
+    private bool _isDodgeCool;
     
     private State<PlayerManager>[] states;
     private StateMachine<PlayerManager> stateMachine;
 
     public PlayerStates CurrentState { private set; get; }
     public Animator PlayerAnimator { private set; get; }
-
-    public int Health
-    {
-        set => health = Mathf.Max(0, value);
-        get => health;
-    }
-    public int Energy
-    {
-        set => energy = Mathf.Max(0, value);
-        get => energy;
-    }
-    public int DodgeGauge
-    {
-        set => dodgeGauge = Mathf.Max(0, value);
-        get => dodgeGauge;
-    }
-
-    public bool IsMove
-    {
-        set => _isMove = value; 
-        get => _isMove;
-    }
-
-    public bool IsAttack
-    {
-        set => _isAttack = value;
-        get => _isAttack;
-    }
-
-    public bool IsDodge
-    {
-        set => _isDodge = value;
-        get => _isDodge;
-    }
+    public float Health { set => health = Mathf.Max(0, value); get => health; }
+    public float MaxHealth { set => maxHealth = Mathf.Max(0, value); get => maxHealth; } 
+    public float Energy { set => energy = Mathf.Max(0, value); get => energy; }
+    public float MaxEnergy { set => maxEnergy = Mathf.Max(0, value); get => maxEnergy; }
+    public bool IsMove { set => _isMove = value; get => _isMove; }
+    public bool IsAttack { set => _isAttack = value; get => _isAttack; }
+    public bool IsDodge { set => _isDodge = value; get => _isDodge; }
     
     public void ChangeState(PlayerStates newState)
     {
@@ -73,8 +50,7 @@ public class PlayerManager : MonoBehaviour
     {
         stateMachine.RevertToPreviousState();
     }
-
-
+    
     private void Awake()
     {
         _animator = GetComponentInChildren<Animator>();
@@ -94,19 +70,23 @@ public class PlayerManager : MonoBehaviour
         stateMachine.Setup(this, states[(int)PlayerStates.Idle]); //Beginning Animation Idle 초기 애니메이션 Idle
         stateMachine.SetGlobalState(states[(int)PlayerStates.Global]);
 
-        health = 100;
-        energy = 100;
-        dodgeGauge = 100;
+        health = 100f;
+        maxHealth = 100f;
+        energy = 100f;
+        maxEnergy = 100f;
         _isMove = false;
         _isAttack = false;
         _isDodge = false;
         moveSpeed = 5f;
+        _dodgeDuration = 0.3f;
+        _dodgeDistance = 2.5f;
+        _dodgeCoolTime = 0.5f;
+        _isDodgeCool = false;
         
         _lookRotation = Quaternion.LookRotation(Vector3.back);
         _lookVector = Vector3.back;
     }
-
-    // Update is called once per frame
+    
     private void Update()
     {
         stateMachine.Execute();
@@ -121,9 +101,18 @@ public class PlayerManager : MonoBehaviour
         }
         _lookRotation = Quaternion.LookRotation(_lookVector);
         
+        if (!_isDodge && !_isDodgeCool)
+        {
+            if (Input.GetKeyDown(KeyCode.Space)) //회피
+            {
+                Vector3 dodgeTarget = transform.position + _lookVector * _dodgeDistance;
+                StartCoroutine(Dodge(dodgeTarget));
+                
+            }
+        }
+        
         if (!_isAttack && !_isDodge) //Take Action...movement restriction 공격 등 행동 시 이동 제한 
         {
-            //transform.LookAt(transform.position + moveVec); //Player Direction 플레이어 방향
             transform.rotation = Quaternion.Slerp(transform.rotation, _lookRotation, 8f * Time.deltaTime);
             // Slerp 부드러운 회전...8f:회전속도
             
@@ -134,16 +123,9 @@ public class PlayerManager : MonoBehaviour
                 AudioManager.Instance.PlaySfx(AudioManager.Sfx.AttackSfx); //Sfx Play
                 AudioManager.Instance.PlaySfx(AudioManager.Sfx.AttackVoice);
             }
-
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                _characterController.Move(_lookVector * (30f * Time.deltaTime));
-                //선형보간Lerp? 코루틴? 1~3초??
-                
-            }
-            
             
             _characterController.Move(moveVector * (moveSpeed * Time.deltaTime)); //Player Move 이동
+            _isMove = moveVector != Vector3.zero; //Movement Check 이동 체크
             
             /* 원거리 플레이어 회전... 마우스기준 회전
             _lookVec -= transform.position;
@@ -151,15 +133,28 @@ public class PlayerManager : MonoBehaviour
             Quaternion newRotation = Quaternion.LookRotation(_lookVec, Vector3.up);
             transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, 8f * Time.deltaTime);
             */
-            _isMove = moveVector != Vector3.zero; //Movement Check 이동 체크
+            
         }
         
     }
 
-    IEnumerable DodgePosition() //회피 코루틴
+    private IEnumerator Dodge(Vector3 dodgeTarget) //회피 계산
     {
-
-        yield return null;
+        float elapsedTime = 0f;
+        _isDodgeCool = true;
+        
+        while (elapsedTime < _dodgeDuration)
+        {
+            Vector3 newPosition = Vector3.Lerp(transform.position, dodgeTarget, elapsedTime / _dodgeDuration);
+            _characterController.Move(newPosition - transform.position);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        _characterController.Move(dodgeTarget - transform.position);
+        _isDodge = false;
+        
+        yield return new WaitForSeconds(_dodgeCoolTime);
+        _isDodgeCool = false;
     }
     
 }

@@ -76,7 +76,7 @@ namespace PlayerAnimState
     {
         public override void Enter(PlayerManager player)
         {
-            //
+            player.PlayerAnimator.Play("Run");
         }
 
         public override void Execute(PlayerManager player)
@@ -116,11 +116,17 @@ namespace PlayerAnimState
         }
         public override void Execute(PlayerManager player)
         {
-            if (player.CurrentState == PlayerStates.Attack)
+            if (player.CurrentState is PlayerStates.Attack or PlayerStates.Dodge)
             {
                 return;
             }
-            if (player.IsAttack)
+            if (player.IsDodge)
+            {
+                if (player.IsAttack)
+                    player.IsAttack = false;
+                player.ChangeState(PlayerStates.Dodge);
+            }
+            else if (player.IsAttack)
             {
                 player.ChangeState(PlayerStates.Attack);
             }
