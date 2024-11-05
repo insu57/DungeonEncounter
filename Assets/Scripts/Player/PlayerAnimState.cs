@@ -64,6 +64,8 @@ namespace PlayerAnimState
                 player.IsAttack = false;
                 player.ChangeState(PlayerStates.Idle); 
             }
+            //if(player.IsDodge)
+                //player.PlayerAnimator.Stop
         }
 
         public override void Exit(PlayerManager player)
@@ -116,7 +118,25 @@ namespace PlayerAnimState
         }
         public override void Execute(PlayerManager player)
         {
-            if (player.CurrentState is PlayerStates.Attack or PlayerStates.Dodge)
+            /*if (player.CurrentState != PlayerStates.Dodge)
+            {
+                if (player.IsDodge)
+                {
+                    if (player.IsAttack)
+                        player.IsAttack = false;
+                    player.ChangeState(PlayerStates.Dodge);
+                }
+
+                if (player.CurrentState != PlayerStates.Attack)
+                {
+                    if (player.IsAttack)
+                    {
+                        player.ChangeState(PlayerStates.Attack);
+                    }
+                }
+            }*/
+    
+             if (player.CurrentState is PlayerStates.Attack or PlayerStates.Dodge)
             {
                 return;
             }
@@ -130,6 +150,7 @@ namespace PlayerAnimState
             {
                 player.ChangeState(PlayerStates.Attack);
             }
+            
         }
         public override void Exit(PlayerManager player)
         {
