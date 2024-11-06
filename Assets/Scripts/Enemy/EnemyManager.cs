@@ -19,14 +19,16 @@ public class EnemyManager : MonoBehaviour //적
     private float _maxHealth;
     private bool _isMove;
     private bool _isAttack;
+    private float _height;
     
-    public EnemyStates CurrentState { set; get; }
+    public EnemyStates CurrentState { private set; get; }
     public Animator EnemyAnimator { private set; get; }
     public float Health { set => _health = Mathf.Max(0,value); get => _health; }
     public float MaxHealth { set => _maxHealth = Mathf.Max(0,value); get => _maxHealth; }
     public bool IsMove { set => _isMove = value; get => _isMove; }
     public bool IsAttack { set => _isAttack = value ; get => _isAttack; }
-    
+    public float Height => _height;
+
     public void ChangeState(EnemyStates newState)
     {
         CurrentState = newState;
@@ -51,7 +53,9 @@ public class EnemyManager : MonoBehaviour //적
 
         _health = 100f;
         _maxHealth = 100f;
-
+        _height = GetComponent<Collider>().bounds.size.y;
+        _isAttack = false;
+        _isMove = false;
     }
 
     private void Update()
@@ -72,5 +76,6 @@ public class EnemyManager : MonoBehaviour //적
             _isMove = true;
             _isAttack = false;
         }
+        
     }
 }

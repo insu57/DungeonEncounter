@@ -7,7 +7,6 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour //UI제어
 {
     private PlayerManager _playerManager;
-    
     private Canvas _canvasMain;
     private Image _playerHealthBar;
     private Image _playerEnergyBar;
@@ -16,50 +15,52 @@ public class UIManager : MonoBehaviour //UI제어
     private float _playerEnergy;
     private float _playerMaxEnergy;
     
+    private EnemyManager[] _enemyManagers;
     private Canvas _canvasFloat;
-    //적 위에 떠있는 체력바...프리팹사용?
+    private Camera _mainCamera;
     private GameObject _enemyHealthPrefab;
-    private Image _enemyHealthBar;
-    private Image _enemyEnergyBar;
-    private float _enemyHealth;
-    private float _enemyMaxHealth;
-
-    private GameObject[] _enemy;
+    private Dictionary<EnemyManager, EnemyHealthBar> _enemyHealthUI; //적 체력 정보
     
     private void Awake()
     {
-        _playerManager = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>();
+        _playerManager = FindObjectOfType<PlayerManager>();
         _playerHealthBar = transform.Find("Health").GetComponent<Image>();
         _playerEnergyBar = transform.Find("Energy").GetComponent<Image>();
-
-        _enemy = GameObject.FindGameObjectsWithTag("Enemy");
-        _enemyHealthPrefab = Resources.Load<GameObject>("Prefabs/EnemyHealth");
         
+        _enemyHealthPrefab = Resources.Load<GameObject>("Prefabs/EnemyHealth");
+        _canvasFloat = GameObject.Find("CanvasFloat").GetComponent<Canvas>();
+        _mainCamera = Camera.main;
+        _canvasFloat.worldCamera = _mainCamera;
+        
+        _enemyHealthUI = new Dictionary<EnemyManager, EnemyHealthBar>();
+        _enemyManagers = FindObjectsOfType<EnemyManager>();
     }
 
     private void Start()
     {
-        _playerHealth = _playerManager.Health;
-        _playerEnergy = _playerManager.Energy;
-        _playerMaxHealth = _playerManager.MaxHealth;
-        _playerMaxEnergy = _playerManager.MaxEnergy;
-
-        foreach (GameObject e in _enemy)
+        foreach (var enemyManager in _enemyManagers)
         {
-            Vector3 pos = e.GetComponent<Transform>().position;
-            pos.y += 1f;
-            Instantiate(_enemyHealthPrefab, e.transform.position, e.transform.rotation);
+            var enemyHealthUI = Instantiate(_enemyHealthPrefab, _canvasFloat.transform); //적 체력 UI 생성
+            var enemyHealthBar = enemyHealthUI.GetComponent<EnemyHealthBar>();
+            enemyHealthBar.Init(enemyManager);
+            _enemyHealthUI[enemyManager] = enemyHealthBar;
         }
-        
-        
     }
 
     private void Update()
     {
-        _playerHealth = _playerManager.Health;
+        _playerHealth = _playerManager.Health;//플레이어 상태정보
         _playerEnergy = _playerManager.Energy;
+        _playerMaxHealth = _playerManager.MaxHealth;
+        _playerMaxEnergy = _playerManager.MaxEnergy;
+        
         _playerHealthBar.fillAmount = _playerHealth / _playerMaxHealth;
         _playerEnergyBar.fillAmount = _playerEnergy / _playerMaxEnergy;
         //플레이어 정보 표시
+        
+        foreach (var (_, enemyHealthBar) in _enemyHealthUI)
+        {
+            enemyHealthBar.UpdateHealthBar();
+        }
     }
 }
