@@ -4,10 +4,11 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - PlayerWeapon
   - Collide
   - Item
   - Enemy
+  - EnemyAttack
+  - PlayerAttack
   layers:
   - Default
   - TransparentFX

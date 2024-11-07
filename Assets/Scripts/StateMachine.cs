@@ -1,34 +1,31 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 public  class StateMachine<T> where T : class //StateMachine Generic 상태머신 제네릭
 {
-    private T ownerCharacter;
-    private State<T> currentState;
-    private State<T> previousState;
-    private State<T> globalState;
+    private T _ownerCharacter;
+    private State<T> _currentState;
+    private State<T> _previousState;
+    private State<T> _globalState;
 
     public void Setup(T owner, State<T> entryState)
     {
-        ownerCharacter = owner;
-        currentState = null;
-        previousState = null;
-        globalState = null;
+        _ownerCharacter = owner;
+        _currentState = null;
+        _previousState = null;
+        _globalState = null;
 
         ChangeState(entryState);
     }
 
     public void Execute()
     {
-        if(globalState != null)
+        if(_globalState != null)
         {
-            globalState.Execute(ownerCharacter);
+            _globalState.Execute(_ownerCharacter);
         }
 
-        if(currentState != null)
+        if(_currentState != null)
         {
-            currentState.Execute(ownerCharacter);
+            _currentState.Execute(_ownerCharacter);
         }
 
     }
@@ -37,25 +34,25 @@ public  class StateMachine<T> where T : class //StateMachine Generic 상태머�
     {
         if (newState == null) return; //No new state, leave it  새로운 상태가 없으면 그대로
 
-        if(currentState != null) //CurrentState 현재상태 Exit
+        if(_currentState != null) //CurrentState 현재상태 Exit
         {
-            previousState = currentState; //PreviousState save 이전상태 저장
+            _previousState = _currentState; //PreviousState save 이전상태 저장
 
-            currentState.Exit(ownerCharacter);
+            _currentState.Exit(_ownerCharacter);
         }
 
-        currentState = newState;
-        currentState.Enter(ownerCharacter);
+        _currentState = newState;
+        _currentState.Enter(_ownerCharacter);
         //New State Enter 새로운 상태 Enter
     }
 
     public void SetGlobalState(State<T> newState)
     {
-        globalState = newState;
+        _globalState = newState;
     }
 
     public void RevertToPreviousState()
     {
-        ChangeState(previousState);
+        ChangeState(_previousState);
     }
 }

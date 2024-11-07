@@ -1,8 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public enum PlayerStates { Idle = 0, Run, Attack, Dodge, UseItem, Global }
+public enum PlayerStates { Idle = 0, Run, Attack, Dodge, UseItem, Damaged ,Global }
 
 public class PlayerManager : MonoBehaviour
 {
@@ -13,6 +12,8 @@ public class PlayerManager : MonoBehaviour
     private bool _isMove;
     private bool _isAttack;
     private bool _isDodge;
+    private bool _wasDamaged;
+    private bool _isUseItem;
     
     private float _moveSpeed;
     private Vector3 _moveVector;
@@ -60,12 +61,13 @@ public class PlayerManager : MonoBehaviour
         _characterController = GetComponent<CharacterController>();
         _mainCamera = Camera.main;
         
-        _states = new State<PlayerManager>[6];
+        _states = new State<PlayerManager>[7];
         _states[(int)PlayerStates.Idle] = new PlayerAnimState.Idle();
         _states[(int)PlayerStates.Run] = new PlayerAnimState.Run();
         _states[(int)PlayerStates.Attack] = new PlayerAnimState.Attack();
         _states[(int)PlayerStates.Dodge] = new PlayerAnimState.Dodge();
         _states[(int)PlayerStates.UseItem] = new PlayerAnimState.UseItem();
+        _states[(int)PlayerStates.Damaged] = new PlayerAnimState.Damaged();
         _states[(int)PlayerStates.Global] =  new PlayerAnimState.StateGlobal();
 
         _stateMachine = new StateMachine<PlayerManager>();
@@ -79,11 +81,14 @@ public class PlayerManager : MonoBehaviour
         _isMove = false;
         _isAttack = false;
         _isDodge = false;
+        _wasDamaged = false;
+        _isUseItem = false;
         _moveSpeed = 5f;
         _dodgeDuration = 0.3f;
         _dodgeDistance = 2.5f;
         _dodgeCoolTime = 0.5f;
         _isDodgeCool = false;
+        
         
         _lookRotation = Quaternion.LookRotation(Vector3.back);
         _lookVector = Vector3.back;
@@ -143,15 +148,15 @@ public class PlayerManager : MonoBehaviour
         }
         
     }
-
+    
     private IEnumerator Dodge(Vector3 dodgeTarget) //회피 계산
     {
-        float elapsedTime = 0f;
+        var elapsedTime = 0f;
         _isDodgeCool = true;
         
         while (elapsedTime < _dodgeDuration)
         {
-            Vector3 newPosition = Vector3.Lerp(transform.position, dodgeTarget, elapsedTime / _dodgeDuration);
+            var newPosition = Vector3.Lerp(transform.position, dodgeTarget, elapsedTime / _dodgeDuration);
             _characterController.Move(newPosition - transform.position);
             elapsedTime += Time.deltaTime;
             yield return null;
@@ -163,4 +168,21 @@ public class PlayerManager : MonoBehaviour
         _isDodgeCool = false;
     }
     
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("EnemyAttack") && _wasDamaged == false)
+        {
+            //PlayerWeapon playerWeapon = other.GetComponent<PlayerWeapon>(); //->Enemy
+            //_wasDamaged = true;
+            //_health -= playerWeapon.Damage;
+            //Debug.Log("Enemy Health: " + _health);
+            //StartCoroutine(Damaged(0.5f));
+        }
+    }
+
+    private IEnumerator Damaged(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        _wasDamaged = false;
+    }
 }

@@ -60,7 +60,7 @@ public class UIManager : MonoBehaviour //UI제어
         
         foreach (var (_, enemyHealthBar) in _enemyHealthUI)
         {
-            enemyHealthBar.UpdateHealthBar();
+            enemyHealthBar.UpdateHealthBar(); //적 체력바 업데이트
         }
     }
 }

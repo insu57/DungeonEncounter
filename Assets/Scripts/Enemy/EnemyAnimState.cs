@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 namespace EnemyAnimState
 {
@@ -70,6 +67,25 @@ namespace EnemyAnimState
             
         }
     }
+
+    public class Damaged : State<EnemyManager>
+    {
+        public override void Enter(EnemyManager enemy)
+        {
+           enemy.EnemyAnimator.Play("Damage");
+            
+        }
+
+        public override void Execute(EnemyManager enemy)
+        {
+            
+        }
+
+        public override void Exit(EnemyManager enemy)
+        {
+            
+        }
+    }
     
     public class StateGlobal : State<EnemyManager>
     {
@@ -80,14 +96,14 @@ namespace EnemyAnimState
 
         public override void Execute(EnemyManager enemy)
         {
-            if (enemy.CurrentState == EnemyStates.Attack)
-            {
-                return;
-            }
-
-            if (enemy.IsAttack)
+            if (enemy.CurrentState != EnemyStates.Attack && enemy.IsAttack)
             {
                 enemy.ChangeState(EnemyStates.Attack);
+            }
+            
+            if (enemy.CurrentState != EnemyStates.Damaged && enemy.WasDamaged)
+            {
+                enemy.ChangeState(EnemyStates.Damaged);
             }
         }
 

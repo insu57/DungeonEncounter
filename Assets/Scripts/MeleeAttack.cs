@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MeleeAttack : MonoBehaviour
@@ -13,7 +11,7 @@ public class MeleeAttack : MonoBehaviour
     {
         _playerManager = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>();
         _trail = GetComponentInChildren<TrailRenderer>(); //이펙트 수정 필요. 
-        _attackArea = GetComponentInChildren<CapsuleCollider>();
+        _attackArea = GetComponent<CapsuleCollider>();
     }
 
     // Update is called once per frame

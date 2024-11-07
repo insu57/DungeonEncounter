@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 namespace PlayerAnimState
 {
@@ -107,6 +104,24 @@ namespace PlayerAnimState
         public override void Exit(PlayerManager player)
         {
 
+        }
+    }
+
+    public class Damaged : State<PlayerManager>
+    {
+        public override void Enter(PlayerManager player)
+        {
+            
+        }
+
+        public override void Execute(PlayerManager player)
+        {
+            
+        }
+
+        public override void Exit(PlayerManager player)
+        {
+            
         }
     }
 
