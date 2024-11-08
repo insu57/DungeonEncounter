@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 
-public enum EnemyStates { Idle = 0, Move, Attack, Damaged ,Global }
+public enum EnemyStates { Idle = 0, Move, Attack, Damaged , Dead ,Global }
 
 public class EnemyManager : MonoBehaviour //적
 {
@@ -20,21 +20,26 @@ public class EnemyManager : MonoBehaviour //적
 
     private float _health;
     private float _maxHealth;
+    private float _power;
+    
     private bool _isMove;
     private bool _isAttack;
     private float _height;
     private bool _wasDamaged;
-
+    private bool _isDead;
+    
     public EnemyStates CurrentState { private set; get; }
     public Animator EnemyAnimator { private set; get; }
 
     public float Health { set => _health = Mathf.Max(0, value); get => _health; }
     public float MaxHealth { set => _maxHealth = Mathf.Max(0, value); get => _maxHealth;}
+    public float Height => _height;
+    public float Power => _power;
     public bool IsMove { set => _isMove = value; get => _isMove; }
     public bool IsAttack { set => _isAttack = value; get => _isAttack; }
     public bool WasDamaged { set => _wasDamaged = value; get => _wasDamaged; }
-    public float Height => _height;
-
+    public bool IsDead { set => _isDead = value; get => _isDead; }
+    
     public void ChangeState(EnemyStates newState)
     {
         CurrentState = newState;
@@ -48,11 +53,12 @@ public class EnemyManager : MonoBehaviour //적
         _player = GameObject.FindGameObjectWithTag("Player");
         _agent = GetComponent<NavMeshAgent>();
         
-        _states = new State<EnemyManager>[5];
+        _states = new State<EnemyManager>[6];
         _states[(int)EnemyStates.Idle] = new EnemyAnimState.Idle();
         _states[(int)EnemyStates.Move] = new EnemyAnimState.Move();
         _states[(int)EnemyStates.Attack] = new EnemyAnimState.Attack();
         _states[(int)EnemyStates.Damaged] = new EnemyAnimState.Damaged();
+        _states[(int)EnemyStates.Dead] = new EnemyAnimState.Dead();
         _states[(int)EnemyStates.Global] = new EnemyAnimState.StateGlobal();
         _stateMachine = new StateMachine<EnemyManager>();
         _stateMachine.Setup(this, _states[(int)EnemyStates.Idle]);
@@ -60,15 +66,18 @@ public class EnemyManager : MonoBehaviour //적
 
         _health = 100f;
         _maxHealth = 100f;
+        _power = 20f;
         _height = GetComponent<Collider>().bounds.size.y;
         _isAttack = false;
         _isMove = false;
         _wasDamaged = false;
+        _isDead = false;
     }
 
     private void Update()
     {
         _stateMachine.Execute();
+        if (_isDead) return;
         
         _agent.SetDestination(_player.transform.position); //NavMeshAgent 플레이어 추적 
         
@@ -94,6 +103,12 @@ public class EnemyManager : MonoBehaviour //적
             PlayerWeapon playerWeapon = other.GetComponent<PlayerWeapon>();
             _wasDamaged = true;
             _health -= playerWeapon.Damage;
+            if (_health <= 0)
+            {
+                _isAttack = false;
+                _isMove = false;
+                _isDead = true;
+            }
             Debug.Log("Enemy Health: " + _health);
             StartCoroutine(Damaged(0.5f));
         }

@@ -86,6 +86,23 @@ namespace EnemyAnimState
             
         }
     }
+    public class Dead : State<EnemyManager>
+    {
+        public override void Enter(EnemyManager enemy)
+        {
+            enemy.EnemyAnimator.Play("Dead");
+        }
+
+        public override void Execute(EnemyManager enemy)
+        {
+            
+        }
+
+        public override void Exit(EnemyManager enemy)
+        {
+            
+        }
+    }
     
     public class StateGlobal : State<EnemyManager>
     {
@@ -96,15 +113,23 @@ namespace EnemyAnimState
 
         public override void Execute(EnemyManager enemy)
         {
-            if (enemy.CurrentState != EnemyStates.Attack && enemy.IsAttack)
+            if (enemy.IsDead)
             {
-                enemy.ChangeState(EnemyStates.Attack);
+                enemy.ChangeState(EnemyStates.Dead);
+            }
+            else
+            {
+                if (enemy.CurrentState != EnemyStates.Attack && enemy.IsAttack)
+                {
+                    enemy.ChangeState(EnemyStates.Attack);
+                }
+            
+                if (enemy.CurrentState != EnemyStates.Damaged && enemy.WasDamaged)
+                {
+                    enemy.ChangeState(EnemyStates.Damaged);
+                }
             }
             
-            if (enemy.CurrentState != EnemyStates.Damaged && enemy.WasDamaged)
-            {
-                enemy.ChangeState(EnemyStates.Damaged);
-            }
         }
 
         public override void Exit(EnemyManager enemy)

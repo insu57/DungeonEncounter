@@ -24,8 +24,9 @@ public class UIManager : MonoBehaviour //UI제어
     private void Awake()
     {
         _playerManager = FindObjectOfType<PlayerManager>();
-        _playerHealthBar = transform.Find("Health").GetComponent<Image>();
-        _playerEnergyBar = transform.Find("Energy").GetComponent<Image>();
+        _canvasMain = GameObject.Find("CanvasMain").GetComponent<Canvas>();
+        _playerHealthBar = _canvasMain.transform.Find("Health").GetComponent<Image>();
+        _playerEnergyBar = _canvasMain.transform.Find("Energy").GetComponent<Image>();
         
         _enemyHealthPrefab = Resources.Load<GameObject>("Prefabs/EnemyHealth");
         _canvasFloat = GameObject.Find("CanvasFloat").GetComponent<Canvas>();

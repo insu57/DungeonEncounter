@@ -5,6 +5,8 @@ public enum PlayerStates { Idle = 0, Run, Attack, Dodge, UseItem, Damaged ,Globa
 
 public class PlayerManager : MonoBehaviour
 {
+    private GameManager _gameManager;
+    
     private float _maxHealth;
     private float _health;
     private float _maxEnergy;
@@ -43,6 +45,8 @@ public class PlayerManager : MonoBehaviour
     public bool IsMove { set => _isMove = value; get => _isMove; }
     public bool IsAttack { set => _isAttack = value; get => _isAttack; }
     public bool IsDodge { set => _isDodge = value; get => _isDodge; }
+    public bool IsUseItem { set => _isUseItem = value; get => _isUseItem; }
+    public bool WasDamaged { set => _wasDamaged = value; get => _wasDamaged; }
     
     public void ChangeState(PlayerStates newState)
     {
@@ -56,6 +60,8 @@ public class PlayerManager : MonoBehaviour
     
     private void Awake()
     {
+        _gameManager = FindObjectOfType<GameManager>();
+        
         _animator = GetComponent<Animator>();
         PlayerAnimator = _animator;
         _characterController = GetComponent<CharacterController>();
@@ -83,6 +89,7 @@ public class PlayerManager : MonoBehaviour
         _isDodge = false;
         _wasDamaged = false;
         _isUseItem = false;
+        
         _moveSpeed = 5f;
         _dodgeDuration = 0.3f;
         _dodgeDistance = 2.5f;
@@ -96,13 +103,13 @@ public class PlayerManager : MonoBehaviour
     
     private void Update() //구조 수정 필요
     {
+        if(_gameManager.GamePaused) return;
+        
         _stateMachine.Execute();
         //x,z axis move
         _hAxis = Input.GetAxisRaw("Horizontal");
         _vAxis = Input.GetAxisRaw("Vertical");
         _moveVector = new Vector3(_hAxis, 0, _vAxis).normalized;
-        
-        
         
         if (!_isAttack && !_isDodge) //Take Action...movement restriction 공격 등 행동 시 이동 제한 
         {
@@ -154,7 +161,7 @@ public class PlayerManager : MonoBehaviour
         var elapsedTime = 0f;
         _isDodgeCool = true;
         
-        while (elapsedTime < _dodgeDuration)
+        while (elapsedTime < _dodgeDuration) //dodgeDuration동안 dodgeTarget으로 움직임(lerp)
         {
             var newPosition = Vector3.Lerp(transform.position, dodgeTarget, elapsedTime / _dodgeDuration);
             _characterController.Move(newPosition - transform.position);
@@ -164,19 +171,18 @@ public class PlayerManager : MonoBehaviour
         _characterController.Move(dodgeTarget - transform.position);
         _isDodge = false;
         
-        yield return new WaitForSeconds(_dodgeCoolTime);
+        yield return new WaitForSeconds(_dodgeCoolTime); //회피 쿨타임
         _isDodgeCool = false;
     }
     
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("EnemyAttack") && _wasDamaged == false)
+        if (other.CompareTag("EnemyAttack") && _wasDamaged == false && _isDodge == false)
         {
-            //PlayerWeapon playerWeapon = other.GetComponent<PlayerWeapon>(); //->Enemy
-            //_wasDamaged = true;
-            //_health -= playerWeapon.Damage;
-            //Debug.Log("Enemy Health: " + _health);
-            //StartCoroutine(Damaged(0.5f));
+            _wasDamaged = true;
+            EnemyMeleeAttack enemyMeleeAttack = other.GetComponent<EnemyMeleeAttack>();
+            _health -= enemyMeleeAttack.Damage;
+            StartCoroutine(Damaged(1f));
         }
     }
 

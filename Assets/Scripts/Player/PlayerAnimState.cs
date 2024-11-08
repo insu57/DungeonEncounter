@@ -1,4 +1,6 @@
 
+using UnityEngine;
+
 namespace PlayerAnimState
 {
     
@@ -111,12 +113,15 @@ namespace PlayerAnimState
     {
         public override void Enter(PlayerManager player)
         {
-            
+            player.PlayerAnimator.Play("Damaged");
         }
 
         public override void Execute(PlayerManager player)
         {
-            
+            if (!player.WasDamaged)
+            {
+                player.ChangeState(PlayerStates.Idle);
+            }
         }
 
         public override void Exit(PlayerManager player)
@@ -150,8 +155,9 @@ namespace PlayerAnimState
                     }
                 }
             }*/
+            
     
-             if (player.CurrentState is PlayerStates.Attack or PlayerStates.Dodge)
+            if (player.CurrentState is PlayerStates.Attack or PlayerStates.Dodge or PlayerStates.Damaged)
             {
                 return;
             }
@@ -160,6 +166,12 @@ namespace PlayerAnimState
                 if (player.IsAttack)
                     player.IsAttack = false;
                 player.ChangeState(PlayerStates.Dodge);
+            }
+            else if (player.WasDamaged)
+            {
+                if (player.IsAttack)
+                    player.IsAttack = false;
+                player.ChangeState(PlayerStates.Damaged);
             }
             else if (player.IsAttack)
             {

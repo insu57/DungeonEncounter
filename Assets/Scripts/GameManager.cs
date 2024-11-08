@@ -1,15 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 
 public class GameManager : Singleton<GameManager> //Singleton Game Manager 싱글톤 게임 매니저
 {
     public GameObject panelPause;
     private bool _gamePaused;
-
+    public bool GamePaused => _gamePaused;
+    
     public override void Awake()
     {
         base.Awake();
@@ -33,9 +32,6 @@ public class GameManager : Singleton<GameManager> //Singleton Game Manager 싱�
             Time.timeScale = 1f;
         }
         
-
-
-
 
     }
     
