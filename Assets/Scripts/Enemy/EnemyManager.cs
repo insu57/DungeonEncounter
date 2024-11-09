@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Scriptable_Objects;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
@@ -16,11 +17,11 @@ public class EnemyManager : MonoBehaviour //적
     private StateMachine<EnemyManager> _stateMachine;
     private GameObject _player;
     private NavMeshAgent _agent;
-    [SerializeField] private GameObject target;
-
+    [SerializeField] private EnemyData data;
+    private string _type;
     private float _health;
     private float _maxHealth;
-    private float _power;
+    private float _damage;
     
     private bool _isMove;
     private bool _isAttack;
@@ -31,10 +32,11 @@ public class EnemyManager : MonoBehaviour //적
     public EnemyStates CurrentState { private set; get; }
     public Animator EnemyAnimator { private set; get; }
 
+    public EnemyData Data => data;
     public float Health { set => _health = Mathf.Max(0, value); get => _health; }
     public float MaxHealth { set => _maxHealth = Mathf.Max(0, value); get => _maxHealth;}
     public float Height => _height;
-    public float Power => _power;
+    public float Damage => _damage;
     public bool IsMove { set => _isMove = value; get => _isMove; }
     public bool IsAttack { set => _isAttack = value; get => _isAttack; }
     public bool WasDamaged { set => _wasDamaged = value; get => _wasDamaged; }
@@ -64,9 +66,10 @@ public class EnemyManager : MonoBehaviour //적
         _stateMachine.Setup(this, _states[(int)EnemyStates.Idle]);
         _stateMachine.SetGlobalState(_states[(int)EnemyStates.Global]);
 
-        _health = 100f;
-        _maxHealth = 100f;
-        _power = 20f;
+        _type = data.Type;
+        _maxHealth = data.MaxHealth;
+        _health = _maxHealth;
+        _damage = data.Damage;
         _height = GetComponent<Collider>().bounds.size.y;
         _isAttack = false;
         _isMove = false;
@@ -79,6 +82,7 @@ public class EnemyManager : MonoBehaviour //적
         _stateMachine.Execute();
         if (_isDead) return;
         
+        transform.LookAt(_player.transform);
         _agent.SetDestination(_player.transform.position); //NavMeshAgent 플레이어 추적 
         
         if (_agent.remainingDistance <= _agent.stoppingDistance && !_agent.pathPending) //Enemy 정지
@@ -100,7 +104,7 @@ public class EnemyManager : MonoBehaviour //적
     {
         if (other.CompareTag("PlayerAttack") && _wasDamaged == false)
         {
-            PlayerWeapon playerWeapon = other.GetComponent<PlayerWeapon>();
+            PlayerWeaponData playerWeapon = other.GetComponent<PlayerWeapon>().Data;
             _wasDamaged = true;
             _health -= playerWeapon.Damage;
             if (_health <= 0)
@@ -109,7 +113,6 @@ public class EnemyManager : MonoBehaviour //적
                 _isMove = false;
                 _isDead = true;
             }
-            Debug.Log("Enemy Health: " + _health);
             StartCoroutine(Damaged(0.5f));
         }
     }

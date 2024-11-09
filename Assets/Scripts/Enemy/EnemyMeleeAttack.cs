@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyMeleeAttack : MonoBehaviour
+
 {
     private EnemyManager _enemyManager;
     private Collider _attackArea;
@@ -21,7 +22,7 @@ public class EnemyMeleeAttack : MonoBehaviour
 
     private void Start()
     {
-        _damage = _enemyManager.Power;
+        _damage = _enemyManager.Damage;
     }
 
     private void Update()

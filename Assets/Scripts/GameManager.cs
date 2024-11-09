@@ -8,16 +8,20 @@ public class GameManager : Singleton<GameManager> //Singleton Game Manager 싱�
     public GameObject panelPause;
     private bool _gamePaused;
     public bool GamePaused => _gamePaused;
+    private PlayerManager _playerManager;
+    private bool _playerDead;
     
     public override void Awake()
     {
         base.Awake();
-        //
+        _playerManager = FindObjectOfType<PlayerManager>();
+        _playerDead = false;
     }
     private void Update()
     {
-        //Debug.Log(SceneManager.sceneCount); //????
-    
+        //if(_playerDead)
+        
+        
         if (!Input.GetButtonDown("Cancel")) return; //ESC->Setting Window 설정창
         if(!_gamePaused) 
         {
@@ -31,6 +35,7 @@ public class GameManager : Singleton<GameManager> //Singleton Game Manager 싱�
             _gamePaused = false;
             Time.timeScale = 1f;
         }
+        
         
 
     }

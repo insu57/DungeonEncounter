@@ -1,3 +1,4 @@
+using Scriptable_Objects;
 using UnityEngine;
 
 public class PlayerMeleeAttack : MonoBehaviour
@@ -5,7 +6,6 @@ public class PlayerMeleeAttack : MonoBehaviour
     private PlayerManager _playerManager;
     private TrailRenderer _trail;
     private CapsuleCollider _attackArea;
-    
     private void Awake()
     {
         _playerManager = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>();

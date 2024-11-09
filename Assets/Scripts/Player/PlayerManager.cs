@@ -180,7 +180,8 @@ public class PlayerManager : MonoBehaviour
         if (other.CompareTag("EnemyAttack") && _wasDamaged == false && _isDodge == false)
         {
             _wasDamaged = true;
-            EnemyMeleeAttack enemyMeleeAttack = other.GetComponent<EnemyMeleeAttack>();
+            EnemyManager enemyManager = other.GetComponentInParent<EnemyManager>();
+            EnemyMeleeAttack enemyMeleeAttack = other.GetComponent<EnemyMeleeAttack>(); //근거리 원거리 공통으로 수정필요
             _health -= enemyMeleeAttack.Damage;
             StartCoroutine(Damaged(1f));
         }
