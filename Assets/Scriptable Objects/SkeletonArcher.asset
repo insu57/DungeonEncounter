@@ -16,5 +16,5 @@ MonoBehaviour:
   description: archer
   type: Ranged
   rank: Normal
-  maxHealth: 80
+  maxHealth: 30
   damage: 20

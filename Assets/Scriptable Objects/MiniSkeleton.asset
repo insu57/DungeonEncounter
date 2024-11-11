@@ -16,5 +16,5 @@ MonoBehaviour:
   description: this is mini skeleton
   type: Melee
   rank: Normal
-  maxHealth: 100
+  maxHealth: 50
   damage: 20

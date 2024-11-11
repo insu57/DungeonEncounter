@@ -102,11 +102,13 @@ public class EnemyManager : MonoBehaviour //적
     
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("Enemy Trigger: "+other.name);
         if (other.CompareTag("PlayerAttack") && _wasDamaged == false)
         {
             PlayerWeaponData playerWeapon = other.GetComponent<PlayerWeapon>().Data;
             _wasDamaged = true;
             _health -= playerWeapon.Damage;
+            Debug.Log(data.EnemyName + " Health: "+_health);
             if (_health <= 0)
             {
                 _isAttack = false;

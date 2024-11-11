@@ -5,12 +5,12 @@ public class PlayerMeleeAttack : MonoBehaviour
 {
     private PlayerManager _playerManager;
     private TrailRenderer _trail;
-    private CapsuleCollider _attackArea;
+    private Collider _attackArea;
     private void Awake()
     {
         _playerManager = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>();
         _trail = GetComponentInChildren<TrailRenderer>(); //이펙트 수정 필요. 
-        _attackArea = GetComponent<CapsuleCollider>();
+        _attackArea = GetComponent<Collider>();
     }
 
     // Update is called once per frame

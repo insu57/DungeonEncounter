@@ -1195,17 +1195,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: mini skeleton Archer
       objectReference: {fileID: 0}
-    - target: {fileID: 5041304006162068929, guid: 88accb75044e5fa4ca6714c76970d718, type: 3}
-      propertyPath: m_Speed
-      value: 3
+    - target: {fileID: 3362123586102918478, guid: 88accb75044e5fa4ca6714c76970d718, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3792868093249844025, guid: 88accb75044e5fa4ca6714c76970d718, type: 3}
+      propertyPath: m_Radius
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3792868093249844025, guid: 88accb75044e5fa4ca6714c76970d718, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5041304006162068929, guid: 88accb75044e5fa4ca6714c76970d718, type: 3}
       propertyPath: m_Height
-      value: 2
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 5041304006162068929, guid: 88accb75044e5fa4ca6714c76970d718, type: 3}
-      propertyPath: m_StoppingDistance
-      value: 6
+      propertyPath: m_Radius
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 7065231592916162182, guid: 88accb75044e5fa4ca6714c76970d718, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2105,6 +2113,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1011984129514734113, guid: 12c2d292a031c184db7ab95cc6dafa10, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1293471123687182191, guid: 12c2d292a031c184db7ab95cc6dafa10, type: 3}
       propertyPath: m_Name
       value: Weapon
@@ -2112,6 +2124,10 @@ PrefabInstance:
     - target: {fileID: 1293471123687182191, guid: 12c2d292a031c184db7ab95cc6dafa10, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1892660770739845039, guid: 12c2d292a031c184db7ab95cc6dafa10, type: 3}
+      propertyPath: m_Radius
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 3347055352814969162, guid: 12c2d292a031c184db7ab95cc6dafa10, type: 3}
       propertyPath: m_Enabled
@@ -2184,6 +2200,14 @@ PrefabInstance:
     - target: {fileID: 8813573649942492110, guid: 12c2d292a031c184db7ab95cc6dafa10, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8976641303431507846, guid: 12c2d292a031c184db7ab95cc6dafa10, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9065338972789093801, guid: 12c2d292a031c184db7ab95cc6dafa10, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9101415979665812312, guid: 12c2d292a031c184db7ab95cc6dafa10, type: 3}
       propertyPath: m_Time
@@ -2387,9 +2411,33 @@ PrefabInstance:
       propertyPath: m_Name
       value: mini simple skeleton
       objectReference: {fileID: 0}
+    - target: {fileID: 3792868093249844025, guid: 1cf146b6be4e627449a210e6576598fd, type: 3}
+      propertyPath: m_Radius
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3792868093249844025, guid: 1cf146b6be4e627449a210e6576598fd, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4022616274770906583, guid: 1cf146b6be4e627449a210e6576598fd, type: 3}
       propertyPath: m_TagString
       value: EnemyAttack
+      objectReference: {fileID: 0}
+    - target: {fileID: 5041304006162068929, guid: 1cf146b6be4e627449a210e6576598fd, type: 3}
+      propertyPath: m_Speed
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5041304006162068929, guid: 1cf146b6be4e627449a210e6576598fd, type: 3}
+      propertyPath: m_Height
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5041304006162068929, guid: 1cf146b6be4e627449a210e6576598fd, type: 3}
+      propertyPath: m_Radius
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5041304006162068929, guid: 1cf146b6be4e627449a210e6576598fd, type: 3}
+      propertyPath: m_StoppingDistance
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 7065231592916162182, guid: 1cf146b6be4e627449a210e6576598fd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2430,6 +2478,26 @@ PrefabInstance:
     - target: {fileID: 7065231592916162182, guid: 1cf146b6be4e627449a210e6576598fd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9061760948683056070, guid: 1cf146b6be4e627449a210e6576598fd, type: 3}
+      propertyPath: m_Height
+      value: 0.8736034
+      objectReference: {fileID: 0}
+    - target: {fileID: 9061760948683056070, guid: 1cf146b6be4e627449a210e6576598fd, type: 3}
+      propertyPath: m_Radius
+      value: 0.18863253
+      objectReference: {fileID: 0}
+    - target: {fileID: 9061760948683056070, guid: 1cf146b6be4e627449a210e6576598fd, type: 3}
+      propertyPath: m_Center.x
+      value: -0.017717415
+      objectReference: {fileID: 0}
+    - target: {fileID: 9061760948683056070, guid: 1cf146b6be4e627449a210e6576598fd, type: 3}
+      propertyPath: m_Center.y
+      value: -0.040339064
+      objectReference: {fileID: 0}
+    - target: {fileID: 9061760948683056070, guid: 1cf146b6be4e627449a210e6576598fd, type: 3}
+      propertyPath: m_Center.z
+      value: 0.28208256
       objectReference: {fileID: 0}
     - target: {fileID: 9061760948683056070, guid: 1cf146b6be4e627449a210e6576598fd, type: 3}
       propertyPath: m_IsTrigger
