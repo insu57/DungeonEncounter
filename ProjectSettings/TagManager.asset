@@ -7,8 +7,9 @@ TagManager:
   - Collide
   - Item
   - Enemy
-  - EnemyAttack
   - PlayerAttack
+  - EnemyRangedAttack
+  - EnemyMeleeAttack
   layers:
   - Default
   - TransparentFX

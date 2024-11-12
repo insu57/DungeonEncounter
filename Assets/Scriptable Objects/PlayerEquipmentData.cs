@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "PlayerEquipmentData",
-    menuName = "Scriptable Objects/PlayerEquipmentData", order = int.MaxValue)]
+    menuName = "ScriptableObjects/PlayerEquipmentData", order = int.MaxValue)]
 public class PlayerEquipmentData : ScriptableObject
 {
     [SerializeField] private string equipmentName;

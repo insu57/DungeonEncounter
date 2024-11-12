@@ -4,7 +4,7 @@ using UnityEngine.Serialization;
 namespace Scriptable_Objects
 {
     [CreateAssetMenu(fileName = "PlayerWeaponData",
-        menuName = "Scriptable Objects/PlayerWeaponData", order = int.MaxValue)]
+        menuName = "ScriptableObjects/PlayerWeaponData", order = int.MaxValue)]
     public class PlayerWeaponData : ScriptableObject
     {
         [SerializeField] private string weaponName;

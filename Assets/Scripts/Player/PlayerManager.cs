@@ -177,12 +177,16 @@ public class PlayerManager : MonoBehaviour
     
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("EnemyAttack") && _wasDamaged == false && _isDodge == false)
+        if ((other.CompareTag("EnemyMeleeAttack") || other.CompareTag("EnemyRangedAttack")) && _wasDamaged == false && _isDodge == false)
         {
             _wasDamaged = true;
-            //EnemyManager enemyManager = other.GetComponentInParent<EnemyManager>();
-            EnemyMeleeAttack enemyMeleeAttack = other.GetComponent<EnemyMeleeAttack>(); //근거리 원거리 공통으로 수정필요
-            _health -= enemyMeleeAttack.Damage;
+            float damage;
+            EnemyManager enemyManager = other.GetComponentInParent<EnemyManager>();
+            if (other.CompareTag("EnemyMeleeAttack"))
+                damage = other.GetComponent<EnemyMeleeAttack>().Damage;
+            else
+                damage = other.GetComponentInParent<EnemyRangedAttack>().Damage;
+            _health -= damage;
             Debug.Log("Player Health: "+_health);
             StartCoroutine(Damaged(1f)); //피격 후 무적시간...1초
         }
