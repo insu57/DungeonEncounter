@@ -83,6 +83,7 @@ public class EnemyManager : MonoBehaviour //적
         if (_isDead) return;
         
         transform.LookAt(_player.transform);
+        //transform.rotation = Quaternion.Slerp();
         _agent.SetDestination(_player.transform.position); //NavMeshAgent 플레이어 추적 
         
         if (_agent.remainingDistance <= _agent.stoppingDistance && !_agent.pathPending) //Enemy 정지

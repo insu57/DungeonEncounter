@@ -19,7 +19,7 @@ MonoBehaviour:
   maxHealth: 30
   damage: 20
   projectilePrefab: {fileID: 5422603927206643936, guid: 7763080958edc594f92566e5b5fa1c85, type: 3}
-  projectileSpeed: 1
+  projectileSpeed: 0.5
   attackFullFrame: 28
   attackStartFrame: 13
   attackEndFrame: 14

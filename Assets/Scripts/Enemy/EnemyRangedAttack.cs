@@ -10,6 +10,7 @@ public class EnemyRangedAttack : MonoBehaviour
     private PlayerManager _playerManager;
     private EnemyData _data;
     private GameObject _projectilePrefab;//원거리 투사체
+    private float _projectileSpeed;
     private TrailRenderer _trailRenderer;
     private Animator _animator;
     private float _attackStartTime;
@@ -17,6 +18,7 @@ public class EnemyRangedAttack : MonoBehaviour
     private bool _isShoot;
     private float _damage;
     public float Damage => _damage;
+    public float ProjectileSpeed => _projectileSpeed;
     //적 캐릭터 패턴이 다양해 지면 적용 어려워짐...추상화 리팩터링 필요
     private void Awake()
     {
@@ -29,6 +31,7 @@ public class EnemyRangedAttack : MonoBehaviour
         _animator = _enemyManager.GetComponent<Animator>();
         _isShoot = false;
         _damage = _data.Damage;
+        _projectileSpeed = _data.ProjectileSpeed;
     }
     
     private void Update()
@@ -38,9 +41,7 @@ public class EnemyRangedAttack : MonoBehaviour
         if (_enemyManager.IsAttack && !_isShoot &&_attackStartTime <= animTime && animTime <= _attackEndTime)
         {
             _isShoot = true;
-            GameObject projectile =Instantiate(_projectilePrefab, transform.position, transform.rotation);
-            projectile.transform.parent = transform;
-            //projectile.transform.LookAt(_playerManager.transform.position);
+            GameObject projectile =Instantiate(_projectilePrefab, transform.position, transform.rotation, transform);
         }
         
         if(animTime > _attackEndTime)

@@ -90,7 +90,7 @@ public class PlayerManager : MonoBehaviour
         _wasDamaged = false;
         _isUseItem = false;
         
-        _moveSpeed = 5f;
+        _moveSpeed = 10f; //5f
         _dodgeDuration = 0.3f;
         _dodgeDistance = 2.5f;
         _dodgeCoolTime = 0.5f;

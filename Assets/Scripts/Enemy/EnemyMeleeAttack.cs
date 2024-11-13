@@ -47,4 +47,12 @@ public class EnemyMeleeAttack : MonoBehaviour
         }
        
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("EnemyRangedAttack"))
+        {
+            Destroy(other.gameObject);
+        }
+    }
 }
