@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using Scriptable_Objects;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -28,7 +29,8 @@ public class EnemyManager : MonoBehaviour //적
     private float _height;
     private bool _wasDamaged;
     private bool _isDead;
-    
+    private bool _inAttackDelay;
+        
     public EnemyStates CurrentState { private set; get; }
     public Animator EnemyAnimator { private set; get; }
 
@@ -75,6 +77,7 @@ public class EnemyManager : MonoBehaviour //적
         _isMove = false;
         _wasDamaged = false;
         _isDead = false;
+        _inAttackDelay = false;
     }
 
     private void Update()
@@ -82,15 +85,22 @@ public class EnemyManager : MonoBehaviour //적
         _stateMachine.Execute();
         if (_isDead) return;
         
-        transform.LookAt(_player.transform);
-        //transform.rotation = Quaternion.Slerp();
+        //transform.LookAt(_player.transform);
+        transform.DOLookAt(_player.transform.position,0.1f);
         _agent.SetDestination(_player.transform.position); //NavMeshAgent 플레이어 추적 
         
+        float animTime = Mathf.Repeat(_animator.GetCurrentAnimatorStateInfo(0).normalizedTime, 1.0f);
         if (_agent.remainingDistance <= _agent.stoppingDistance && !_agent.pathPending) //Enemy 정지
         {
             _agent.isStopped = true;
             _isMove = false;
+
+            if (_inAttackDelay) return;
             _isAttack = true;
+            //공격 딜레이 정상작동x 전혀 작동안됨
+            //공격 체크...
+            StartCoroutine(AttackDelay(10f));//1f delay
+
         }
         else
         {
@@ -108,6 +118,7 @@ public class EnemyManager : MonoBehaviour //적
             PlayerWeaponData playerWeapon = other.GetComponent<PlayerWeapon>().Data;
             _wasDamaged = true;
             _health -= playerWeapon.Damage;
+            //test
             Debug.Log(data.EnemyName + " Health: "+_health);
             if (_health <= 0)
             {
@@ -115,6 +126,7 @@ public class EnemyManager : MonoBehaviour //적
                 _isMove = false;
                 _isDead = true;
             }
+            
             StartCoroutine(Damaged(0.5f));
         }
     }
@@ -125,4 +137,13 @@ public class EnemyManager : MonoBehaviour //적
         _wasDamaged = false;
     }
 
+    private IEnumerator AttackDelay(float duration)
+    {
+        _inAttackDelay = true;
+        _isAttack = false;
+        yield return new WaitForSeconds(duration);
+        _inAttackDelay = false;
+    }
+    
+    
 }

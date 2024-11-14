@@ -41,7 +41,7 @@ public class EnemyRangedAttack : MonoBehaviour
         if (_enemyManager.IsAttack && !_isShoot &&_attackStartTime <= animTime && animTime <= _attackEndTime)
         {
             _isShoot = true;
-            GameObject projectile =Instantiate(_projectilePrefab, transform.position, transform.rotation, transform);
+            Instantiate(_projectilePrefab, transform.position, transform.rotation, transform);
         }
         
         if(animTime > _attackEndTime)

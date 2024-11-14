@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4920313409088397371}
   - component: {fileID: 6988617014303939247}
-  - component: {fileID: 3089533836502076820}
+  - component: {fileID: 7210772956866186499}
   m_Layer: 0
   m_Name: Arrow01
   m_TagString: Untagged
@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78c591fa4eea6b74184ef00578ab18ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!54 &3089533836502076820
+--- !u!54 &7210772956866186499
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -72,7 +72,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 1
+  m_CollisionDetection: 0
 --- !u!1 &7099147479833146915
 GameObject:
   m_ObjectHideFlags: 0

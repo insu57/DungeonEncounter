@@ -185,7 +185,7 @@ public class PlayerManager : MonoBehaviour
             if (other.CompareTag("EnemyMeleeAttack"))
                 damage = other.GetComponent<EnemyMeleeAttack>().Damage;
             else
-                damage = other.GetComponentInParent<EnemyRangedAttack>().Damage;
+                damage = other.GetComponentInParent<EnemyProjectile>().Damage;
             _health -= damage;
             Debug.Log("Player Health: "+_health);
             StartCoroutine(Damaged(1f)); //피격 후 무적시간...1초

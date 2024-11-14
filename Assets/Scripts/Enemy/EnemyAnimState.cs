@@ -56,7 +56,9 @@ namespace EnemyAnimState
         {
             
             enemy.EnemyAnimator.Play("Attack");
-            if (!enemy.IsAttack)
+            float animTime = enemy.EnemyAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime;
+            if (!enemy.IsAttack || animTime >= 1.0f)
+                
             {
                 enemy.ChangeState(EnemyStates.Idle);
             }
