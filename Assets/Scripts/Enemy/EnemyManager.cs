@@ -43,6 +43,7 @@ public class EnemyManager : MonoBehaviour //적
     public bool IsAttack { set => _isAttack = value; get => _isAttack; }
     public bool WasDamaged { set => _wasDamaged = value; get => _wasDamaged; }
     public bool IsDead { set => _isDead = value; get => _isDead; }
+    public bool InAttackDelay { set => _inAttackDelay = value; get => _inAttackDelay; }
     
     public void ChangeState(EnemyStates newState)
     {
@@ -89,18 +90,22 @@ public class EnemyManager : MonoBehaviour //적
         transform.DOLookAt(_player.transform.position,0.1f);
         _agent.SetDestination(_player.transform.position); //NavMeshAgent 플레이어 추적 
         
-        float animTime = Mathf.Repeat(_animator.GetCurrentAnimatorStateInfo(0).normalizedTime, 1.0f);
+        float animTime = _animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
         if (_agent.remainingDistance <= _agent.stoppingDistance && !_agent.pathPending) //Enemy 정지
         {
             _agent.isStopped = true;
             _isMove = false;
-
+            
+            //StartCoroutine(AttackDelay(1f));
+            
             if (_inAttackDelay) return;
             _isAttack = true;
-            //공격 딜레이 정상작동x 전혀 작동안됨
-            //공격 체크...
-            StartCoroutine(AttackDelay(10f));//1f delay
-
+            if (animTime >= 1f && _animator.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
+            {
+                _isAttack = false;
+                StartCoroutine(AttackDelay(1f));//1f delay
+            }
+            
         }
         else
         {
@@ -116,7 +121,7 @@ public class EnemyManager : MonoBehaviour //적
         if (other.CompareTag("PlayerAttack") && _wasDamaged == false)
         {
             PlayerWeaponData playerWeapon = other.GetComponent<PlayerWeapon>().Data;
-            _wasDamaged = true;
+            
             _health -= playerWeapon.Damage;
             //test
             Debug.Log(data.EnemyName + " Health: "+_health);
@@ -133,6 +138,7 @@ public class EnemyManager : MonoBehaviour //적
 
     private IEnumerator Damaged(float duration)
     {
+        _wasDamaged = true;
         yield return new WaitForSeconds(duration);
         _wasDamaged = false;
     }
@@ -140,7 +146,6 @@ public class EnemyManager : MonoBehaviour //적
     private IEnumerator AttackDelay(float duration)
     {
         _inAttackDelay = true;
-        _isAttack = false;
         yield return new WaitForSeconds(duration);
         _inAttackDelay = false;
     }

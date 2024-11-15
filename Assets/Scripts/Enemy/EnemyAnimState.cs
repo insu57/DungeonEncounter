@@ -1,4 +1,6 @@
 
+using UnityEngine;
+
 namespace EnemyAnimState
 {
     public class Idle : State<EnemyManager>
@@ -48,20 +50,13 @@ namespace EnemyAnimState
     {
         public override void Enter(EnemyManager enemy)
         {
-           
-            
+            enemy.EnemyAnimator.Play("Attack");
         }
 
         public override void Execute(EnemyManager enemy)
         {
-            
-            enemy.EnemyAnimator.Play("Attack");
-            float animTime = enemy.EnemyAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime;
-            if (!enemy.IsAttack || animTime >= 1.0f)
-                
-            {
-                enemy.ChangeState(EnemyStates.Idle);
-            }
+            if (enemy.IsAttack) return;
+            enemy.ChangeState(EnemyStates.Idle);
         }
 
         public override void Exit(EnemyManager enemy)

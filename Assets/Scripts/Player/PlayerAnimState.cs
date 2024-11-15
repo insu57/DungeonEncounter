@@ -56,13 +56,15 @@ namespace PlayerAnimState
 
         public override void Execute(PlayerManager player)
         {
-            if (player.PlayerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Attack")  // 공격 애니메이션 체크
-                &&  player.PlayerAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f) //애니메이션 종료 체크
+            // &&  player.PlayerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Attack")  // 공격 애니메이션 체크
+            float animTime = player.PlayerAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime;    
+            if ( animTime >= 1.0f && player.IsAttack) //애니메이션 종료 체크
             //Attack Animation End, State return to Idle. 공격 애니메이션 종료 시 상태종료 Idle로 돌아감
             {
                 player.IsAttack = false;
                 player.ChangeState(PlayerStates.Idle); 
             }
+            
             
         }
 
@@ -137,24 +139,6 @@ namespace PlayerAnimState
         }
         public override void Execute(PlayerManager player)
         {
-            /*if (player.CurrentState != PlayerStates.Dodge)
-            {
-                if (player.IsDodge)
-                {
-                    if (player.IsAttack)
-                        player.IsAttack = false;
-                    player.ChangeState(PlayerStates.Dodge);
-                }
-
-                if (player.CurrentState != PlayerStates.Attack)
-                {
-                    if (player.IsAttack)
-                    {
-                        player.ChangeState(PlayerStates.Attack);
-                    }
-                }
-            }*/
-            
     
             if (player.CurrentState is PlayerStates.Attack or PlayerStates.Dodge or PlayerStates.Damaged)
             {
