@@ -18,6 +18,7 @@ namespace Scriptable_Objects
         [SerializeField] private float attackFullFrame; //전체
         [SerializeField] private float attackStartFrame; //공격 판정 시작
         [SerializeField] private float attackEndFrame; //공격 판정 끝
+        [SerializeField] private EnemyDropTable dropTable;
         
         public string EnemyName => enemyName;
         public string Description => description;
@@ -30,5 +31,6 @@ namespace Scriptable_Objects
         public float AttackFullFrame => attackFullFrame;
         public float AttackStartFrame => attackStartFrame;
         public float AttackEndFrame => attackEndFrame;
+        public EnemyDropTable DropTable => dropTable;
     }
 }

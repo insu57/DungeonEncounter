@@ -1,13 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager> //Singleton Game Manager 싱글톤 게임 매니저
 {
-    public GameObject panelPause;
     private bool _gamePaused;
-    public bool GamePaused => _gamePaused;
+    public bool GamePaused {get => _gamePaused; set => _gamePaused = value; }
     private PlayerManager _playerManager;
     private bool _playerDead;
     
@@ -21,19 +21,15 @@ public class GameManager : Singleton<GameManager> //Singleton Game Manager 싱�
     {
         //if(_playerDead)
         
-        
-        if (!Input.GetButtonDown("Cancel")) return; //ESC->Setting Window 설정창
-        if(!_gamePaused) 
+        if(_gamePaused) 
         {
-            _gamePaused = true;
-            panelPause.SetActive(true);
             Time.timeScale = 0f;
+            DOTween.PauseAll();
         }
         else
         {
-            panelPause.SetActive(false);
-            _gamePaused = false;
             Time.timeScale = 1f;
+            DOTween.PlayAll();
         }
         
         

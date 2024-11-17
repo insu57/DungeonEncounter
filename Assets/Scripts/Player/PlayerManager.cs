@@ -5,6 +5,7 @@ public enum PlayerStates { Idle = 0, Run, Attack, Dodge, UseItem, Damaged ,Globa
 
 public class PlayerManager : MonoBehaviour
 {
+    private static readonly int Color1 = Shader.PropertyToID("_Color");
     private GameManager _gameManager;
     
     private float _maxHealth;
@@ -30,7 +31,7 @@ public class PlayerManager : MonoBehaviour
     private float _dodgeDistance;
     private float _dodgeCoolTime;
     private bool _isDodgeCool;
-
+    
     private GameObject _playerWeapon;
     
     private State<PlayerManager>[] _states;
@@ -89,13 +90,11 @@ public class PlayerManager : MonoBehaviour
         _isDodge = false;
         _wasDamaged = false;
         _isUseItem = false;
-        
-        _moveSpeed = 10f; //5f
+        _moveSpeed = 7f; //5f
         _dodgeDuration = 0.3f;
         _dodgeDistance = 2.5f;
         _dodgeCoolTime = 0.5f;
         _isDodgeCool = false;
-        
         
         _lookRotation = Quaternion.LookRotation(Vector3.back);
         _lookVector = Vector3.back;
@@ -179,9 +178,7 @@ public class PlayerManager : MonoBehaviour
     {
         if ((other.CompareTag("EnemyMeleeAttack") || other.CompareTag("EnemyRangedAttack")) && _wasDamaged == false && _isDodge == false)
         {
-            _wasDamaged = true;
             float damage;
-            EnemyManager enemyManager = other.GetComponentInParent<EnemyManager>();
             if (other.CompareTag("EnemyMeleeAttack"))
                 damage = other.GetComponent<EnemyMeleeAttack>().Damage;
             else
@@ -190,10 +187,16 @@ public class PlayerManager : MonoBehaviour
             Debug.Log("Player Health: "+_health);
             StartCoroutine(Damaged(1f)); //피격 후 무적시간...1초
         }
+        else if (other.CompareTag("Item"))
+        {
+            //Add to Inventory
+        }
     }
 
     private IEnumerator Damaged(float duration)
     {
+        _wasDamaged = true;
+       
         yield return new WaitForSeconds(duration);
         _wasDamaged = false;
     }

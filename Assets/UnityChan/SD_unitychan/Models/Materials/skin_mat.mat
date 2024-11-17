@@ -235,6 +235,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Texture0:
+        m_Texture: {fileID: 2800000, guid: 2f441154066ad6b4eb0887cdb3b4ab52, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _ThicknessMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -358,6 +362,7 @@ Material:
     - _FirstShadeOverridden: 0
     - _FirstShadeVisible: 1
     - _GI_Intensity: 0
+    - _Gamma: 1
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
@@ -434,6 +439,7 @@ Material:
     - _PPDPrimitiveLength: 1
     - _PPDPrimitiveWidth: 1
     - _Parallax: 0.02
+    - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _ReceivesSSR: 1
@@ -486,6 +492,16 @@ Material:
     - _SupportDecals: 1
     - _Surface: 0
     - _SurfaceType: 0
+    - _TessEdgeLength: 5
+    - _TessExtrusionAmount: 0
+    - _TessPhongStrength: 0.5
+    - _TessellationBackFaceCullEpsilon: -0.25
+    - _TessellationFactor: 4
+    - _TessellationFactorMaxDistance: 50
+    - _TessellationFactorMinDistance: 20
+    - _TessellationFactorTriangleSize: 100
+    - _TessellationMode: 0
+    - _TessellationShapeFactor: 0.75
     - _TexWorldScale: 1
     - _TexWorldScaleEmissive: 1
     - _Thickness: 1

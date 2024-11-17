@@ -17,8 +17,10 @@ public class EnemyManager : MonoBehaviour //적
     private State<EnemyManager>[] _states;
     private StateMachine<EnemyManager> _stateMachine;
     private GameObject _player;
+    private Tween _lookAtTween;
     private NavMeshAgent _agent;
     [SerializeField] private EnemyData data;
+    private EnemyDropTable _dropTable;
     private string _type;
     private float _health;
     private float _maxHealth;
@@ -57,6 +59,7 @@ public class EnemyManager : MonoBehaviour //적
         EnemyAnimator = _animator;
         _player = GameObject.FindGameObjectWithTag("Player");
         _agent = GetComponent<NavMeshAgent>();
+        _dropTable = data.DropTable;
         
         _states = new State<EnemyManager>[6];
         _states[(int)EnemyStates.Idle] = new EnemyAnimState.Idle();
@@ -79,6 +82,7 @@ public class EnemyManager : MonoBehaviour //적
         _wasDamaged = false;
         _isDead = false;
         _inAttackDelay = false;
+        
     }
 
     private void Update()
@@ -87,7 +91,9 @@ public class EnemyManager : MonoBehaviour //적
         if (_isDead) return;
         
         //transform.LookAt(_player.transform);
-        transform.DOLookAt(_player.transform.position,0.1f);
+        if(_lookAtTween != null || !_lookAtTween.IsActive() || !_lookAtTween.IsPlaying())
+            _lookAtTween = transform.DOLookAt(_player.transform.position,0.1f).SetUpdate(true);
+        
         _agent.SetDestination(_player.transform.position); //NavMeshAgent 플레이어 추적 
         
         float animTime = _animator.GetCurrentAnimatorStateInfo(0).normalizedTime;

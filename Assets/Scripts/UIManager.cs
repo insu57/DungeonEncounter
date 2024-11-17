@@ -6,14 +6,18 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour //UI제어
 {
+    private GameManager _gameManager;
     private PlayerManager _playerManager;
     private Canvas _canvasMain;
+    private GameObject _playerInfo;
     private Image _playerHealthBar;
     private Image _playerEnergyBar;
     private float _playerHealth;
     private float _playerMaxHealth;
     private float _playerEnergy;
     private float _playerMaxEnergy;
+    private GameObject _pauseMenu;
+    
     
     private EnemyManager[] _enemyManagers;
     private Canvas _canvasFloat;
@@ -23,10 +27,13 @@ public class UIManager : MonoBehaviour //UI제어
     
     private void Awake()
     {
+        _gameManager = FindObjectOfType<GameManager>();
         _playerManager = FindObjectOfType<PlayerManager>();
         _canvasMain = GameObject.Find("CanvasMain").GetComponent<Canvas>();
-        _playerHealthBar = _canvasMain.transform.Find("Health").GetComponent<Image>();
-        _playerEnergyBar = _canvasMain.transform.Find("Energy").GetComponent<Image>();
+        _playerInfo = _canvasMain.transform.Find("PlayerInfo").gameObject;
+        _playerHealthBar = _playerInfo.transform.Find("Health").GetComponent<Image>();
+        _playerEnergyBar = _playerInfo.transform.Find("Energy").GetComponent<Image>();
+        _pauseMenu = _canvasMain.transform.Find("PauseMenu").gameObject;
         
         _enemyHealthPrefab = Resources.Load<GameObject>("Prefabs/EnemyHealth");
         _canvasFloat = GameObject.Find("CanvasFloat").GetComponent<Canvas>();
@@ -50,6 +57,20 @@ public class UIManager : MonoBehaviour //UI제어
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (!_gameManager.GamePaused)
+            {
+                _gameManager.GamePaused = true;
+                _pauseMenu.SetActive(true);
+            }
+            else
+            {
+                _gameManager.GamePaused = false;
+                _pauseMenu.SetActive(false);
+            }
+        }
+        
         _playerHealth = _playerManager.Health;//플레이어 상태정보
         _playerEnergy = _playerManager.Energy;
         _playerMaxHealth = _playerManager.MaxHealth;
