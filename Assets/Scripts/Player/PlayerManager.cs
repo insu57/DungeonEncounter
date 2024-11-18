@@ -5,7 +5,6 @@ public enum PlayerStates { Idle = 0, Run, Attack, Dodge, UseItem, Damaged ,Globa
 
 public class PlayerManager : MonoBehaviour
 {
-    private static readonly int Color1 = Shader.PropertyToID("_Color");
     private GameManager _gameManager;
     
     private float _maxHealth;
@@ -130,8 +129,8 @@ public class PlayerManager : MonoBehaviour
                 AudioManager.Instance.PlayFootstep(AudioManager.Footstep.RockFootstep); //Footstep Play
             }
             _lookRotation = Quaternion.LookRotation(_lookVector);
-            transform.rotation = Quaternion.Slerp(transform.rotation, _lookRotation, 8f * Time.deltaTime);
-            // Slerp 부드러운 회전...8f:회전속도
+            transform.rotation = Quaternion.Lerp(transform.rotation, _lookRotation, 8f * Time.deltaTime);
+            // lerp 부드러운 회전...8f:회전속도
             
             if (Input.GetMouseButtonDown(0)) //Mouse left click Attack 마우스 좌클릭 공격
             {

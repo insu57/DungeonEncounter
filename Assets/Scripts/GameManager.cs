@@ -32,8 +32,6 @@ public class GameManager : Singleton<GameManager> //Singleton Game Manager ì‹±ê¸
             DOTween.PlayAll();
         }
         
-        
-
     }
     
     

@@ -13,6 +13,7 @@ public enum EnemyStates { Idle = 0, Move, Attack, Damaged , Dead ,Global }
 
 public class EnemyManager : MonoBehaviour //적
 {
+    private GameManager _gameManager;
     private Animator _animator;
     private State<EnemyManager>[] _states;
     private StateMachine<EnemyManager> _stateMachine;
@@ -55,6 +56,7 @@ public class EnemyManager : MonoBehaviour //적
 
     private void Awake()
     {
+        _gameManager = FindObjectOfType<GameManager>();
         _animator = GetComponent<Animator>();
         EnemyAnimator = _animator;
         _player = GameObject.FindGameObjectWithTag("Player");
@@ -84,15 +86,16 @@ public class EnemyManager : MonoBehaviour //적
         _inAttackDelay = false;
         
     }
-
+    
     private void Update()
     {
         _stateMachine.Execute();
         if (_isDead) return;
         
-        //transform.LookAt(_player.transform);
-        if(_lookAtTween != null || !_lookAtTween.IsActive() || !_lookAtTween.IsPlaying())
-            _lookAtTween = transform.DOLookAt(_player.transform.position,0.1f).SetUpdate(true);
+        Vector3 dir = _player.transform.position - transform.position;
+        Quaternion targetRotation = Quaternion.LookRotation(dir);
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * 7f);
+        //lerp LookAt Player
         
         _agent.SetDestination(_player.transform.position); //NavMeshAgent 플레이어 추적 
         

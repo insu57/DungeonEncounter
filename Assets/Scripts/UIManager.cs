@@ -53,6 +53,7 @@ public class UIManager : MonoBehaviour //UI제어
             enemyHealthBar.Init(enemyManager);
             _enemyHealthUI[enemyManager] = enemyHealthBar;
         }
+        //수정필요...적 추가시 대응
     }
 
     private void Update()
