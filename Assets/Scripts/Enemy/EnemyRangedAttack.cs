@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Enemy;
+using Player;
 using Scriptable_Objects;
 using UnityEngine;
 

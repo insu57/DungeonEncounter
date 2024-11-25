@@ -16,4 +16,4 @@ MonoBehaviour:
   description: Very normal sword.
   type: Sword
   rarity: Common
-  damage: 20
+  attackValue: 20

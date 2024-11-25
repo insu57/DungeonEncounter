@@ -1,7 +1,4 @@
-
-using UnityEngine;
-
-namespace EnemyAnimState
+namespace Enemy
 {
     public class Idle : State<EnemyManager>
     {

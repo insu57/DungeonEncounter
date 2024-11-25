@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Enemy;
 using Scriptable_Objects;
 using UnityEditor.Localization.Plugins.XLIFF.V20;
 using UnityEngine;

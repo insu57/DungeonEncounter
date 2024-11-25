@@ -4,21 +4,21 @@ using UnityEngine;
 
 public class Singleton<T> : MonoBehaviour where T: Component //Singleton Generic 싱글톤 제네릭
 {
-    private static T instance;
+    private static T _instance;
     public static T Instance
     {
         get
         {
-            if (instance == null)
+            if (!_instance)
             {
-                instance = (T)FindAnyObjectByType(typeof(T));
-                if (instance == null)
+                _instance = (T)FindAnyObjectByType(typeof(T));
+                if (!_instance)
                 {
                     SetupInstance();
 
                 }
             }
-            return instance;
+            return _instance;
         }
     }
 
@@ -27,24 +27,27 @@ public class Singleton<T> : MonoBehaviour where T: Component //Singleton Generic
         RemoveDuplicates();
     }
 
+    // ReSharper disable Unity.PerformanceAnalysis
     private static void SetupInstance()
     {
-        instance = (T)FindAnyObjectByType(typeof(T));
+        _instance = (T)FindAnyObjectByType(typeof(T));
 
-        if (instance == null)
+        if (!_instance)
         {
-            GameObject gameObj = new GameObject();
-            gameObj.name = typeof(T).Name;
-            instance = gameObj.AddComponent<T>();
+            GameObject gameObj = new GameObject
+            {
+                name = typeof(T).Name
+            };
+            _instance = gameObj.AddComponent<T>();
             DontDestroyOnLoad(gameObj);
         }
     }
 
     private void RemoveDuplicates()
     {
-        if(instance == null)
+        if(!_instance)
         {
-            instance = this as T;
+            _instance = this as T;
             DontDestroyOnLoad(gameObject);
         }
         else

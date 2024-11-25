@@ -1,18 +1,15 @@
-
-using UnityEngine;
-
-namespace PlayerAnimState
+namespace Player
 {
     
-    public class Idle : State<PlayerManager>
+    public class Idle : State<PlayerControl>
     {
 
-        public override void Enter(PlayerManager player)
+        public override void Enter(PlayerControl player)
         {
             player.PlayerAnimator.Play("Idle");
         }
 
-        public override void Execute(PlayerManager player)
+        public override void Execute(PlayerControl player)
         {
             if (player.IsMove)
             {
@@ -20,20 +17,20 @@ namespace PlayerAnimState
             }
         }
 
-        public override void Exit(PlayerManager player)
+        public override void Exit(PlayerControl player)
         {
             
         }
     }
 
-    public class Run : State<PlayerManager>
+    public class Run : State<PlayerControl>
     {
-        public override void Enter(PlayerManager player)
+        public override void Enter(PlayerControl player)
         {
             player.PlayerAnimator.Play("Run");
         }
 
-        public override void Execute(PlayerManager player)
+        public override void Execute(PlayerControl player)
         {
             if (!player.IsMove)
             {
@@ -41,20 +38,20 @@ namespace PlayerAnimState
             }
         }
 
-        public override void Exit(PlayerManager player)
+        public override void Exit(PlayerControl player)
         {
 
         }
     }
 
-    public class Attack : State<PlayerManager>
+    public class Attack : State<PlayerControl>
     {
-        public override void Enter(PlayerManager player)
+        public override void Enter(PlayerControl player)
         {
             player.PlayerAnimator.Play("Attack");
         }
 
-        public override void Execute(PlayerManager player)
+        public override void Execute(PlayerControl player)
         {
             // &&  player.PlayerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Attack")  // 공격 애니메이션 체크
             float animTime = player.PlayerAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime;    
@@ -68,76 +65,76 @@ namespace PlayerAnimState
             
         }
 
-        public override void Exit(PlayerManager player)
+        public override void Exit(PlayerControl player)
         {
             
         }
     }
 
-    public class Dodge : State<PlayerManager>
+    public class Dodge : State<PlayerControl>
     {
-        public override void Enter(PlayerManager player)
+        public override void Enter(PlayerControl player)
         {
             player.PlayerAnimator.Play("Run");
         }
 
-        public override void Execute(PlayerManager player)
+        public override void Execute(PlayerControl player)
         {
 
         }
 
-        public override void Exit(PlayerManager player)
+        public override void Exit(PlayerControl player)
         {
 
         }
     }
 
-    public class UseItem : State<PlayerManager>
+    public class UseItem : State<PlayerControl>
     {
-        public override void Enter(PlayerManager player)
+        public override void Enter(PlayerControl player)
         {
             //
         }
 
-        public override void Execute(PlayerManager player)
+        public override void Execute(PlayerControl player)
         {
 
         }
 
-        public override void Exit(PlayerManager player)
+        public override void Exit(PlayerControl player)
         {
 
         }
     }
 
-    public class Damaged : State<PlayerManager>
+    public class Damaged : State<PlayerControl>
     {
-        public override void Enter(PlayerManager player)
+        public override void Enter(PlayerControl player)
         {
             //player.PlayerAnimator.Play("Damaged");
         }
 
-        public override void Execute(PlayerManager player)
+        public override void Execute(PlayerControl player)
         {
-            if (!player.WasDamaged)
+            if (!player.IsDamaged)
             {
                 player.ChangeState(PlayerStates.Idle);
             }
         }
 
-        public override void Exit(PlayerManager player)
+        public override void Exit(PlayerControl player)
         {
             
         }
     }
 
-    public class StateGlobal : State<PlayerManager>
+    public class StateGlobal : State<PlayerControl>
     {
-        public override void Enter(PlayerManager player)
+        public override void Enter(PlayerControl player)
         {
             
         }
-        public override void Execute(PlayerManager player)
+        public override void Execute(PlayerControl player)
         {
     
             if (player.CurrentState is PlayerStates.Attack or PlayerStates.Dodge or PlayerStates.Damaged)
@@ -165,7 +162,7 @@ namespace PlayerAnimState
             }
             
         }
-        public override void Exit(PlayerManager player)
+        public override void Exit(PlayerControl player)
         {
             
         }

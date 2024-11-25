@@ -11,12 +11,12 @@ namespace Scriptable_Objects
         [SerializeField] private string description;
         [SerializeField] private string type;
         [SerializeField] private string rarity;
-        [SerializeField] private float damage;
+        [SerializeField] private float attackValue;
 
         public string WeaponName => weaponName;
         public string Description => description;
         public string Type => type;
         public string Rarity => rarity;
-        public float Damage => damage;
+        public float AttackValue => attackValue;
     }
 }

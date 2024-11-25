@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a04bbbfa8b2b3f049b56253ade913afa, type: 3}
+  m_Name: WarriorJobData
+  m_EditorClassIdentifier: 
+  playerJobName: Warrior
+  defaultWeapon: {fileID: 3213851043470871558, guid: dcf19aef1c8a2e04c9dde8894033af61, type: 3}
+  health: 100
+  maxHealth: 100
+  energy: 100
+  maxEnergy: 100
+  moveSpeed: 7
