@@ -19,16 +19,14 @@ namespace Player
         private GameManager _gameManager;
         [SerializeField]private PlayerJobData playerJobData;
         private PlayerControl _playerControl;
-        private GameObject _playerWeaponPrefab;
-        private PlayerWeapon _playerWeapon;
-        private PlayerWeaponData _playerWeaponData;
-        
+        private GameObject _playerWeaponPrefab;//Weapon...Prefab
+        private PlayerWeaponData _playerWeaponData;//SO Data
         private Dictionary<PlayerStatTypes, float> _playerStats;
         public event Action<PlayerStatTypes,float> OnStatChanged;
         
         private Camera _mainCamera;
-        
 
+        
         public void SetStat(PlayerStatTypes statType, float value)
         {
             if (_playerStats.ContainsKey(statType) && Mathf.Approximately(_playerStats[statType], value)) return;
@@ -52,8 +50,8 @@ namespace Player
             _mainCamera = Camera.main;
             
             _playerWeaponPrefab = playerJobData.DefaultWeapon;
-            _playerWeapon = _playerWeaponPrefab.GetComponent<PlayerWeapon>();
-            _playerWeaponData = _playerWeapon.Data;
+            PlayerWeapon playerWeapon = _playerWeaponPrefab.GetComponent<PlayerWeapon>();
+            _playerWeaponData = playerWeapon.Data;
             //직업 기본 데이터에서 받아오게 수정...SO에서 받아옴
             
             _playerStats = new Dictionary<PlayerStatTypes, float>
@@ -65,17 +63,13 @@ namespace Player
                 { PlayerStatTypes.AttackValue, _playerWeaponData.AttackValue},
                 { PlayerStatTypes.DefenseValue, 0f}
             };
-            
+            Debug.Log(_playerStats[PlayerStatTypes.AttackValue]);
+            Debug.Log(_playerStats[PlayerStatTypes.DefenseValue]);
         }
     
         private void Start() //구조 수정중
         {
-            //Init처리 필요...초기값은 Invoke되지않은듯...
-            SetStat(PlayerStatTypes.Health, GetStat(PlayerStatTypes.Health) );
-            Debug.Log(_playerStats[PlayerStatTypes.Health]);
-            SetStat(PlayerStatTypes.Energy, _playerStats[PlayerStatTypes.Energy] );
-            SetStat(PlayerStatTypes.AttackValue, _playerStats[PlayerStatTypes.AttackValue]);
-            SetStat(PlayerStatTypes.DefenseValue, _playerStats[PlayerStatTypes.DefenseValue]);
+            
         }
         
         private void OnTriggerEnter(Collider other)

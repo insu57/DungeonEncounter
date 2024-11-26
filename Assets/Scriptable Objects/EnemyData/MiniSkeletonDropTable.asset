@@ -14,9 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moneyRangeStart: 10
   moneyRangeEnd: 100
-  items:
-  - dropPrefab: {fileID: 0}
-    dropChance: 0
+  consumableItems: []
   weapons: []
   equipments: []
   itemChance: 0.3

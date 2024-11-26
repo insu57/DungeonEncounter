@@ -1,5 +1,6 @@
 using System.Collections;
 using DG.Tweening;
+using Player;
 using Scriptable_Objects;
 using UnityEngine;
 using UnityEngine.AI;

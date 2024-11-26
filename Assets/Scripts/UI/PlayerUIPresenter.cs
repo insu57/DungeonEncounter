@@ -5,37 +5,48 @@ using UnityEngine;
 namespace UI
 {
     public class PlayerUIPresenter
-    {
-        private readonly PlayerManager _model;
+
+    { 
+        private readonly PlayerManager _playerManager;
         private readonly IPlayerUIView _uiView;
-
-        public PlayerUIPresenter(PlayerManager model, IPlayerUIView uiView)
+        public PlayerUIPresenter(PlayerManager playerManager, IPlayerUIView uiView) //presenter
         {
-            _model = model;
-            _uiView = uiView;
-
-            _model.OnStatChanged += HandleStatChanged;
+            _playerManager = playerManager; //model
+            _uiView = uiView; //view
+            
+            _playerManager.OnStatChanged += HandleStatChanged;
+            
+            //init stat
+            float health = _playerManager.GetStat(PlayerStatTypes.Health);
+            float maxHealth = _playerManager.GetStat(PlayerStatTypes.MaxHealth);
+            float energy = _playerManager.GetStat(PlayerStatTypes.Energy);
+            float maxEnergy = _playerManager.GetStat(PlayerStatTypes.MaxEnergy);
+            float attack = _playerManager.GetStat(PlayerStatTypes.AttackValue);
+            float defense = _playerManager.GetStat(PlayerStatTypes.DefenseValue);
+            
+            _uiView.UpdatePlayerHealthBar(health, maxHealth);
+            _uiView.UpdatePlayerEnergyBar(energy, maxEnergy);
+            _uiView.UpdatePlayerAttackValue(attack);
+            _uiView.UpdatePlayerDefenseValue(defense);
         }
-        
         private void HandleStatChanged(PlayerStatTypes statTypes, float value)
         {
-            Debug.Log("EVENT HANDLE");
-            switch(statTypes)
+            switch (statTypes)
             {
                 case PlayerStatTypes.Health:
-                    float maxHealth = _model.GetStat(PlayerStatTypes.MaxHealth);
+                    float maxHealth = _playerManager.GetStat(PlayerStatTypes.MaxHealth);
                     _uiView.UpdatePlayerHealthBar(value, maxHealth);
                     break;
                 case PlayerStatTypes.MaxHealth:
-                    float health = _model.GetStat(PlayerStatTypes.Health);
+                    float health = _playerManager.GetStat(PlayerStatTypes.Health);
                     _uiView.UpdatePlayerHealthBar(health, value);
                     break;
                 case PlayerStatTypes.Energy:
-                    float maxEnergy = _model.GetStat(PlayerStatTypes.MaxEnergy);
+                    float maxEnergy = _playerManager.GetStat(PlayerStatTypes.MaxEnergy);
                     _uiView.UpdatePlayerEnergyBar(value, maxEnergy);
                     break;
                 case PlayerStatTypes.MaxEnergy:
-                    float energy = _model.GetStat(PlayerStatTypes.Energy);
+                    float energy = _playerManager.GetStat(PlayerStatTypes.Energy);
                     _uiView.UpdatePlayerEnergyBar(energy, value);
                     break;
                 case PlayerStatTypes.AttackValue:
@@ -48,11 +59,10 @@ namespace UI
                     break;
             }
         }
-
+    
         public void Dispose()
         {
-            _model.OnStatChanged -= HandleStatChanged;
+            _playerManager.OnStatChanged -= HandleStatChanged;
         }
-        
     }
 }

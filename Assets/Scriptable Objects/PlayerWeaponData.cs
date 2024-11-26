@@ -7,16 +7,17 @@ namespace Scriptable_Objects
         menuName = "ScriptableObjects/PlayerWeaponData", order = int.MaxValue)]
     public class PlayerWeaponData : ScriptableObject
     {
+       
         [SerializeField] private string weaponName;
         [SerializeField] private string description;
-        [SerializeField] private string type;
-        [SerializeField] private string rarity;
+        [SerializeField] private WeaponType type;
+        [SerializeField] private Rarity rarity;
         [SerializeField] private float attackValue;
 
         public string WeaponName => weaponName;
         public string Description => description;
-        public string Type => type;
-        public string Rarity => rarity;
+        public WeaponType Type => type;
+        public Rarity Rarity => rarity;
         public float AttackValue => attackValue;
     }
 }

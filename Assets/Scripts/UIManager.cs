@@ -30,8 +30,6 @@ public class UIManager : MonoBehaviour //UI제어
         _playerManager = FindObjectOfType<PlayerManager>();
         _playerUIView = GetComponent<PlayerUIView>();
         _gameManager = FindObjectOfType<GameManager>();
-     
-        _playerUIPresenter = new PlayerUIPresenter(_playerManager, _playerUIView);
         
         _canvasFloat = GameObject.Find("CanvasFloat").GetComponent<Canvas>();
         _mainCamera = Camera.main;
@@ -55,8 +53,7 @@ public class UIManager : MonoBehaviour //UI제어
         }
         //수정필요...적 추가시 대응
 
-        
-
+        _playerUIPresenter = new PlayerUIPresenter(_playerManager, _playerUIView);
     }
     
     private void Update()

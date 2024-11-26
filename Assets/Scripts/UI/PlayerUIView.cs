@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -32,7 +33,7 @@ namespace UI
         private TextMeshProUGUI _energyText;
         private TextMeshProUGUI _attackText;
         private TextMeshProUGUI _defenseText;
-    
+        public event Action OnPlayerUIViewReady;
         private void TogglePause()
         {
             _gameManager.TogglePause();
@@ -64,7 +65,27 @@ namespace UI
 
         public void UpdatePlayerDefenseValue(float defenseValue)
         {
-            _attackText.text = $"{defenseValue}";
+            _defenseText.text = $"{defenseValue}";
+        }
+
+        private void OnPlayerStatusMenu()
+        {
+            //Debug.Log("OnPlayerStatusMenu");
+        }
+
+        private void OnWeaponInventory()
+        {
+            
+        }
+
+        private void OnEquipmentInventory()
+        {
+            
+        }
+
+        private void OnConsumableInventory()
+        {
+            
         }
         
         private void Awake()
@@ -84,6 +105,10 @@ namespace UI
             _weaponButton = _playerMenu.transform.Find("Buttons/WeaponButton").GetComponent<Button>();
             _equipmentButton = _playerMenu.transform.Find("Buttons/EquipmentButton").GetComponent<Button>();
             _consumableButton = _playerMenu.transform.Find("Buttons/ConsumableButton").GetComponent<Button>();
+            _playerButton.onClick.AddListener(OnPlayerStatusMenu);
+            _weaponButton.onClick.AddListener(OnWeaponInventory);
+            _equipmentButton.onClick.AddListener(OnEquipmentInventory);
+            _consumableButton.onClick.AddListener(OnConsumableInventory);
             //Main
             _playerMenuMain = _playerMenu.transform.Find("Main").gameObject;
             _playerStatus = _playerMenuMain.transform.Find("PlayerStatus").gameObject;
@@ -91,7 +116,6 @@ namespace UI
             //...Player Status
          
             _jobText = _playerStatus.transform.Find("JobText").GetComponent<TextMeshProUGUI>();
-            Debug.Log(_jobText.name);
             _healthText = _playerStatus.transform.Find("HealthText").GetComponent<TextMeshProUGUI>();
             _energyText = _playerStatus.transform.Find("EnergyText").GetComponent<TextMeshProUGUI>();
             _attackText = _playerStatus.transform.Find("AttackText").GetComponent<TextMeshProUGUI>();
@@ -106,7 +130,7 @@ namespace UI
         // Start is called before the first frame update
         private void Start()
         {
-            
+            OnPlayerUIViewReady?.Invoke();
         }
 
         // Update is called once per frame
