@@ -1,19 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "PlayerEquipmentData",
-    menuName = "ScriptableObjects/PlayerEquipmentData", order = int.MaxValue)]
-public class PlayerEquipmentData : ScriptableObject
+namespace Scriptable_Objects
 {
-    [SerializeField] private string equipmentName;
-    [SerializeField] private string description;
-    [SerializeField] private string type;
-    [SerializeField] private string rarity;
+    [CreateAssetMenu(fileName = "PlayerEquipmentData",
+        menuName = "ScriptableObjects/PlayerEquipmentData", order = int.MaxValue)]
+    public class PlayerEquipmentData : ScriptableObject
+    {
+        [SerializeField] private string equipmentName;
+        [SerializeField] private string description;
+        [SerializeField] private string type;
+        [SerializeField] private string rarity;
+        [SerializeField] private Sprite icon;
 
-    public string EquipmentName => equipmentName;
-    public string Description => description;
-    public string Type => type;
-    public string Rarity => rarity;
-
+        public string EquipmentName => equipmentName;
+        public string Description => description;
+        public string Type => type;
+        public string Rarity => rarity;
+        public Sprite Icon => icon;
+    }
 }

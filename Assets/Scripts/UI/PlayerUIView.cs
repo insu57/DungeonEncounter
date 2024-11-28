@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace UI
 {
-    public class PlayerUIView : MonoBehaviour, IPlayerUIView
+    public class PlayerUIView : MonoBehaviour
     {
         private GameManager _gameManager;
         private Canvas _canvasMain;
@@ -28,12 +28,23 @@ namespace UI
         private Button _weaponButton;
         private Button _equipmentButton;
         private Button _consumableButton;
+        
         private TextMeshProUGUI _jobText;
         private TextMeshProUGUI _healthText;
         private TextMeshProUGUI _energyText;
         private TextMeshProUGUI _attackText;
         private TextMeshProUGUI _defenseText;
-        public event Action OnPlayerUIViewReady;
+        private Image _currentWeaponImg;
+        private Image _currentEquipmentImg;
+        private Image _currentQuick1Img;
+        private Image _currentQuick2Img;
+       
+        public event Action OnWeaponChanged;
+        public event Action OnEquipmentChanged;
+        public event Action<int> OnItemQuickChanged;
+        public event Action OnShowIcon; //icon? data?
+        
+        
         private void TogglePause()
         {
             _gameManager.TogglePause();
@@ -70,23 +81,36 @@ namespace UI
 
         private void OnPlayerStatusMenu()
         {
-            //Debug.Log("OnPlayerStatusMenu");
+            _inventory.SetActive(false);
+            
         }
 
         private void OnWeaponInventory()
         {
-            
+            _inventory.SetActive(true);
         }
 
         private void OnEquipmentInventory()
         {
-            
+            _inventory.SetActive(true);
         }
 
         private void OnConsumableInventory()
         {
-            
+            _inventory.SetActive(true);
         }
+
+        public void UpdateCurrentWeapon(Sprite sprite)
+        {
+            _currentWeaponImg.sprite = sprite;
+            Color alpha = new Color(1, 1, 1, 1);
+            _currentWeaponImg.color = alpha;
+        }
+        private void ShowCurrentItem()
+        {
+            //_currentWeaponSprite
+        }
+        
         
         private void Awake()
         {
@@ -120,17 +144,19 @@ namespace UI
             _energyText = _playerStatus.transform.Find("EnergyText").GetComponent<TextMeshProUGUI>();
             _attackText = _playerStatus.transform.Find("AttackText").GetComponent<TextMeshProUGUI>();
             _defenseText = _playerStatus.transform.Find("DefenseText").GetComponent<TextMeshProUGUI>();
+            _currentWeaponImg = _playerStatus.transform.Find("CurrentWeaponIcon").GetComponent<Image>();
         
             //PlayerInfo
             _playerInfo = _canvasMain.transform.Find("PlayerInfo").gameObject;
             _playerHealthBar = _playerInfo.transform.Find("Health").GetComponent<Image>();
             _playerEnergyBar = _playerInfo.transform.Find("Energy").GetComponent<Image>();
+         
         }
 
         // Start is called before the first frame update
         private void Start()
         {
-            OnPlayerUIViewReady?.Invoke();
+            
         }
 
         // Update is called once per frame

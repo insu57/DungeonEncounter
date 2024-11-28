@@ -13,6 +13,8 @@ namespace Scriptable_Objects
         [SerializeField] private float energy;
         [SerializeField] private float maxEnergy;
         [SerializeField] private float moveSpeed;
+
+        [SerializeField] private Sprite icon;
         //json에서 받아오게 수정 예정...
         
         public string PlayerJobName => playerJobName;
@@ -22,5 +24,6 @@ namespace Scriptable_Objects
         public float Energy => energy;
         public float MaxEnergy => maxEnergy;
         public float MoveSpeed => moveSpeed;
+        public Sprite Icon => icon;
     }
 }

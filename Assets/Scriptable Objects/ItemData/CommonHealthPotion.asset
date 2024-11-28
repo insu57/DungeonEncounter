@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: CommonHealthPotion
   description: common health potion
-  type: Health Potion
-  rarity: Common
+  type: 0
+  rarity: 0
   itemData:
-  - effectType: Helath
-    effectCalc: Plus
+  - effectStat: 0
+    effectCalc: 0
     effect: 50
+  icon: {fileID: 21300000, guid: 3fb5a077320e89d4e97af9a20cf8a6e5, type: 3}

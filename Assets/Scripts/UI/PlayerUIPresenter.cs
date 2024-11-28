@@ -6,14 +6,17 @@ namespace UI
 {
     public class PlayerUIPresenter
 
-    { 
+    {
         private readonly PlayerManager _playerManager;
-        private readonly IPlayerUIView _uiView;
-        public PlayerUIPresenter(PlayerManager playerManager, IPlayerUIView uiView) //presenter
+        private readonly InventoryManager _inventoryManager;
+        private readonly PlayerUIView _uiView;
+        
+        
+        public PlayerUIPresenter(PlayerManager playerManager ,PlayerUIView uiView) //presenter
         {
-            _playerManager = playerManager; //model
+            _playerManager = playerManager; //PlayerDataModel
             _uiView = uiView; //view
-            
+
             _playerManager.OnStatChanged += HandleStatChanged;
             
             //init stat
@@ -23,12 +26,15 @@ namespace UI
             float maxEnergy = _playerManager.GetStat(PlayerStatTypes.MaxEnergy);
             float attack = _playerManager.GetStat(PlayerStatTypes.AttackValue);
             float defense = _playerManager.GetStat(PlayerStatTypes.DefenseValue);
-            
+
             _uiView.UpdatePlayerHealthBar(health, maxHealth);
             _uiView.UpdatePlayerEnergyBar(energy, maxEnergy);
             _uiView.UpdatePlayerAttackValue(attack);
             _uiView.UpdatePlayerDefenseValue(defense);
+
+           
         }
+
         private void HandleStatChanged(PlayerStatTypes statTypes, float value)
         {
             switch (statTypes)
@@ -59,7 +65,8 @@ namespace UI
                     break;
             }
         }
-    
+
+        
         public void Dispose()
         {
             _playerManager.OnStatChanged -= HandleStatChanged;

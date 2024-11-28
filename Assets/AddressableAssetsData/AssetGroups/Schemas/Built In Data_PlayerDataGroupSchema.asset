@@ -9,12 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc3a0f9c5c8eabb469e521f3f16b18ec, type: 3}
-  m_Name: SwordNormal01
+  m_Script: {fileID: 11500000, guid: b1487f5d688e4f94f828f879d599dbdc, type: 3}
+  m_Name: Built In Data_PlayerDataGroupSchema
   m_EditorClassIdentifier: 
-  weaponName: Very Normal Sword
-  description: Very normal sword.
-  type: 0
-  rarity: 0
-  attackValue: 20
-  icon: {fileID: 21300000, guid: 799011a6803676d4a9c5279d3971d821, type: 3}
+  m_Group: {fileID: 11400000, guid: 244c569eaf74c6143aede656cfaa1589, type: 2}
+  m_IncludeResourcesFolders: 1
+  m_IncludeBuildSettingsScenes: 1

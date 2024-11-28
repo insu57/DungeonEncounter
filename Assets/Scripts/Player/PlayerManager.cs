@@ -20,14 +20,17 @@ namespace Player
         [SerializeField]private PlayerJobData playerJobData;
         private PlayerControl _playerControl;
         private GameObject _playerWeaponPrefab;//Weapon...Prefab
-        private PlayerWeaponData _playerWeaponData;//SO Data
-        private Dictionary<PlayerStatTypes, float> _playerStats;
+        public PlayerWeaponData WeaponData { get; private set; }
+
+        private Dictionary<PlayerStatTypes, float> _playerStats; 
         public event Action<PlayerStatTypes,float> OnStatChanged;
+        
+        private InventoryManager _playerInventoryManager;
         
         private Camera _mainCamera;
 
-        
-        public void SetStat(PlayerStatTypes statType, float value)
+
+        private void SetStat(PlayerStatTypes statType, float value)
         {
             if (_playerStats.ContainsKey(statType) && Mathf.Approximately(_playerStats[statType], value)) return;
             _playerStats[statType] = value;
@@ -51,7 +54,8 @@ namespace Player
             
             _playerWeaponPrefab = playerJobData.DefaultWeapon;
             PlayerWeapon playerWeapon = _playerWeaponPrefab.GetComponent<PlayerWeapon>();
-            _playerWeaponData = playerWeapon.Data;
+            WeaponData = playerWeapon.Data;
+            Debug.Log(WeaponData.Icon);
             //직업 기본 데이터에서 받아오게 수정...SO에서 받아옴
             
             _playerStats = new Dictionary<PlayerStatTypes, float>
@@ -60,11 +64,11 @@ namespace Player
                 { PlayerStatTypes.MaxHealth, playerJobData.MaxHealth },
                 { PlayerStatTypes.Energy, playerJobData.Energy },
                 { PlayerStatTypes.MaxEnergy, playerJobData.MaxEnergy },
-                { PlayerStatTypes.AttackValue, _playerWeaponData.AttackValue},
+                { PlayerStatTypes.AttackValue, WeaponData.AttackValue},
                 { PlayerStatTypes.DefenseValue, 0f}
             };
-            Debug.Log(_playerStats[PlayerStatTypes.AttackValue]);
-            Debug.Log(_playerStats[PlayerStatTypes.DefenseValue]);
+
+            //_playerInventoryManager.CurrentWeaponData = _playerWeaponData;
         }
     
         private void Start() //구조 수정중
@@ -88,6 +92,7 @@ namespace Player
             else if (other.CompareTag("Item"))
             {
                 //Add to Inventory
+                Debug.Log("Get Item!"+other.name);
             }
         }
 

@@ -10,7 +10,9 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour //UI제어
 {
     private PlayerUIPresenter _playerUIPresenter;
+    private InventoryUIPresenter _inventoryUIPresenter;
     private PlayerManager _playerManager;
+    private InventoryManager _inventoryManager;
     private PlayerUIView _playerUIView;
     
     private GameManager _gameManager;
@@ -28,6 +30,7 @@ public class UIManager : MonoBehaviour //UI제어
     private void Awake()
     {
         _playerManager = FindObjectOfType<PlayerManager>();
+        _inventoryManager = FindObjectOfType<InventoryManager>();
         _playerUIView = GetComponent<PlayerUIView>();
         _gameManager = FindObjectOfType<GameManager>();
         
@@ -54,6 +57,7 @@ public class UIManager : MonoBehaviour //UI제어
         //수정필요...적 추가시 대응
 
         _playerUIPresenter = new PlayerUIPresenter(_playerManager, _playerUIView);
+        _inventoryUIPresenter = new InventoryUIPresenter(_playerManager, _inventoryManager, _playerUIView);
     }
     
     private void Update()
