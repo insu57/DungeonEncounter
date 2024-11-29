@@ -103,7 +103,7 @@ namespace UI
         public void UpdateCurrentWeapon(Sprite sprite)
         {
             _currentWeaponImg.sprite = sprite;
-            Color alpha = new Color(1, 1, 1, 1);
+            Color alpha = new Color(1,1,1, 1);
             _currentWeaponImg.color = alpha;
         }
         private void ShowCurrentItem()

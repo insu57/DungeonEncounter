@@ -13,13 +13,13 @@ public class InventoryManager : MonoBehaviour
     private GameObject _itemQuickSlot1;
     private GameObject _itemQuickSlot2;
     
-    public PlayerWeaponData CurrentWeaponData { private set; get; }
+    public ItemData CurrentWeaponData { private set; get; }
     public PlayerEquipmentData CurrentEquipmentData { private set; get; }
     public ConsumableItemData ItemQuickSlot1 { private set; get; }
     public ConsumableItemData ItemQuickSlot2 { private set; get; }
 
     private GameObject _selectedItem; //GameObject?Data?...
-    private List<PlayerWeaponData> _weaponDataList = new List<PlayerWeaponData>();
+    private List<ItemData> _weaponDataList = new List<ItemData>();
     private List<PlayerEquipmentData> _equipmentDataList = new List<PlayerEquipmentData>();
     private List<ConsumableItemData> _itemDataList = new List<ConsumableItemData>(); //수량도 필요함..Dictionary?
     
@@ -42,8 +42,9 @@ public class InventoryManager : MonoBehaviour
     
     //inventory
 
-    public void SetWeapon(PlayerWeaponData data)
+    public void SetWeapon(ItemData data)
     {
+        if(data.ItemType != ItemTypes.Weapon) return;
         CurrentWeaponData = data;
         _weaponDataList.Add(data);
     }

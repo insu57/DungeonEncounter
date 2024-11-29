@@ -16,6 +16,7 @@ namespace Enemy
         private State<EnemyManager>[] _states;
         private StateMachine<EnemyManager> _stateMachine;
         private GameObject _player;
+        private PlayerManager _playerManager;
         private Tween _lookAtTween;
         private NavMeshAgent _agent;
         [SerializeField] private EnemyData data;
@@ -58,6 +59,7 @@ namespace Enemy
             _animator = GetComponent<Animator>();
             EnemyAnimator = _animator;
             _player = GameObject.FindGameObjectWithTag("Player");
+            _playerManager = _player.GetComponent<PlayerManager>();
             _agent = GetComponent<NavMeshAgent>();
             _dropTable = data.DropTable;
         
@@ -127,9 +129,10 @@ namespace Enemy
         {
             if (other.CompareTag("PlayerAttack") && _wasDamaged == false)
             {
-                PlayerWeaponData playerWeapon = other.GetComponent<PlayerWeapon>().Data;
-            
-                _health -= playerWeapon.AttackValue;
+                //ItemData playerWeapon = other.GetComponent<GetItemData>().ItemData; //원거리 추가 필요
+                //player기준...
+                float damage = _playerManager.GetStat(PlayerStatTypes.AttackValue);
+                _health -= damage;
                 //test
                 Debug.Log(data.EnemyName + " Health: "+_health);
                 if (_health <= 0)

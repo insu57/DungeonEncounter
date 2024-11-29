@@ -24,7 +24,7 @@ public class InventoryUIPresenter
         //init
       
         _inventoryManager.SetWeapon(_playerManager.WeaponData);
-        _playerUIView.UpdateCurrentWeapon(_playerManager.WeaponData.Icon);
+        _playerUIView.UpdateCurrentWeapon(_playerManager.WeaponData.ItemIcon);
     }
     
     private void HandleShowIcon()
@@ -36,7 +36,7 @@ public class InventoryUIPresenter
     private void HandleWeaponChanged()
     {
         //_inventoryManager.SetWeapon();
-
+        
     }
     private void HandleEquipmentChanged()
     {

@@ -22,10 +22,10 @@ TagManager:
   - Player
   - Enemy
   - 
-  - 
-  - 
-  - 
-  - 
+  - PlayerWeapon
+  - PlayerEquipment
+  - Item
+  - Money
   - 
   - 
   - 

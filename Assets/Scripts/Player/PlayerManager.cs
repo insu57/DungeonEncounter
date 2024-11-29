@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Scriptable_Objects;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -14,18 +15,20 @@ namespace Player
         Energy, MaxEnergy,
         AttackValue, DefenseValue,
     }
+
     public class PlayerManager : MonoBehaviour
     {
         private GameManager _gameManager;
         [SerializeField]private PlayerJobData playerJobData;
         private PlayerControl _playerControl;
         private GameObject _playerWeaponPrefab;//Weapon...Prefab
-        public PlayerWeaponData WeaponData { get; private set; }
+        public ItemData WeaponData { get; private set; }
 
         private Dictionary<PlayerStatTypes, float> _playerStats; 
         public event Action<PlayerStatTypes,float> OnStatChanged;
         
         private InventoryManager _playerInventoryManager;
+        public event Action<float> OnGetMoney;
         
         private Camera _mainCamera;
 
@@ -42,6 +45,8 @@ namespace Player
             return _playerStats.GetValueOrDefault(statType, 0);
         }
         
+        
+        
         //무기,장비 변경
         //아이템 사용
         //사망 처리...리셋
@@ -53,11 +58,15 @@ namespace Player
             _mainCamera = Camera.main;
             
             _playerWeaponPrefab = playerJobData.DefaultWeapon;
-            PlayerWeapon playerWeapon = _playerWeaponPrefab.GetComponent<PlayerWeapon>();
-            WeaponData = playerWeapon.Data;
-            Debug.Log(WeaponData.Icon);
+            //PlayerWeapon playerWeapon = _playerWeaponPrefab.GetComponent<PlayerWeapon>();
+            GetItemData playerWeapon = _playerWeaponPrefab.GetComponent<GetItemData>();
+            WeaponData = playerWeapon.ItemData;
+            
+           
             //직업 기본 데이터에서 받아오게 수정...SO에서 받아옴
             
+            Debug.Log(WeaponData.ItemName);
+            Debug.Log(WeaponData.AttackValue);
             _playerStats = new Dictionary<PlayerStatTypes, float>
             {
                 { PlayerStatTypes.Health, playerJobData.Health }, 
@@ -73,7 +82,14 @@ namespace Player
     
         private void Start() //구조 수정중
         {
-            
+            _playerWeaponPrefab.AddComponent<PlayerMeleeAttack>(); 
+            //종료하고 추가됨... 개선필요
+            //에디터 종료해도 안사라짐
+        }
+
+        private void OnApplicationQuit()
+        {
+            //Component 
         }
         
         private void OnTriggerEnter(Collider other)
