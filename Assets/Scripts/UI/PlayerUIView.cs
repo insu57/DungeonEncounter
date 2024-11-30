@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Scriptable_Objects;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -28,6 +30,7 @@ namespace UI
         private Button _weaponButton;
         private Button _equipmentButton;
         private Button _consumableButton;
+        private TextMeshProUGUI _countText;
         
         private TextMeshProUGUI _jobText;
         private TextMeshProUGUI _healthText;
@@ -38,22 +41,24 @@ namespace UI
         private Image _currentEquipmentImg;
         private Image _currentQuick1Img;
         private Image _currentQuick2Img;
-       
-        public event Action OnWeaponChanged;
-        public event Action OnEquipmentChanged;
-        public event Action<int> OnItemQuickChanged;
+
+        public event Action<ItemTypes> OnInventoryOpen;
+        public event Action OnWeaponInventory;
+        public event Action OnEquipmentInventory;
+        public event Action OnConsumableInventory;
         public event Action OnShowIcon; //icon? data?
         
         
         private void TogglePause()
         {
-            _gameManager.TogglePause();
+            GameManager.Instance.TogglePause();
             _pauseMenu.SetActive(!_pauseMenu.activeSelf);
         }
 
         private void TogglePlayerMenu()
         {
             _playerMenu.SetActive(!_playerMenu.activeSelf);
+            _inventory.SetActive(false);
         }
         
         public void UpdatePlayerHealthBar(float health, float maxHealth)
@@ -82,22 +87,12 @@ namespace UI
         private void OnPlayerStatusMenu()
         {
             _inventory.SetActive(false);
-            
         }
 
-        private void OnWeaponInventory()
+        private void OpenInventory(ItemTypes type)
         {
             _inventory.SetActive(true);
-        }
-
-        private void OnEquipmentInventory()
-        {
-            _inventory.SetActive(true);
-        }
-
-        private void OnConsumableInventory()
-        {
-            _inventory.SetActive(true);
+            OnInventoryOpen?.Invoke(type);
         }
 
         public void UpdateCurrentWeapon(Sprite sprite)
@@ -105,6 +100,15 @@ namespace UI
             _currentWeaponImg.sprite = sprite;
             Color alpha = new Color(1,1,1, 1);
             _currentWeaponImg.color = alpha;
+        }
+
+        public void UpdateInventoryCount(int count, int maxCount)
+        {
+            _countText.text = $"{count} / {maxCount}";
+        }
+        public void UpdateInventoryIcon(int index, Sprite sprite)
+        {
+            
         }
         private void ShowCurrentItem()
         {
@@ -114,8 +118,8 @@ namespace UI
         
         private void Awake()
         {
-            _gameManager = FindObjectOfType<GameManager>();
-            _canvasMain = GameObject.Find("CanvasMain").GetComponent<Canvas>();
+            //스크립트 동적 할당 vs 인스펙터로 할당(SerializeField)
+            _canvasMain = transform.Find("CanvasMain").GetComponent<Canvas>();
         
             //PauseMenu
             _pauseMenu = _canvasMain.transform.Find("PauseMenu").gameObject;
@@ -130,13 +134,14 @@ namespace UI
             _equipmentButton = _playerMenu.transform.Find("Buttons/EquipmentButton").GetComponent<Button>();
             _consumableButton = _playerMenu.transform.Find("Buttons/ConsumableButton").GetComponent<Button>();
             _playerButton.onClick.AddListener(OnPlayerStatusMenu);
-            _weaponButton.onClick.AddListener(OnWeaponInventory);
-            _equipmentButton.onClick.AddListener(OnEquipmentInventory);
-            _consumableButton.onClick.AddListener(OnConsumableInventory);
+            _weaponButton.onClick.AddListener(() => OpenInventory(ItemTypes.Weapon));
+            _equipmentButton.onClick.AddListener(() => OpenInventory(ItemTypes.Equipment));
+            _consumableButton.onClick.AddListener(() => OpenInventory(ItemTypes.Consumable));
             //Main
             _playerMenuMain = _playerMenu.transform.Find("Main").gameObject;
             _playerStatus = _playerMenuMain.transform.Find("PlayerStatus").gameObject;
             _inventory = _playerMenuMain.transform.Find("Inventory").gameObject;
+            _countText = _inventory.transform.Find("Count").GetComponent<TextMeshProUGUI>();
             //...Player Status
          
             _jobText = _playerStatus.transform.Find("JobText").GetComponent<TextMeshProUGUI>();

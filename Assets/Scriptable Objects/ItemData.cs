@@ -38,11 +38,15 @@ namespace Scriptable_Objects
         
         [Header("무기 데이터")]
         [SerializeField] private float attackValue;
+        [SerializeField] private WeaponType weaponType;
         public float AttackValue => attackValue;
         
         [Header("장비 데이터")]
         [SerializeField] private float defenseValue;
         public float DefenseValue => defenseValue;
    
+        [Header("소비품 데이터")]
+        [SerializeField] private ConsumableType consumableType;
+        
     }
 }

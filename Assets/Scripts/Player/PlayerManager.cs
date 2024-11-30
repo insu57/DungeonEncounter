@@ -22,7 +22,8 @@ namespace Player
         [SerializeField]private PlayerJobData playerJobData;
         private PlayerControl _playerControl;
         private GameObject _playerWeaponPrefab;//Weapon...Prefab
-        public ItemData WeaponData { get; private set; }
+        [SerializeField]private GameObject playerRightHand;
+        public PlayerWeaponData WeaponData { get; private set; }
 
         private Dictionary<PlayerStatTypes, float> _playerStats; 
         public event Action<PlayerStatTypes,float> OnStatChanged;
@@ -56,17 +57,20 @@ namespace Player
             _gameManager = FindObjectOfType<GameManager>();
             _playerControl = GetComponent<PlayerControl>();
             _mainCamera = Camera.main;
-            
+            //실제 들고있는 무기에... 무기교체 기능
             _playerWeaponPrefab = playerJobData.DefaultWeapon;
-            //PlayerWeapon playerWeapon = _playerWeaponPrefab.GetComponent<PlayerWeapon>();
-            GetItemData playerWeapon = _playerWeaponPrefab.GetComponent<GetItemData>();
-            WeaponData = playerWeapon.ItemData;
-            
+            PlayerWeapon playerWeapon = _playerWeaponPrefab.GetComponent<PlayerWeapon>();
+            WeaponData = playerWeapon.WeaponData;
+            GameObject currentWeapon = Instantiate(_playerWeaponPrefab, playerRightHand.transform);
+            //if(WeaponData.Type == )
+            if (WeaponData.AttackType == AttackType.Melee)
+            {
+                currentWeapon.AddComponent<PlayerMeleeAttack>();
+                currentWeapon.tag = "PlayerAttack";
+            }
+            //else...Ranged
            
             //직업 기본 데이터에서 받아오게 수정...SO에서 받아옴
-            
-            Debug.Log(WeaponData.ItemName);
-            Debug.Log(WeaponData.AttackValue);
             _playerStats = new Dictionary<PlayerStatTypes, float>
             {
                 { PlayerStatTypes.Health, playerJobData.Health }, 
@@ -78,18 +82,6 @@ namespace Player
             };
 
             //_playerInventoryManager.CurrentWeaponData = _playerWeaponData;
-        }
-    
-        private void Start() //구조 수정중
-        {
-            _playerWeaponPrefab.AddComponent<PlayerMeleeAttack>(); 
-            //종료하고 추가됨... 개선필요
-            //에디터 종료해도 안사라짐
-        }
-
-        private void OnApplicationQuit()
-        {
-            //Component 
         }
         
         private void OnTriggerEnter(Collider other)

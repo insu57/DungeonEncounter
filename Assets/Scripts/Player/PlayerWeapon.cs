@@ -7,8 +7,7 @@ namespace Player
 {
     public class PlayerWeapon : MonoBehaviour
     {
-        [SerializeField] private ItemData itemData;
-        public ItemData ItemData => itemData;
-        public ItemTypes ItemType => itemData.ItemType;
+        [SerializeField] private PlayerWeaponData weaponData;
+        public PlayerWeaponData WeaponData => weaponData;
     }
 }

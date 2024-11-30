@@ -10,13 +10,15 @@ namespace Scriptable_Objects
        
         [SerializeField] private string weaponName;
         [SerializeField] private string description;
-        [SerializeField] private WeaponType type;
+        [SerializeField] private WeaponType weaponType;
+        [SerializeField] private AttackType attackType;
         [SerializeField] private Rarity rarity;
         [SerializeField] private float attackValue;
         [SerializeField] private Sprite icon;
         public string WeaponName => weaponName;
         public string Description => description;
-        public WeaponType Type => type;
+        public WeaponType WeaponType => weaponType;
+        public AttackType AttackType => attackType;
         public Rarity Rarity => rarity;
         public float AttackValue => attackValue;
         public Sprite Icon => icon;

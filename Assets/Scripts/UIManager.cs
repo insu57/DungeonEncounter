@@ -34,7 +34,7 @@ public class UIManager : MonoBehaviour //UI제어
         _playerUIView = GetComponent<PlayerUIView>();
         _gameManager = FindObjectOfType<GameManager>();
         
-        _canvasFloat = GameObject.Find("CanvasFloat").GetComponent<Canvas>();
+        _canvasFloat = transform.Find("CanvasFloat").GetComponent<Canvas>();
         _mainCamera = Camera.main;
         _canvasFloat.worldCamera = _mainCamera;
         

@@ -15,16 +15,18 @@ public class InventoryUIPresenter
         _playerManager = playerManager;
         _inventoryManager = inventoryManager;
         _playerUIView = playerUIView;
-        
-        _playerUIView.OnWeaponChanged += HandleWeaponChanged;
-        _playerUIView.OnEquipmentChanged += HandleEquipmentChanged;
-        _playerUIView.OnItemQuickChanged += HandleItemQuickChanged;
+
+        _playerUIView.OnInventoryOpen += HandleOnInventoryOpen;
+        _playerUIView.OnWeaponInventory += HandleOnWeaponInventory;
+        _playerUIView.OnEquipmentInventory += HandleOpenEquipmentInventory;
+        _playerUIView.OnConsumableInventory += HandleOpenConsumableInventory;
         _playerUIView.OnShowIcon += HandleShowIcon;
         
         //init
       
+        _inventoryManager.AddWeaponData(_playerManager.WeaponData);
         _inventoryManager.SetWeapon(_playerManager.WeaponData);
-        _playerUIView.UpdateCurrentWeapon(_playerManager.WeaponData.ItemIcon);
+        _playerUIView.UpdateCurrentWeapon(_playerManager.WeaponData.Icon);
     }
     
     private void HandleShowIcon()
@@ -32,27 +34,46 @@ public class InventoryUIPresenter
         
         //_playerManager.
     }
-            
-    private void HandleWeaponChanged()
-    {
-        //_inventoryManager.SetWeapon();
-        
-    }
-    private void HandleEquipmentChanged()
-    {
 
-
-    }
-    private void HandleItemQuickChanged(int index)
+    private void HandleOnInventoryOpen(ItemTypes type)
     {
-        switch (index)
+        int count, maxCount;
+        switch (type)
         {
-            case 1:
+            case ItemTypes.Weapon:
+                count = _inventoryManager.weaponInventoryCount;
+                maxCount = _inventoryManager.weaponInventoryMaxCount;
+                _playerUIView.UpdateInventoryCount(count, maxCount);
+                for (int i = 0; i < maxCount; i++)
+                {
+                    _playerUIView.UpdateInventoryIcon(i,_inventoryManager.ConsumableDataList[i].Icon );
+                }
                 break;
-            case 2:
+            case ItemTypes.Equipment:
+                count = _inventoryManager.equipmentInventoryCount;
+                maxCount = _inventoryManager.equipmentInventoryMaxCount;
+                _playerUIView.UpdateInventoryCount(count, maxCount);
                 break;
-            default:
+            case ItemTypes.Consumable:
+                count = _inventoryManager.consumableInventoryCount;
+                maxCount = _inventoryManager.consumableInventoryMaxCount;
+                _playerUIView.UpdateInventoryCount(count, maxCount);
                 break;
         }
+        
+        
+    }
+    
+    private void HandleOnWeaponInventory()
+    {
+        
+    }
+    private void HandleOpenEquipmentInventory()
+    {
+
+
+    }
+    private void HandleOpenConsumableInventory()
+    {
     }
 }

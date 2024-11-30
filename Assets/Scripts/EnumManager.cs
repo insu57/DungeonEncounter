@@ -14,6 +14,11 @@ public enum WeaponType
     Sword, Axe, Hammer, Spear, Wand, Staff, Bow
 }
 
+public enum AttackType
+{
+    Melee, Ranged
+}
+
 public enum ConsumableType
 {
     Potion, Food, Throwable

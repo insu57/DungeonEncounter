@@ -129,8 +129,7 @@ namespace Enemy
         {
             if (other.CompareTag("PlayerAttack") && _wasDamaged == false)
             {
-                //ItemData playerWeapon = other.GetComponent<GetItemData>().ItemData; //원거리 추가 필요
-                //player기준...
+                //데미지...현재 플레이어 공격력 기준... 공격별 데미지 배수, 스킬 추가 대응필요
                 float damage = _playerManager.GetStat(PlayerStatTypes.AttackValue);
                 _health -= damage;
                 //test
