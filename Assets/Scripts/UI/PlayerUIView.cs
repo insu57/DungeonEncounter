@@ -3,45 +3,49 @@ using System.Collections.Generic;
 using Scriptable_Objects;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace UI
 {
     public class PlayerUIView : MonoBehaviour
     {
-        private GameManager _gameManager;
-        private Canvas _canvasMain;
+        [SerializeField] private Canvas canvasMain;
         //Game Menu
-        private GameObject _pauseMenu;
-        private Button _resumeButton;
+        [Header("Pause Menu")]
+        [SerializeField] private GameObject pauseMenu;
+        [SerializeField] private Button resumeButton;
     
         //Player Info
-        private GameObject _playerInfo;//직업 관련 추가 필요
-        private Image _playerHealthBar;
-        private Image _playerEnergyBar;
+        [Header("Player Info")]
+        //직업 관련 추가 필요
+        [SerializeField] private Image playerHealthBar;
+        [SerializeField] private Image playerEnergyBar;
         
     
         //PlayerMenu...Inventory
-        private GameObject _playerMenu;
-        private GameObject _playerMenuMain;
-        private GameObject _playerStatus;
-        private GameObject _inventory;
-        private Button _playerButton;
-        private Button _weaponButton;
-        private Button _equipmentButton;
-        private Button _consumableButton;
-        private TextMeshProUGUI _countText;
+        [Header("Player Menu")]
+        [SerializeField] private GameObject playerMenu;
+        [SerializeField] private TextMeshProUGUI jobText;
+        [SerializeField] private TextMeshProUGUI healthText;
+        [SerializeField] private TextMeshProUGUI energyText;
+        [SerializeField] private TextMeshProUGUI attackText;
+        [SerializeField] private TextMeshProUGUI defenseText;
+        [SerializeField] private Image currentWeaponImg;
+        [SerializeField] private Image currentEquipmentImg;
+        [SerializeField] private Image currentQuick1Img;
+        [SerializeField] private Image currentQuick2Img;
         
-        private TextMeshProUGUI _jobText;
-        private TextMeshProUGUI _healthText;
-        private TextMeshProUGUI _energyText;
-        private TextMeshProUGUI _attackText;
-        private TextMeshProUGUI _defenseText;
-        private Image _currentWeaponImg;
-        private Image _currentEquipmentImg;
-        private Image _currentQuick1Img;
-        private Image _currentQuick2Img;
-
+        [Header("Inventory")]
+        [SerializeField] private GameObject inventory;
+        [SerializeField] private Transform inventoryGridParent;
+        [SerializeField] private GameObject inventoryIconPrefab;
+        [SerializeField] private Button playerButton;
+        [SerializeField] private Button weaponButton;
+        [SerializeField] private Button equipmentButton;
+        [SerializeField] private Button consumableButton;
+        [SerializeField] private TextMeshProUGUI countText;
+        
         public event Action<ItemTypes> OnInventoryOpen;
         public event Action OnWeaponInventory;
         public event Action OnEquipmentInventory;
@@ -52,64 +56,71 @@ namespace UI
         private void TogglePause()
         {
             GameManager.Instance.TogglePause();
-            _pauseMenu.SetActive(!_pauseMenu.activeSelf);
+            pauseMenu.SetActive(!pauseMenu.activeSelf);
         }
 
         private void TogglePlayerMenu()
         {
-            _playerMenu.SetActive(!_playerMenu.activeSelf);
-            _inventory.SetActive(false);
+            playerMenu.SetActive(!playerMenu.activeSelf);
+            inventory.SetActive(false);
         }
         
         public void UpdatePlayerHealthBar(float health, float maxHealth)
         {
-            _playerHealthBar.fillAmount = health / maxHealth;
-            _healthText.text = $"{health}/{maxHealth}";
+            playerHealthBar.fillAmount = health / maxHealth;
+            healthText.text = $"{health}/{maxHealth}";
             Debug.Log($"{health}/{maxHealth}");
         }
 
         public void UpdatePlayerEnergyBar(float energy, float maxEnergy)
         {
-            _playerEnergyBar.fillAmount = energy / maxEnergy;
-            _energyText.text = $"{energy}/{maxEnergy}";
+            playerEnergyBar.fillAmount = energy / maxEnergy;
+            energyText.text = $"{energy}/{maxEnergy}";
         }
         //플레이어 정보 창일때만 호출하게 수정필요
         public void UpdatePlayerAttackValue(float attackValue)
         {
-            _attackText.text = $"{attackValue}";
+            attackText.text = $"{attackValue}";
         }
 
         public void UpdatePlayerDefenseValue(float defenseValue)
         {
-            _defenseText.text = $"{defenseValue}";
+            defenseText.text = $"{defenseValue}";
         }
 
         private void OnPlayerStatusMenu()
         {
-            _inventory.SetActive(false);
+            inventory.SetActive(false);
         }
 
         private void OpenInventory(ItemTypes type)
         {
-            _inventory.SetActive(true);
+            inventory.SetActive(true);
             OnInventoryOpen?.Invoke(type);
         }
 
         public void UpdateCurrentWeapon(Sprite sprite)
         {
-            _currentWeaponImg.sprite = sprite;
+            currentWeaponImg.sprite = sprite;
             Color alpha = new Color(1,1,1, 1);
-            _currentWeaponImg.color = alpha;
+            currentWeaponImg.color = alpha;
         }
 
         public void UpdateInventoryCount(int count, int maxCount)
         {
-            _countText.text = $"{count} / {maxCount}";
+            countText.text = $"{count} / {maxCount}";
         }
         public void UpdateInventoryIcon(int index, Sprite sprite)
         {
             
         }
+
+        public void InitInventory()
+        {
+            Instantiate(inventoryIconPrefab, inventoryGridParent);
+            Debug.Log("INIT INVENTORY");
+        }
+        
         private void ShowCurrentItem()
         {
             //_currentWeaponSprite
@@ -118,43 +129,12 @@ namespace UI
         
         private void Awake()
         {
-            //스크립트 동적 할당 vs 인스펙터로 할당(SerializeField)
-            _canvasMain = transform.Find("CanvasMain").GetComponent<Canvas>();
-        
-            //PauseMenu
-            _pauseMenu = _canvasMain.transform.Find("PauseMenu").gameObject;
-            _resumeButton = _pauseMenu.transform.Find("ResumeButton").GetComponent<Button>();
-            _resumeButton.onClick.AddListener(TogglePause);//일시정지 재개
-        
-            //PlayerMenu
-            //Buttons
-            _playerMenu = _canvasMain.transform.Find("PlayerMenu").gameObject;
-            _playerButton = _playerMenu.transform.Find("Buttons/PlayerButton").gameObject.GetComponent<Button>();
-            _weaponButton = _playerMenu.transform.Find("Buttons/WeaponButton").GetComponent<Button>();
-            _equipmentButton = _playerMenu.transform.Find("Buttons/EquipmentButton").GetComponent<Button>();
-            _consumableButton = _playerMenu.transform.Find("Buttons/ConsumableButton").GetComponent<Button>();
-            _playerButton.onClick.AddListener(OnPlayerStatusMenu);
-            _weaponButton.onClick.AddListener(() => OpenInventory(ItemTypes.Weapon));
-            _equipmentButton.onClick.AddListener(() => OpenInventory(ItemTypes.Equipment));
-            _consumableButton.onClick.AddListener(() => OpenInventory(ItemTypes.Consumable));
-            //Main
-            _playerMenuMain = _playerMenu.transform.Find("Main").gameObject;
-            _playerStatus = _playerMenuMain.transform.Find("PlayerStatus").gameObject;
-            _inventory = _playerMenuMain.transform.Find("Inventory").gameObject;
-            _countText = _inventory.transform.Find("Count").GetComponent<TextMeshProUGUI>();
-            //...Player Status
-         
-            _jobText = _playerStatus.transform.Find("JobText").GetComponent<TextMeshProUGUI>();
-            _healthText = _playerStatus.transform.Find("HealthText").GetComponent<TextMeshProUGUI>();
-            _energyText = _playerStatus.transform.Find("EnergyText").GetComponent<TextMeshProUGUI>();
-            _attackText = _playerStatus.transform.Find("AttackText").GetComponent<TextMeshProUGUI>();
-            _defenseText = _playerStatus.transform.Find("DefenseText").GetComponent<TextMeshProUGUI>();
-            _currentWeaponImg = _playerStatus.transform.Find("CurrentWeaponIcon").GetComponent<Image>();
-        
-            //PlayerInfo
-            _playerInfo = _canvasMain.transform.Find("PlayerInfo").gameObject;
-            _playerHealthBar = _playerInfo.transform.Find("Health").GetComponent<Image>();
-            _playerEnergyBar = _playerInfo.transform.Find("Energy").GetComponent<Image>();
+            //Button Click Callback
+            playerButton.onClick.AddListener(OnPlayerStatusMenu);
+            weaponButton.onClick.AddListener(() => OpenInventory(ItemTypes.Weapon));
+            equipmentButton.onClick.AddListener(() => OpenInventory(ItemTypes.Equipment));
+            consumableButton.onClick.AddListener(() => OpenInventory(ItemTypes.Consumable));
+            
          
         }
 

@@ -27,6 +27,14 @@ public class InventoryUIPresenter
         _inventoryManager.AddWeaponData(_playerManager.WeaponData);
         _inventoryManager.SetWeapon(_playerManager.WeaponData);
         _playerUIView.UpdateCurrentWeapon(_playerManager.WeaponData.Icon);
+        int maxCount = inventoryManager.weaponInventoryMaxCount;  //생성은 초기화, 최대칸 증가 시에만
+        maxCount = 40;
+        for (int i = 0; i < maxCount; i++)
+        {
+            _playerUIView.InitInventory();
+        }
+
+
     }
     
     private void HandleShowIcon()
@@ -44,10 +52,7 @@ public class InventoryUIPresenter
                 count = _inventoryManager.weaponInventoryCount;
                 maxCount = _inventoryManager.weaponInventoryMaxCount;
                 _playerUIView.UpdateInventoryCount(count, maxCount);
-                for (int i = 0; i < maxCount; i++)
-                {
-                    _playerUIView.UpdateInventoryIcon(i,_inventoryManager.ConsumableDataList[i].Icon );
-                }
+                
                 break;
             case ItemTypes.Equipment:
                 count = _inventoryManager.equipmentInventoryCount;

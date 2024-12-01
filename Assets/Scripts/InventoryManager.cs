@@ -20,15 +20,18 @@ public class InventoryManager : MonoBehaviour
     public ConsumableItemData ItemQuickSlot2 { private set; get; }
 
     private GameObject _selectedItem; //GameObject?Data?...
-    public List<PlayerWeaponData> WeaponDataList { private set; get; }
-    public List<PlayerEquipmentData> EquipmentDataList { private set; get;}
-    public List<ConsumableItemData> ConsumableDataList { private set; get; } //수량도 필요함..Dictionary?
-    
+    private readonly List<PlayerWeaponData> _weaponDataList = new List<PlayerWeaponData>();
+    private List<PlayerEquipmentData> _equipmentDataList = new List<PlayerEquipmentData>();
+    private List<ConsumableItemData> _consumableDataList = new List<ConsumableItemData>(); //수량도 필요함..Dictionary?
+
+    public List<PlayerWeaponData> WeaponDataList => _weaponDataList;
+    public List<PlayerEquipmentData> EquipmentDataList => _equipmentDataList;
+    public List<ConsumableItemData> ConsumableDataList => _consumableDataList;
     //public Action 
     //public Event changeWeapon;
     //public Event changeEquipment;
     public Event UpdateInventory;
-    
+
     public int weaponInventoryCount { private set; get; }
     public int weaponInventoryMaxCount { private set; get; }
 
@@ -49,9 +52,9 @@ public class InventoryManager : MonoBehaviour
 
     public void AddWeaponData(PlayerWeaponData data)
     {
-        WeaponDataList.Add(data);
-        weaponInventoryCount = WeaponDataList.Count;
-        WeaponDataList.Sort((a, b)
+        _weaponDataList.Add(data);
+        weaponInventoryCount = _weaponDataList.Count;
+        _weaponDataList.Sort((a, b)
             => string.Compare(a.WeaponName, b.WeaponName, StringComparison.Ordinal));
     }
     
@@ -59,16 +62,15 @@ public class InventoryManager : MonoBehaviour
     private void Awake()
     {
         weaponInventoryCount = 0;
-        weaponInventoryMaxCount = 32;
+        weaponInventoryMaxCount = 20;
         
         equipmentInventoryCount = 0;
-        equipmentInventoryMaxCount = 32;
+        equipmentInventoryMaxCount = 20;
         
         consumableInventoryCount = 0;
-        consumableInventoryMaxCount = 32;
+        consumableInventoryMaxCount = 20;
 
         consumableItemMaxQuantity = 10;//현재-모든 소비템 최대 보유 개수 통일
-        
     }
     
     private void Update()

@@ -18,7 +18,6 @@ namespace Player
 
     public class PlayerManager : MonoBehaviour
     {
-        private GameManager _gameManager;
         [SerializeField]private PlayerJobData playerJobData;
         private PlayerControl _playerControl;
         private GameObject _playerWeaponPrefab;//Weapon...Prefab
@@ -54,7 +53,7 @@ namespace Player
         
         private void Awake()
         {
-            _gameManager = FindObjectOfType<GameManager>();
+            
             _playerControl = GetComponent<PlayerControl>();
             _mainCamera = Camera.main;
             //실제 들고있는 무기에... 무기교체 기능

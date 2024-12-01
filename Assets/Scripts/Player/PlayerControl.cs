@@ -10,7 +10,6 @@ namespace Player
     }
     public class PlayerControl : MonoBehaviour
     {
-        private GameManager _gameManager;
         private PlayerManager _playerManager;
         private Animator _animator;
         private CharacterController _characterController;
@@ -48,7 +47,6 @@ namespace Player
         
         private void Awake()
         {
-            _gameManager = FindObjectOfType<GameManager>();
             _playerManager = GetComponent<PlayerManager>();
             _animator = GetComponent<Animator>();
             PlayerAnimator = _animator;
@@ -105,7 +103,7 @@ namespace Player
 
         private void Update()
         {
-            if(_gameManager.GamePaused) return;
+            if(GameManager.Instance.GamePaused) return;
         
             _stateMachine.Execute();
             
