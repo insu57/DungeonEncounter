@@ -22,11 +22,11 @@ TagManager:
   - Player
   - Enemy
   - 
-  - PlayerWeapon
-  - PlayerEquipment
-  - Item
+  - Weapon
+  - Equipment
+  - Consumable
   - Money
-  - 
+  - Chest
   - 
   - 
   - 

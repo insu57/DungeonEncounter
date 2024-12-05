@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Player;
 using UI;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class InventoryUIPresenter
@@ -28,12 +29,11 @@ public class InventoryUIPresenter
         _inventoryManager.SetWeapon(_playerManager.WeaponData);
         _playerUIView.UpdateCurrentWeapon(_playerManager.WeaponData.Icon);
         int maxCount = inventoryManager.weaponInventoryMaxCount;  //생성은 초기화, 최대칸 증가 시에만
-        maxCount = 40;
         for (int i = 0; i < maxCount; i++)
         {
             _playerUIView.InitInventory();
         }
-
+        _playerUIView.UpdateInventoryIcon(0, _playerManager.WeaponData.Icon);
 
     }
     
@@ -80,5 +80,12 @@ public class InventoryUIPresenter
     }
     private void HandleOpenConsumableInventory()
     {
+    }
+
+    public void Dispose()
+    {
+        _playerUIView.OnInventoryOpen -= HandleOnInventoryOpen;
+        //
+        _playerUIView.OnShowIcon -= HandleShowIcon;
     }
 }

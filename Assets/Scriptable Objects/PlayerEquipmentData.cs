@@ -9,13 +9,14 @@ namespace Scriptable_Objects
         [SerializeField] private string equipmentName;
         [SerializeField] private string description;
         [SerializeField] private string type;
-        [SerializeField] private string rarity;
+        [SerializeField] private Rarity rarity;
+        [SerializeField] private int defenseValue;
         [SerializeField] private Sprite icon;
 
         public string EquipmentName => equipmentName;
         public string Description => description;
         public string Type => type;
-        public string Rarity => rarity;
+        public Rarity Rarity => rarity;
         public Sprite Icon => icon;
     }
 }

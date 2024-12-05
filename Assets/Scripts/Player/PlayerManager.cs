@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Enemy;
 using Scriptable_Objects;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -22,10 +23,13 @@ namespace Player
         private PlayerControl _playerControl;
         private GameObject _playerWeaponPrefab;//Weapon...Prefab
         [SerializeField]private GameObject playerRightHand;
+        [SerializeField]private GameObject playerHead;
+        private EnemyMeleeAttack _enemyMeleeAttack;
+        private EnemyProjectile _enemyProjectile;
         public PlayerWeaponData WeaponData { get; private set; }
-
         private Dictionary<PlayerStatTypes, float> _playerStats; 
         public event Action<PlayerStatTypes,float> OnStatChanged;
+        public float FinalDamage { get; private set; }
         
         private InventoryManager _playerInventoryManager;
         public event Action<float> OnGetMoney;
@@ -44,7 +48,14 @@ namespace Player
         {
             return _playerStats.GetValueOrDefault(statType, 0);
         }
-        
+
+        private void GetItem(ItemTypes itemType)
+        {
+            if (itemType == ItemTypes.Money)
+            {
+                
+            }
+        }
         
         
         //무기,장비 변경
@@ -81,6 +92,7 @@ namespace Player
             };
 
             //_playerInventoryManager.CurrentWeaponData = _playerWeaponData;
+            //_enemyProjectile = G
         }
         
         private void OnTriggerEnter(Collider other)
@@ -99,7 +111,31 @@ namespace Player
             else if (other.CompareTag("Item"))
             {
                 //Add to Inventory
-                Debug.Log("Get Item!"+other.name);
+                //Float Image Key F... Press "F"
+
+                if (other.gameObject.layer == (int)ItemLayers.Money)
+                {
+                    GetItem(ItemTypes.Money);
+                }
+                else if (other.gameObject.layer == (int)ItemLayers.Consumable)
+                {
+                    GetItem(ItemTypes.Consumable);
+                }
+                else if (other.gameObject.layer == (int)ItemLayers.Weapon)
+                {
+                    GetItem(ItemTypes.Weapon);
+                }
+                else if (other.gameObject.layer == (int)ItemLayers.Equipment)
+                {
+                    GetItem(ItemTypes.Equipment);
+                }
+                else if (other.gameObject.layer == (int)ItemLayers.Chest)
+                {
+                    GetItem(ItemTypes.Chest);
+                }
+                
+                //other.
+                Destroy(other.gameObject);//추후 오브젝트 풀링으로 관리.(SetActive(false))
             }
         }
 

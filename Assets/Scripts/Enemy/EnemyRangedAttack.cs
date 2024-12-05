@@ -1,54 +1,53 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Enemy;
 using Player;
 using Scriptable_Objects;
 using UnityEngine;
 
-public class EnemyRangedAttack : MonoBehaviour
+namespace Enemy
 {
-    private EnemyManager _enemyManager;
-    private PlayerManager _playerManager;
-    private EnemyData _data;
-    private GameObject _projectilePrefab;//원거리 투사체
-    private float _projectileSpeed;
-    private TrailRenderer _trailRenderer;
-    private Animator _animator;
-    private float _attackStartTime;
-    private float _attackEndTime;
-    private bool _isShoot;
-    private float _damage;
-    public float Damage => _damage;
-    public float ProjectileSpeed => _projectileSpeed;
-    //적 캐릭터 패턴이 다양해 지면 적용 어려워짐...추상화 리팩터링 필요
-    private void Awake()
+    public class EnemyRangedAttack : MonoBehaviour
     {
-        _enemyManager = GetComponentInParent<EnemyManager>();
-        _playerManager = FindObjectOfType<PlayerManager>();
-        _data = _enemyManager.Data;
-        _attackStartTime = _data.AttackStartFrame / _data.AttackFullFrame;
-        _attackEndTime = _data.AttackEndFrame / _data.AttackFullFrame;
-        _projectilePrefab = _data.ProjectilePrefab;
-        _animator = _enemyManager.GetComponent<Animator>();
-        _isShoot = false;
-        _damage = _data.Damage;
-        _projectileSpeed = _data.ProjectileSpeed;
-    }
-    
-    private void Update()
-    {
-        float animTime = Mathf.Repeat(_animator.GetCurrentAnimatorStateInfo(0).normalizedTime, 1.0f);
-        
-        if (_enemyManager.IsAttack && !_isShoot &&_attackStartTime <= animTime && animTime <= _attackEndTime)
+        private EnemyManager _enemyManager;
+        private EnemyControl _enemyControl;
+        private EnemyData _data;
+        private GameObject _projectilePrefab;//원거리 투사체
+        private float _projectileSpeed;
+        private TrailRenderer _trailRenderer;
+        private Animator _animator;
+        private float _attackStartTime;
+        private float _attackEndTime;
+        private bool _isShoot;
+        private float _damage;
+        public float Damage => _damage;
+        public float ProjectileSpeed => _projectileSpeed;
+        //적 캐릭터 패턴이 다양해 지면 적용 어려워짐...추상화 리팩터링 필요
+        private void Awake()
         {
-            _isShoot = true;
-            Instantiate(_projectilePrefab, transform.position, transform.rotation, transform);
-        }
-        
-        if(animTime > _attackEndTime)
+            _enemyManager = GetComponentInParent<EnemyManager>();
+            _enemyControl = GetComponentInParent<EnemyControl>();
+            _data = _enemyManager.Data;
+            _attackStartTime = _data.AttackStartFrame / _data.AttackFullFrame;
+            _attackEndTime = _data.AttackEndFrame / _data.AttackFullFrame;
+            _projectilePrefab = _data.ProjectilePrefab;
+            _animator = _enemyManager.GetComponent<Animator>();
             _isShoot = false;
-        
-    }
+            _damage = _data.Damage;
+            _projectileSpeed = _data.ProjectileSpeed;
+        }
     
+        private void Update()
+        {
+            float animTime = Mathf.Repeat(_animator.GetCurrentAnimatorStateInfo(0).normalizedTime, 1.0f);
+        
+            if (_enemyControl.IsAttack && !_isShoot &&_attackStartTime <= animTime && animTime <= _attackEndTime)
+            {
+                _isShoot = true;
+                Instantiate(_projectilePrefab, transform.position, transform.rotation, transform);
+            }
+        
+            if(animTime > _attackEndTime)
+                _isShoot = false;
+        
+        }
+    
+    }
 }

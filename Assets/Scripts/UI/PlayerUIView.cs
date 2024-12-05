@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Scriptable_Objects;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -39,6 +40,7 @@ namespace UI
         [Header("Inventory")]
         [SerializeField] private GameObject inventory;
         [SerializeField] private Transform inventoryGridParent;
+        
         [SerializeField] private GameObject inventoryIconPrefab;
         [SerializeField] private Button playerButton;
         [SerializeField] private Button weaponButton;
@@ -112,13 +114,18 @@ namespace UI
         }
         public void UpdateInventoryIcon(int index, Sprite sprite)
         {
-            
+            Image icon = inventoryGridParent.GetChild(index)
+                .transform.Find("SlotBackground/ImageSlot").GetComponent<Image>();
+           Color alpha = new Color(1, 1, 1, 1);
+           icon.color = alpha;
+           icon.sprite = sprite;
+           
         }
 
         public void InitInventory()
         {
             Instantiate(inventoryIconPrefab, inventoryGridParent);
-            Debug.Log("INIT INVENTORY");
+            //인벤토리 슬롯 초기 생성 
         }
         
         private void ShowCurrentItem()

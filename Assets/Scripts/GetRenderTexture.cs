@@ -11,6 +11,7 @@ public class GetRenderTexture : MonoBehaviour
     [SerializeField] private GameObject targetPrefab;
     private Sprite GetItemRenderTexture(GameObject itemPrefab)
     {
+        Debug.Log("GetRenderTexture");
         RenderTexture renderTexture = new RenderTexture(256, 256, 24);
         cam.targetTexture = renderTexture;
         //cam.transform.position = itemPrefab.transform.position + Vector3.back * 1f + Vector3.up * -1f;

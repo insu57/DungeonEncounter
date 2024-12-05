@@ -4,15 +4,7 @@ using UnityEngine;
 
 namespace Scriptable_Objects
 {
-    [Serializable]
-    public class ItemEffect
-    {
-        public PlayerStatTypes effectStat;
-        public CalculateType effectCalc;
-        public float effectAmount;
-        public string effect;
-        //즉발.지연 추가 필요
-    }
+    
     
     [CreateAssetMenu(fileName = "ItemData",
         menuName = "ScriptableObjects/ItemData", order = int.MaxValue)]

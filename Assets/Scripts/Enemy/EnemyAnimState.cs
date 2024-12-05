@@ -1,13 +1,13 @@
 namespace Enemy
 {
-    public class Idle : State<EnemyManager>
+    public class Idle : State<EnemyControl>
     {
-        public override void Enter(EnemyManager enemy)
+        public override void Enter(EnemyControl enemy)
         {
             enemy.EnemyAnimator.Play("Idle");
         }
 
-        public override void Execute(EnemyManager enemy)
+        public override void Execute(EnemyControl enemy)
         {
             if (enemy.IsMove)
             {
@@ -16,20 +16,20 @@ namespace Enemy
                 
         }
 
-        public override void Exit(EnemyManager enemy)
+        public override void Exit(EnemyControl enemy)
         {
             
         }
     }
     
-    public class Move : State<EnemyManager>
+    public class Move : State<EnemyControl>
     {
-        public override void Enter(EnemyManager enemy)
+        public override void Enter(EnemyControl enemy)
         {
             enemy.EnemyAnimator.Play("Move");
         }
 
-        public override void Execute(EnemyManager enemy)
+        public override void Execute(EnemyControl enemy)
         {
             if (!enemy.IsMove)
             {
@@ -37,75 +37,75 @@ namespace Enemy
             }
         }
 
-        public override void Exit(EnemyManager enemy)
+        public override void Exit(EnemyControl enemy)
         {
             
         }
     }
     
-    public class Attack : State<EnemyManager>
+    public class Attack : State<EnemyControl>
     {
-        public override void Enter(EnemyManager enemy)
+        public override void Enter(EnemyControl enemy)
         {
             enemy.EnemyAnimator.Play("Attack");
         }
 
-        public override void Execute(EnemyManager enemy)
+        public override void Execute(EnemyControl enemy)
         {
             if (enemy.IsAttack) return;
             enemy.ChangeState(EnemyStates.Idle);
         }
 
-        public override void Exit(EnemyManager enemy)
+        public override void Exit(EnemyControl enemy)
         {
             
         }
     }
 
-    public class Damaged : State<EnemyManager>
+    public class Damaged : State<EnemyControl>
     {
-        public override void Enter(EnemyManager enemy)
+        public override void Enter(EnemyControl enemy)
         {
            enemy.EnemyAnimator.Play("Damage");
             
         }
 
-        public override void Execute(EnemyManager enemy)
+        public override void Execute(EnemyControl enemy)
         {
             
         }
 
-        public override void Exit(EnemyManager enemy)
+        public override void Exit(EnemyControl enemy)
         {
             
         }
     }
-    public class Dead : State<EnemyManager>
+    public class Dead : State<EnemyControl>
     {
-        public override void Enter(EnemyManager enemy)
+        public override void Enter(EnemyControl enemy)
         {
             enemy.EnemyAnimator.Play("Dead");
         }
 
-        public override void Execute(EnemyManager enemy)
+        public override void Execute(EnemyControl enemy)
         {
             
         }
 
-        public override void Exit(EnemyManager enemy)
+        public override void Exit(EnemyControl enemy)
         {
             
         }
     }
     
-    public class StateGlobal : State<EnemyManager>
+    public class StateGlobal : State<EnemyControl>
     {
-        public override void Enter(EnemyManager enemy)
+        public override void Enter(EnemyControl enemy)
         {
             
         }
 
-        public override void Execute(EnemyManager enemy)
+        public override void Execute(EnemyControl enemy)
         {
             if (enemy.IsDead)
             {
@@ -126,7 +126,7 @@ namespace Enemy
             
         }
 
-        public override void Exit(EnemyManager enemy)
+        public override void Exit(EnemyControl enemy)
         {
             
         }

@@ -393,6 +393,7 @@ GameObject:
   - component: {fileID: 7065231592916162182}
   - component: {fileID: 4336229758300594491}
   - component: {fileID: 2342692391474388577}
+  - component: {fileID: 2010561096048147251}
   - component: {fileID: 3792868093249844025}
   - component: {fileID: 5041304006162068929}
   - component: {fileID: 4558151545706015300}
@@ -457,6 +458,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 3a7bce9a1301f9848aa78e6d4b6f3c2c, type: 2}
+--- !u!114 &2010561096048147251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3362123586102918478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbca1a2b371720a45b9a1db0a2a50ce2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!136 &3792868093249844025
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -883,7 +896,7 @@ GameObject:
   - component: {fileID: 2706354276172169148}
   m_Layer: 0
   m_Name: sword_wood
-  m_TagString: Untagged
+  m_TagString: EnemyMeleeAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1044,7 +1057,7 @@ TrailRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1065,7 +1078,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 5
+  m_Time: 1
   m_PreviewTimeScale: 1
   m_Parameters:
     serializedVersion: 3
@@ -1087,7 +1100,7 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 1, b: 1, a: 1}
+      key0: {r: 1, g: 0, b: 0, a: 1}
       key1: {r: 1, g: 1, b: 1, a: 1}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
@@ -1112,7 +1125,7 @@ TrailRenderer:
       atime6: 0
       atime7: 0
       m_Mode: 0
-      m_ColorSpace: -1
+      m_ColorSpace: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     numCornerVertices: 0
