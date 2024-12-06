@@ -16,5 +16,6 @@ MonoBehaviour:
   description: this is cookie
   type: hat(temP)
   rarity: 0
-  defenseValue: 0
-  icon: {fileID: 0}
+  defenseValue: 10
+  itemEffect: []
+  icon: {fileID: 21300000, guid: 44607b4e7c524e94fa32a37fa8ac5a30, type: 3}

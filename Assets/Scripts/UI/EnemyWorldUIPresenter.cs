@@ -22,7 +22,6 @@ namespace UI
         
         private void HandleEnemyHealthChange(float health, float maxHealth)
         {
-            Debug.Log("update");
             _healthBar.UpdateHealthBar(health, maxHealth);
         }
     }

@@ -1,12 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using DG.Tweening;
 using Player;
 using Scriptable_Objects;
 using UI;
 using UnityEngine;
-using UnityEngine.AI;
+using Random = UnityEngine.Random;
+
 
 namespace Enemy
 {
@@ -43,7 +43,35 @@ namespace Enemy
 
         private void DropItem()
         {
+            //Money min~max Consumable Chest
+            //일단 Instantiate로 생성
+            Vector3 pos = transform.position;
+            //Money
+            float moneyAmount = Random.Range(_dropTable.MoneyRangeStart, _dropTable.MoneyRangeEnd+1);
+            GameObject money = Instantiate(_dropTable.MoneyPrefab, pos+Vector3.back, Quaternion.identity);
+            money.GetComponent<Money>().SetMoneyAmount(moneyAmount);
+            //Consumable
+            float consumableChance = _dropTable.ConsumableChance;
+            float randomChance = Random.value;
             
+            if (randomChance > consumableChance)
+            {
+                int consumableTotalWeight = _dropTable.ConsumableTotalWeight;
+                int randomWeight = Random.Range(0, consumableTotalWeight);
+                int cumulativeWeight = 0;
+                foreach (var drop in _dropTable.ConsumableItems)
+                {
+                    cumulativeWeight += drop.dropWeight;
+                    if (cumulativeWeight > randomWeight)
+                    {
+                        Instantiate(drop.dropPrefab, pos+Vector3.left, Quaternion.identity);
+                        break;
+                    }
+                }
+            }
+            
+            
+
         }
         
         private void Awake()

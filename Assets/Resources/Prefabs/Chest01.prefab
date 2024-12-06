@@ -262,7 +262,7 @@ GameObject:
   - component: {fileID: 922357527048495016}
   - component: {fileID: 5132771606922262968}
   m_Layer: 13
-  m_Name: ChestV1
+  m_Name: Chest01
   m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

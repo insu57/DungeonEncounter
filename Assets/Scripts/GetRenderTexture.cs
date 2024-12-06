@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -34,11 +35,10 @@ public class GetRenderTexture : MonoBehaviour
         byte[] bytes = texture.EncodeToPNG();
         File.WriteAllBytes(path, bytes);
     }
-    
-    // Start is called before the first frame update
-    void Start()
+
+    private void Awake()
     {
-       
+        cam.transform.LookAt(targetPrefab.transform);
     }
 
     // Update is called once per frame

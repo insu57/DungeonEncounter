@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4006259797194583507}
   - component: {fileID: 7894752404919585228}
   - component: {fileID: 6333464770080825685}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: PlayerSword01
   m_TagString: Item
   m_Icon: {fileID: 0}
@@ -133,6 +133,10 @@ PrefabInstance:
     - target: {fileID: 3333738615844198536, guid: b80c8c71cabbdda4b965625a513fd49c, type: 3}
       propertyPath: m_Name
       value: Effect
+      objectReference: {fileID: 0}
+    - target: {fileID: 3333738615844198536, guid: b80c8c71cabbdda4b965625a513fd49c, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 8178636167714089623, guid: b80c8c71cabbdda4b965625a513fd49c, type: 3}
       propertyPath: m_LocalPosition.x

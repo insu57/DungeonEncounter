@@ -16,5 +16,6 @@ MonoBehaviour:
   description: this is doughnut
   type: hat(temp)
   rarity: 1
-  defenseValue: 0
-  icon: {fileID: 0}
+  defenseValue: 25
+  itemEffect: []
+  icon: {fileID: 21300000, guid: 927c9f60f52557a44a834871318c547f, type: 3}

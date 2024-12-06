@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5521055106246493055}
   - component: {fileID: 8732845880626601999}
   - component: {fileID: 4628936261311941698}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: WarriorDeafultWeapon
   m_TagString: Item
   m_Icon: {fileID: 0}

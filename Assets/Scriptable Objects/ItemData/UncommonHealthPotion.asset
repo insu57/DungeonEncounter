@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8a73577cd75dd7d4f9f57b1fdb1d8a56, type: 3}
-  m_Name: CommonHealthPotion
+  m_Name: UncommonHealthPotion
   m_EditorClassIdentifier: 
-  itemName: CommonHealthPotion
-  description: common health potion
+  itemName: UncommonHealthPotion
+  description: this is uncommon health potion
   type: 0
-  rarity: 0
+  rarity: 1
   itemData:
   - effectStat: 0
     effectCalculate: 0
-    effectAmount: 50
-    effectDescription: "\uC989\uC2DC \uCCB4\uB825 50\uD68C\uBCF5"
+    effectAmount: 80
+    effectDescription: "\uC989\uC2DC"
     effectDuration: 0
     isTickBased: 0
     tickSecond: 0
     effectType: 0
-  icon: {fileID: 21300000, guid: b82d122cb0b35bc4a9db6222121463a8, type: 3}
+  icon: {fileID: 21300000, guid: 3fb5a077320e89d4e97af9a20cf8a6e5, type: 3}

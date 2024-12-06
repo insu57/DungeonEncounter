@@ -14,6 +14,7 @@ namespace Scriptable_Objects
         [SerializeField] private AttackType attackType;
         [SerializeField] private Rarity rarity;
         [SerializeField] private float attackValue;
+        [SerializeField] private ItemEffect[] itemEffects;
         [SerializeField] private Sprite icon;
         public string WeaponName => weaponName;
         public string Description => description;
@@ -21,6 +22,7 @@ namespace Scriptable_Objects
         public AttackType AttackType => attackType;
         public Rarity Rarity => rarity;
         public float AttackValue => attackValue;
+        public ItemEffect[] ItemEffects => itemEffects;
         public Sprite Icon => icon;
     }
 }
