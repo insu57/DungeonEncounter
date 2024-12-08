@@ -24,5 +24,10 @@ namespace UI
         {
             _healthBar.UpdateHealthBar(health, maxHealth);
         }
+
+        public void Dispose()
+        {
+            _enemy.OnHealthChanged -= HandleEnemyHealthChange;
+        }
     }
 }

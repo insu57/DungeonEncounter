@@ -21,10 +21,20 @@ MonoBehaviour:
   - dropPrefab: {fileID: 7183969217170220544, guid: 6f0fc7668c627c2479a0be5f772a0d60, type: 3}
     dropWeight: 70
   consumableTotalWeight: 100
-  weapons: []
-  equipments: []
+  weapons:
+  - dropPrefab: {fileID: 3213851043470871558, guid: dcf19aef1c8a2e04c9dde8894033af61, type: 3}
+    dropWeight: 70
+  - dropPrefab: {fileID: 4302747001184217955, guid: fd877ee7373dfa1439bf397ada3d27e8, type: 3}
+    dropWeight: 30
+  weaponsTotalWeight: 100
+  equipments:
+  - dropPrefab: {fileID: 4688187244948865697, guid: 12b913e8b4c00544eac9315b732121ab, type: 3}
+    dropWeight: 70
+  - dropPrefab: {fileID: 1162732315936075981, guid: 3c9b093113bb39746b68bbb2979baf5e, type: 3}
+    dropWeight: 30
+  equipmentTotalWeight: 100
   consumableChance: 0.3
-  chestPrefab: {fileID: 7398582306683335699, guid: 728a183cab313f144840f14a965c548c, type: 3}
+  chestPrefab: {fileID: 8547558045587734986, guid: 34ca5d5f1125faf46a8c60b7f34a2ae1, type: 3}
   chestChance: 0.2
   weaponChance: 0.6
   equipmentChance: 0.4

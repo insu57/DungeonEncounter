@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Player;
+using Scriptable_Objects;
 using UI;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -22,6 +23,10 @@ public class InventoryUIPresenter
         _playerUIView.OnEquipmentInventory += HandleOpenEquipmentInventory;
         _playerUIView.OnConsumableInventory += HandleOpenConsumableInventory;
         _playerUIView.OnShowIcon += HandleShowIcon;
+
+        _playerManager.OnGetMoney += HandleAddMoney;
+        _playerManager.OnGetItem += HandleAddItem;
+        _inventoryManager.UpdateMoneyAmount += HandleUpdateTotalMoney;
         
         //init
       
@@ -82,6 +87,25 @@ public class InventoryUIPresenter
     {
     }
 
+    private void HandleAddMoney(int money)
+    {
+        _inventoryManager.AddMoney(money);
+    }
+
+    private void HandleAddItem(GameObject item)
+    {
+        if (item.layer == (int)ItemLayers.Weapon)
+        {
+            PlayerWeaponData weaponData = item.GetComponent<PlayerWeapon>().WeaponData;
+            _inventoryManager.AddWeaponData(weaponData);
+        }
+    }
+
+    private void HandleUpdateTotalMoney(int moneyAmount)
+    {
+        _playerUIView.UpdateMoney(moneyAmount);
+    }
+    
     public void Dispose()
     {
         _playerUIView.OnInventoryOpen -= HandleOnInventoryOpen;

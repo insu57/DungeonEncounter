@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Money : MonoBehaviour
 {
-    public float moneyAmount { private set; get; }
+    public int moneyAmount { private set; get; }
 
-    public void SetMoneyAmount(float money)
+    public void SetMoneyAmount(int money)
     {
         moneyAmount = money;
         Debug.Log("Drop Money: "+moneyAmount);

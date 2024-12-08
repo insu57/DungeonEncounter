@@ -15,13 +15,20 @@ namespace Scriptable_Objects
         menuName = "ScriptableObjects/EnemyDropTable", order = int.MaxValue)]
     public class EnemyDropTable : ScriptableObject
     {
+        [Header("Money")]
         [SerializeField] private GameObject moneyPrefab;
         [SerializeField] private int moneyRangeStart;
         [SerializeField] private int moneyRangeEnd;
+        [Header("Consumables")]
         [SerializeField] private List<DropEntry> consumableItems;
         [SerializeField] private int consumableTotalWeight;
+        [Header("Weapons")]
         [SerializeField] private List<DropEntry> weapons;
+        [SerializeField] private int weaponsTotalWeight;
+        [Header("Equipments")]
         [SerializeField] private List<DropEntry> equipments;
+        [SerializeField] private int equipmentTotalWeight;
+        [Header("Chance")]
         [SerializeField] private float consumableChance;
         [SerializeField] private GameObject chestPrefab;
         [SerializeField] private float chestChance;
@@ -34,7 +41,9 @@ namespace Scriptable_Objects
         public List<DropEntry> ConsumableItems => consumableItems;
         public int ConsumableTotalWeight => consumableTotalWeight;
         public List<DropEntry> Weapons => weapons;
+        public int WeaponsTotalWeight => weaponsTotalWeight;
         public List<DropEntry> Equipments => equipments;
+        public int EquipmentTotalWeight => equipmentTotalWeight;
         public float ConsumableChance => consumableChance;
         public GameObject ChestPrefab => chestPrefab;
         public float ChestChance => chestChance;

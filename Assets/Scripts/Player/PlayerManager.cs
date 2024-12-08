@@ -32,7 +32,8 @@ namespace Player
         public float FinalDamage { get; private set; }
         
         private InventoryManager _playerInventoryManager;
-        public event Action<float> OnGetMoney;
+        public event Action<int> OnGetMoney;
+        public event Action<GameObject> OnGetItem;
         
         private Camera _mainCamera;
 
@@ -49,12 +50,18 @@ namespace Player
             return _playerStats.GetValueOrDefault(statType, 0);
         }
 
-        private void GetItem(ItemTypes itemType)
+        private void GetItem(GameObject item)
         {
-            if (itemType == ItemTypes.Money)
+            if (item.layer == (int)ItemLayers.Money)
             {
-                
+                Money money = item.GetComponent<Money>();
+                OnGetMoney?.Invoke(money.moneyAmount);
             }
+            else
+            {
+                OnGetItem?.Invoke(item);
+            }
+            Destroy(item);
         }
         
         
@@ -108,34 +115,27 @@ namespace Player
                 Debug.Log("Player Health: "+health);
                 StartCoroutine(Damaged(1f)); //피격 후 무적시간...1초
             }
-            else if (other.CompareTag("Item"))
-            {
-                //Add to Inventory
-                //Float Image Key F... Press "F"
+            
+        }
 
-                if (other.gameObject.layer == (int)ItemLayers.Money)
+        private void OnTriggerStay(Collider other)
+        {
+            if (other.CompareTag("Item"))
+            {
+                if (other.gameObject.layer == (int)ItemLayers.Chest)
                 {
-                    GetItem(ItemTypes.Money);
+                    if(Input.GetKeyDown(KeyCode.F))
+                        other.gameObject.GetComponent<Chest>().OpenChest(); //Float Image OPEN KEY 'F'
                 }
-                else if (other.gameObject.layer == (int)ItemLayers.Consumable)
+                else if(other.gameObject.layer == (int)ItemLayers.Money)
                 {
-                    GetItem(ItemTypes.Consumable);
+                    GetItem(other.gameObject);
                 }
-                else if (other.gameObject.layer == (int)ItemLayers.Weapon)
+                else
                 {
-                    GetItem(ItemTypes.Weapon);
+                    if(Input.GetKeyDown(KeyCode.F))
+                        GetItem(other.gameObject);
                 }
-                else if (other.gameObject.layer == (int)ItemLayers.Equipment)
-                {
-                    GetItem(ItemTypes.Equipment);
-                }
-                else if (other.gameObject.layer == (int)ItemLayers.Chest)
-                {
-                    GetItem(ItemTypes.Chest);
-                }
-                
-                //other.
-                Destroy(other.gameObject);//추후 오브젝트 풀링으로 관리.(SetActive(false))
             }
         }
 

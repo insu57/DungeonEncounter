@@ -22,7 +22,7 @@ namespace UI
         //직업 관련 추가 필요
         [SerializeField] private Image playerHealthBar;
         [SerializeField] private Image playerEnergyBar;
-        
+        [SerializeField] private TextMeshProUGUI moneyMainText;
     
         //PlayerMenu...Inventory
         [Header("Player Menu")]
@@ -32,6 +32,7 @@ namespace UI
         [SerializeField] private TextMeshProUGUI energyText;
         [SerializeField] private TextMeshProUGUI attackText;
         [SerializeField] private TextMeshProUGUI defenseText;
+        [SerializeField] private TextMeshProUGUI moneyMenuText;
         [SerializeField] private Image currentWeaponImg;
         [SerializeField] private Image currentEquipmentImg;
         [SerializeField] private Image currentQuick1Img;
@@ -79,6 +80,13 @@ namespace UI
             playerEnergyBar.fillAmount = energy / maxEnergy;
             energyText.text = $"{energy}/{maxEnergy}";
         }
+
+        public void UpdateMoney(int money)
+        {
+            moneyMainText.text = money.ToString();
+            moneyMenuText.text = money.ToString();
+        }
+        
         //플레이어 정보 창일때만 호출하게 수정필요
         public void UpdatePlayerAttackValue(float attackValue)
         {

@@ -14,6 +14,7 @@ public class InventoryManager : MonoBehaviour
     private GameObject _itemQuickSlot1;
     private GameObject _itemQuickSlot2;
     
+    public int _moneyAmount;
     public PlayerWeaponData CurrentWeaponData { private set; get; }
     public PlayerEquipmentData CurrentEquipmentData { private set; get; }
     public ConsumableItemData ItemQuickSlot1 { private set; get; }
@@ -30,6 +31,7 @@ public class InventoryManager : MonoBehaviour
     //public Action 
     //public Event changeWeapon;
     //public Event changeEquipment;
+    public event Action<int> UpdateMoneyAmount; 
     public Event UpdateInventory;
 
     public int weaponInventoryCount { private set; get; }
@@ -57,7 +59,20 @@ public class InventoryManager : MonoBehaviour
         _weaponDataList.Sort((a, b)
             => string.Compare(a.WeaponName, b.WeaponName, StringComparison.Ordinal));
     }
+
+    public void AddEquipmentData(PlayerEquipmentData data)
+    {
+        _equipmentDataList.Add(data);
+        equipmentInventoryCount = _equipmentDataList.Count;
+        _equipmentDataList.Sort( (a,b) 
+            => string.Compare(a.EquipmentName, b.EquipmentName, StringComparison.Ordinal));
+    }
     
+    public void AddMoney(int amount)
+    {
+        _moneyAmount += amount;
+        UpdateMoneyAmount?.Invoke(_moneyAmount);
+    }
     
     private void Awake()
     {
@@ -71,6 +86,8 @@ public class InventoryManager : MonoBehaviour
         consumableInventoryMaxCount = 20;
 
         consumableItemMaxQuantity = 10;//현재-모든 소비템 최대 보유 개수 통일
+
+        _moneyAmount = 0;
     }
     
     private void Update()
