@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3382448564651537593}
   - component: {fileID: 8280244359088943771}
   - component: {fileID: 7080512545182219322}
+  - component: {fileID: 5278568185077509997}
   m_Layer: 10
   m_Name: Cookie Hat
   m_TagString: Item
@@ -97,3 +98,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 41a1446097fcb6f499864c1dcd190c09, type: 2}
+--- !u!65 &5278568185077509997
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4688187244948865697}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.3, y: 0.2, z: 0.3}
+  m_Center: {x: 0, y: 0, z: 0}

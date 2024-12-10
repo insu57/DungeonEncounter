@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1411ec737bc929e4792f24b160ba8ad7, type: 3}
+  m_Name: ItemPrefabData
+  m_EditorClassIdentifier: 
+  weaponPrefabs:
+  - weaponData: {fileID: 11400000, guid: a8745fc335fc77644a38fecf548f5c32, type: 2}
+    prefab: {fileID: 5710825388350084945, guid: b48dac54f99fb3346ac11d045b9a3c99, type: 3}
+  - weaponData: {fileID: 11400000, guid: 6355779932e71e943871c8dd939781cf, type: 2}
+    prefab: {fileID: 3213851043470871558, guid: dcf19aef1c8a2e04c9dde8894033af61, type: 3}
+  - weaponData: {fileID: 11400000, guid: 2e5915928362a9645947c3605d712051, type: 2}
+    prefab: {fileID: 4302747001184217955, guid: fd877ee7373dfa1439bf397ada3d27e8, type: 3}
+  equipmentPrefabs:
+  - equipmentData: {fileID: 11400000, guid: 41a1446097fcb6f499864c1dcd190c09, type: 2}
+    prefab: {fileID: 4688187244948865697, guid: 12b913e8b4c00544eac9315b732121ab, type: 3}
+  - equipmentData: {fileID: 11400000, guid: 4c78e11e92c584f47ba1bb8acc468e24, type: 2}
+    prefab: {fileID: 1162732315936075981, guid: 3c9b093113bb39746b68bbb2979baf5e, type: 3}
+  consumablePrefabs:
+  - consumableData: {fileID: 11400000, guid: 23b0c79bd28ec0d46a6dc4833c879efe, type: 2}
+    prefab: {fileID: 7183969217170220544, guid: 6f0fc7668c627c2479a0be5f772a0d60, type: 3}
+  - consumableData: {fileID: 11400000, guid: 44d989d6787bbf54e86bb771a5364be7, type: 2}
+    prefab: {fileID: 6877928846283078665, guid: 633cb1ebbec254849aa77967842467fd, type: 3}

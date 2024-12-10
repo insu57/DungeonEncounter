@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Player;
 using Scriptable_Objects;
 using UnityEngine;
@@ -8,26 +9,29 @@ using UnityEngine.Serialization;
 
 public class InventoryManager : MonoBehaviour
 {
-    private PlayerManager _playerManager;
+    public class ConsumableItem
+    {
+        public ConsumableItemData ItemData;
+        public int Quantity;
+    }
     
+    private PlayerManager _playerManager;
+    [SerializeField] private ItemPrefabData itemPrefabData;
     private GameObject _currentEquipment;
     private GameObject _itemQuickSlot1;
     private GameObject _itemQuickSlot2;
     
-    public int _moneyAmount;
+    private int _moneyAmount;
     public PlayerWeaponData CurrentWeaponData { private set; get; }
     public PlayerEquipmentData CurrentEquipmentData { private set; get; }
     public ConsumableItemData ItemQuickSlot1 { private set; get; }
     public ConsumableItemData ItemQuickSlot2 { private set; get; }
 
     private GameObject _selectedItem; //GameObject?Data?...
-    private readonly List<PlayerWeaponData> _weaponDataList = new List<PlayerWeaponData>();
-    private List<PlayerEquipmentData> _equipmentDataList = new List<PlayerEquipmentData>();
-    private List<ConsumableItemData> _consumableDataList = new List<ConsumableItemData>(); //수량도 필요함..Dictionary?
+    public List<PlayerWeaponData> WeaponDataList { get; } = new List<PlayerWeaponData>();
+    public List<PlayerEquipmentData> EquipmentDataList { get; } = new List<PlayerEquipmentData>();
+    public List<ConsumableItem> ConsumableDataList { get; } = new List<ConsumableItem>();
 
-    public List<PlayerWeaponData> WeaponDataList => _weaponDataList;
-    public List<PlayerEquipmentData> EquipmentDataList => _equipmentDataList;
-    public List<ConsumableItemData> ConsumableDataList => _consumableDataList;
     //public Action 
     //public Event changeWeapon;
     //public Event changeEquipment;
@@ -54,18 +58,34 @@ public class InventoryManager : MonoBehaviour
 
     public void AddWeaponData(PlayerWeaponData data)
     {
-        _weaponDataList.Add(data);
-        weaponInventoryCount = _weaponDataList.Count;
-        _weaponDataList.Sort((a, b)
+        WeaponDataList.Add(data);
+        weaponInventoryCount = WeaponDataList.Count;
+        WeaponDataList.Sort((a, b)
             => string.Compare(a.WeaponName, b.WeaponName, StringComparison.Ordinal));
     }
 
     public void AddEquipmentData(PlayerEquipmentData data)
     {
-        _equipmentDataList.Add(data);
-        equipmentInventoryCount = _equipmentDataList.Count;
-        _equipmentDataList.Sort( (a,b) 
+        EquipmentDataList.Add(data);
+        equipmentInventoryCount = EquipmentDataList.Count;
+        EquipmentDataList.Sort( (a,b) 
             => string.Compare(a.EquipmentName, b.EquipmentName, StringComparison.Ordinal));
+    }
+
+    public void AddConsumableData(ConsumableItemData data)
+    {
+        var existingItem = ConsumableDataList.FirstOrDefault(x => x.ItemData == data);
+        if (existingItem != null)
+        {
+            existingItem.Quantity++;
+        }
+        else
+        {
+            ConsumableDataList.Add(new ConsumableItem { ItemData = data, Quantity = 1 });
+            consumableInventoryCount = ConsumableDataList.Count;
+            ConsumableDataList.Sort( (a,b)
+                => string.Compare(a.ItemData.ItemName, b.ItemData.ItemName, StringComparison.Ordinal));
+        }
     }
     
     public void AddMoney(int amount)
@@ -88,10 +108,5 @@ public class InventoryManager : MonoBehaviour
         consumableItemMaxQuantity = 10;//현재-모든 소비템 최대 보유 개수 통일
 
         _moneyAmount = 0;
-    }
-    
-    private void Update()
-    {
-        
     }
 }

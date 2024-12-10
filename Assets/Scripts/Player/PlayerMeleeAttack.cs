@@ -13,6 +13,7 @@ namespace Player
             _playerControl = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControl>();
             _trailRenderer = GetComponentInChildren<TrailRenderer>(); //이펙트 수정 필요. 
             _attackArea = GetComponent<Collider>();
+            
         }
 
         // Update is called once per frame

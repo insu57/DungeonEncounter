@@ -31,8 +31,7 @@ namespace UI
             _uiView.UpdatePlayerEnergyBar(energy, maxEnergy);
             _uiView.UpdatePlayerAttackValue(attack);
             _uiView.UpdatePlayerDefenseValue(defense);
-
-           
+            
         }
 
         private void HandleStatChanged(PlayerStatTypes statTypes, float value)

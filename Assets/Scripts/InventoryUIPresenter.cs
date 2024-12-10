@@ -10,19 +10,21 @@ public class InventoryUIPresenter
 {
     private readonly PlayerManager _playerManager;
     private readonly InventoryManager _inventoryManager;
-    private readonly PlayerUIView _playerUIView;
+    private readonly InventoryUIView _inventoryUIView;
 
-    public InventoryUIPresenter(PlayerManager playerManager, InventoryManager inventoryManager, PlayerUIView playerUIView)
+    public InventoryUIPresenter(PlayerManager playerManager, InventoryManager inventoryManager,
+        InventoryUIView inventoryUIView)
     {
         _playerManager = playerManager;
         _inventoryManager = inventoryManager;
-        _playerUIView = playerUIView;
+        _inventoryUIView = inventoryUIView;
 
-        _playerUIView.OnInventoryOpen += HandleOnInventoryOpen;
-        _playerUIView.OnWeaponInventory += HandleOnWeaponInventory;
-        _playerUIView.OnEquipmentInventory += HandleOpenEquipmentInventory;
-        _playerUIView.OnConsumableInventory += HandleOpenConsumableInventory;
-        _playerUIView.OnShowIcon += HandleShowIcon;
+        _inventoryUIView.OnInventoryOpen += HandleOnInventoryOpen;
+        _inventoryUIView.OnShowIcon += HandleShowIcon;
+        _inventoryUIView.OnCurrentWeapon += HandleShowCurrentWeapon;
+        _inventoryUIView.OnCurrentEquipment += HandleShowCurrentEquipment;
+        _inventoryUIView.OnQuickSlot1 += HandleShowCurrentQuick1;
+        _inventoryUIView.OnQuickSlot2 += HandleShowCurrentQuick2;
 
         _playerManager.OnGetMoney += HandleAddMoney;
         _playerManager.OnGetItem += HandleAddItem;
@@ -32,13 +34,13 @@ public class InventoryUIPresenter
       
         _inventoryManager.AddWeaponData(_playerManager.WeaponData);
         _inventoryManager.SetWeapon(_playerManager.WeaponData);
-        _playerUIView.UpdateCurrentWeapon(_playerManager.WeaponData.Icon);
-        int maxCount = inventoryManager.weaponInventoryMaxCount;  //생성은 초기화, 최대칸 증가 시에만
+        _inventoryUIView.UpdateCurrentWeapon(_playerManager.WeaponData.Icon);
+        int maxCount = _inventoryManager.weaponInventoryMaxCount;  //생성은 초기화, 최대칸 증가 시에만
         for (int i = 0; i < maxCount; i++)
         {
-            _playerUIView.InitInventory();
+            _inventoryUIView.InitInventory();
         }
-        _playerUIView.UpdateInventoryIcon(0, _playerManager.WeaponData.Icon);
+        //_playerUIView.UpdateInventoryIcon(0, _playerManager.WeaponData.Icon);
 
     }
     
@@ -48,6 +50,26 @@ public class InventoryUIPresenter
         //_playerManager.
     }
 
+    private void HandleShowCurrentWeapon()
+    {
+        PlayerWeaponData data = _inventoryManager.CurrentWeaponData;
+        _inventoryUIView.SelectedWeapon(data);
+    }
+    
+    private void HandleShowCurrentEquipment()
+    {
+        PlayerEquipmentData data = _inventoryManager.CurrentEquipmentData;
+    }
+    private void HandleShowCurrentQuick1()
+    {
+        ConsumableItemData data = _inventoryManager.ItemQuickSlot1;
+    }
+
+    private void HandleShowCurrentQuick2()
+    {
+        ConsumableItemData data = _inventoryManager.ItemQuickSlot2;
+    }
+    
     private void HandleOnInventoryOpen(ItemTypes type)
     {
         int count, maxCount;
@@ -56,35 +78,43 @@ public class InventoryUIPresenter
             case ItemTypes.Weapon:
                 count = _inventoryManager.weaponInventoryCount;
                 maxCount = _inventoryManager.weaponInventoryMaxCount;
-                _playerUIView.UpdateInventoryCount(count, maxCount);
+                _inventoryUIView.UpdateInventoryCount(count, maxCount);
+                _inventoryUIView.ClearInventoryIcon(maxCount);
+                int index = 0;
+                foreach (var weaponData in _inventoryManager.WeaponDataList)
+                {
+                    _inventoryUIView.UpdateInventoryIcon(index, weaponData.Icon);
+                    index++;
+                }
                 
                 break;
             case ItemTypes.Equipment:
                 count = _inventoryManager.equipmentInventoryCount;
                 maxCount = _inventoryManager.equipmentInventoryMaxCount;
-                _playerUIView.UpdateInventoryCount(count, maxCount);
+                _inventoryUIView.UpdateInventoryCount(count, maxCount);
+                _inventoryUIView.ClearInventoryIcon(maxCount);
+                index = 0;
+                foreach (var equipmentData in _inventoryManager.EquipmentDataList)
+                {
+                    _inventoryUIView.UpdateInventoryIcon(index, equipmentData.Icon);
+                    index++;
+                }
                 break;
             case ItemTypes.Consumable:
                 count = _inventoryManager.consumableInventoryCount;
                 maxCount = _inventoryManager.consumableInventoryMaxCount;
-                _playerUIView.UpdateInventoryCount(count, maxCount);
+                _inventoryUIView.UpdateInventoryCount(count, maxCount);
+                _inventoryUIView.ClearInventoryIcon(maxCount);
+                index = 0;
+                foreach (var consumableItem in _inventoryManager.ConsumableDataList)
+                {
+                    int quantity = consumableItem.Quantity;
+                    _inventoryUIView.UpdateInventoryIconWithQuantity(index, consumableItem.ItemData.Icon, quantity);
+                }
                 break;
         }
         
         
-    }
-    
-    private void HandleOnWeaponInventory()
-    {
-        
-    }
-    private void HandleOpenEquipmentInventory()
-    {
-
-
-    }
-    private void HandleOpenConsumableInventory()
-    {
     }
 
     private void HandleAddMoney(int money)
@@ -99,17 +129,28 @@ public class InventoryUIPresenter
             PlayerWeaponData weaponData = item.GetComponent<PlayerWeapon>().WeaponData;
             _inventoryManager.AddWeaponData(weaponData);
         }
+        else if (item.layer == (int)ItemLayers.Equipment)
+        {
+            PlayerEquipmentData equipmentData = item.GetComponent<PlayerEquipment>().Data;
+            _inventoryManager.AddEquipmentData(equipmentData);
+        }
+        else if (item.layer == (int)ItemLayers.Consumable)
+        {
+            ConsumableItemData consumableData = item.GetComponent<ConsumableItem>().Data;
+            _inventoryManager.AddConsumableData(consumableData);
+        }
     }
 
     private void HandleUpdateTotalMoney(int moneyAmount)
     {
-        _playerUIView.UpdateMoney(moneyAmount);
+        _inventoryUIView.UpdateMoney(moneyAmount);
+        
     }
     
     public void Dispose()
     {
-        _playerUIView.OnInventoryOpen -= HandleOnInventoryOpen;
+        _inventoryUIView.OnInventoryOpen -= HandleOnInventoryOpen;
         //
-        _playerUIView.OnShowIcon -= HandleShowIcon;
+        _inventoryUIView.OnShowIcon -= HandleShowIcon;
     }
 }

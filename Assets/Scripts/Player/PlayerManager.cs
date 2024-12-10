@@ -65,10 +65,6 @@ namespace Player
         }
         
         
-        //무기,장비 변경
-        //아이템 사용
-        //사망 처리...리셋
-        
         private void Awake()
         {
             
@@ -87,7 +83,7 @@ namespace Player
             }
             //else...Ranged
            
-            //직업 기본 데이터에서 받아오게 수정...SO에서 받아옴
+            //PlayerJobData SO
             _playerStats = new Dictionary<PlayerStatTypes, float>
             {
                 { PlayerStatTypes.Health, playerJobData.Health }, 
@@ -98,8 +94,6 @@ namespace Player
                 { PlayerStatTypes.DefenseValue, 0f}
             };
 
-            //_playerInventoryManager.CurrentWeaponData = _playerWeaponData;
-            //_enemyProjectile = G
         }
         
         private void OnTriggerEnter(Collider other)
