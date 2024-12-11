@@ -36,6 +36,5 @@ public class UIManager : MonoBehaviour //UI제어
     {
         _playerUIPresenter?.Dispose();
         _inventoryUIPresenter?.Dispose();
-        
     }
 }

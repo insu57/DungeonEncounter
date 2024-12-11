@@ -1,5 +1,6 @@
 using System;
 using Player;
+using UnityEngine;
 using UnityEngine.Serialization;
 
 [Serializable]
@@ -65,3 +66,54 @@ public enum Rarity
     Common, Uncommon, Rare, Epic, Legendary,
 }
 
+public static class EnumManager
+{
+    public static string RarityToString(Rarity rarity)
+    {
+        return rarity switch
+        {
+            Rarity.Common => "Common",
+            Rarity.Uncommon => "Uncommon",
+            Rarity.Rare => "Rare",
+            Rarity.Epic => "Epic",
+            Rarity.Legendary => "Legendary",
+            _ => rarity.ToString()
+        };
+    }
+    
+    public static string WeaponTypeToString(WeaponType type)
+    {
+        return type switch
+        {
+            WeaponType.Sword => "Sword",
+            WeaponType.Axe => "Axe",
+            WeaponType.Hammer => "Hammer",
+            WeaponType.Spear => "Spear",
+            WeaponType.Staff => "Staff",
+            WeaponType.Wand => "Wand",
+            WeaponType.Bow => "Bow",
+            _ => type.ToString()
+        };
+    }        
+    
+    public static string AttackTypeToString(AttackType type)
+    {
+        return type switch
+        {
+            AttackType.Melee => "Melee",
+            AttackType.Ranged => "Ranged",
+            _ => type.ToString()
+        };
+    }       
+    
+    public static string ConsumableTypeToString(ConsumableType type)
+    {
+        return type switch
+        {
+            ConsumableType.Food => "Food",
+            ConsumableType.Potion => "Potion",
+            ConsumableType.Throwable => "Throwable",
+            _ => type.ToString()
+        };
+    }
+}

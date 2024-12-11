@@ -56,6 +56,21 @@ public class InventoryManager : MonoBehaviour
         CurrentWeaponData = data;
     }
 
+    public void SetEquipment(PlayerEquipmentData data)
+    {
+        CurrentEquipmentData = data;
+    }
+
+    public void SetQuickSlot1(ConsumableItemData data)
+    {
+        ItemQuickSlot1 = data;
+    }
+
+    public void SetQuickSlot2(ConsumableItemData data)
+    {
+        ItemQuickSlot2 = data;
+    }
+
     public void AddWeaponData(PlayerWeaponData data)
     {
         WeaponDataList.Add(data);

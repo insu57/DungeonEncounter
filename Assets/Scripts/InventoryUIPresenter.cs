@@ -20,11 +20,11 @@ public class InventoryUIPresenter
         _inventoryUIView = inventoryUIView;
 
         _inventoryUIView.OnInventoryOpen += HandleOnInventoryOpen;
-        _inventoryUIView.OnShowIcon += HandleShowIcon;
         _inventoryUIView.OnCurrentWeapon += HandleShowCurrentWeapon;
         _inventoryUIView.OnCurrentEquipment += HandleShowCurrentEquipment;
         _inventoryUIView.OnQuickSlot1 += HandleShowCurrentQuick1;
         _inventoryUIView.OnQuickSlot2 += HandleShowCurrentQuick2;
+        _inventoryUIView.OnSelectInventorySlot += HandleSelectInventorySlot;
 
         _playerManager.OnGetMoney += HandleAddMoney;
         _playerManager.OnGetItem += HandleAddItem;
@@ -44,30 +44,76 @@ public class InventoryUIPresenter
 
     }
     
-    private void HandleShowIcon()
-    {
-        
-        //_playerManager.
-    }
-
     private void HandleShowCurrentWeapon()
     {
         PlayerWeaponData data = _inventoryManager.CurrentWeaponData;
         _inventoryUIView.SelectedWeapon(data);
+        _inventoryUIView.ItemButtonActive(true);
     }
     
     private void HandleShowCurrentEquipment()
     {
         PlayerEquipmentData data = _inventoryManager.CurrentEquipmentData;
+        if (data != null)
+        {
+            _inventoryUIView.SelectedEquipment(data);
+            _inventoryUIView.ItemButtonActive(true);
+        }
+        
     }
     private void HandleShowCurrentQuick1()
     {
         ConsumableItemData data = _inventoryManager.ItemQuickSlot1;
+        if (data != null)
+        {
+            _inventoryUIView.SelectedConsumable(data);
+            _inventoryUIView.ItemButtonActive(true);
+        }
+        
     }
 
     private void HandleShowCurrentQuick2()
     {
         ConsumableItemData data = _inventoryManager.ItemQuickSlot2;
+        if (data != null)
+        {
+            _inventoryUIView.SelectedConsumable(data);
+            _inventoryUIView.ItemButtonActive(true);
+        }
+    }
+
+    private void HandleSelectInventorySlot(ItemTypes type, int index)
+    {
+        switch (type)
+        {
+            case ItemTypes.Weapon:
+                if (index < _inventoryManager.weaponInventoryCount)
+                {
+                    PlayerWeaponData data = _inventoryManager.WeaponDataList[index];
+                    _inventoryUIView.SelectedWeapon(data);
+                    _inventoryUIView.ItemButtonActive(true);
+                }
+                break;
+            case ItemTypes.Equipment:
+                if (index < _inventoryManager.equipmentInventoryCount)
+                {
+                    PlayerEquipmentData data = _inventoryManager.EquipmentDataList[index];
+                    _inventoryUIView.SelectedEquipment(data);
+                    _inventoryUIView.ItemButtonActive(true);
+                }
+                break;
+            case ItemTypes.Consumable:
+                if (index < _inventoryManager.consumableInventoryCount)
+                {
+                    ConsumableItemData data = _inventoryManager.ConsumableDataList[index].ItemData;
+                    //int quantity = _inventoryManager.ConsumableDataList[index].Quantity;
+                    _inventoryUIView.SelectedConsumable(data);
+                    _inventoryUIView.ItemButtonActive(true);
+                }
+                break;
+            default:
+                break;
+        }
     }
     
     private void HandleOnInventoryOpen(ItemTypes type)
@@ -151,6 +197,6 @@ public class InventoryUIPresenter
     {
         _inventoryUIView.OnInventoryOpen -= HandleOnInventoryOpen;
         //
-        _inventoryUIView.OnShowIcon -= HandleShowIcon;
+        _inventoryUIView.OnSelectInventorySlot -= HandleSelectInventorySlot;
     }
 }
