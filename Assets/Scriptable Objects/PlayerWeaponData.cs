@@ -7,7 +7,6 @@ namespace Scriptable_Objects
         menuName = "ScriptableObjects/PlayerWeaponData", order = int.MaxValue)]
     public class PlayerWeaponData : ScriptableObject
     {
-       
         [SerializeField] private string weaponName;
         [SerializeField] private string description;
         [SerializeField] private WeaponType weaponType;
@@ -16,6 +15,7 @@ namespace Scriptable_Objects
         [SerializeField] private float attackValue;
         [SerializeField] private ItemEffect[] itemEffects;
         [SerializeField] private Sprite icon;
+        [SerializeField] private bool isDefaultWeapon;
         public string WeaponName => weaponName;
         public string Description => description;
         public WeaponType WeaponType => weaponType;
@@ -24,5 +24,6 @@ namespace Scriptable_Objects
         public float AttackValue => attackValue;
         public ItemEffect[] ItemEffects => itemEffects;
         public Sprite Icon => icon;
+        public bool IsDefaultWeapon => isDefaultWeapon;
     }
 }

@@ -29,11 +29,12 @@ public class InventoryUIPresenter
         _playerManager.OnGetMoney += HandleAddMoney;
         _playerManager.OnGetItem += HandleAddItem;
         _inventoryManager.UpdateMoneyAmount += HandleUpdateTotalMoney;
+        //InventoryManager StatChange -> PlayerManager
+        
         
         //init
-      
         _inventoryManager.AddWeaponData(_playerManager.WeaponData);
-        _inventoryManager.SetWeapon(_playerManager.WeaponData);
+        _inventoryManager.SetWeapon(_playerManager.WeaponData, 0);
         _inventoryUIView.UpdateCurrentWeapon(_playerManager.WeaponData.Icon);
         int maxCount = _inventoryManager.weaponInventoryMaxCount;  //생성은 초기화, 최대칸 증가 시에만
         for (int i = 0; i < maxCount; i++)
@@ -44,71 +45,95 @@ public class InventoryUIPresenter
 
     }
     
-    private void HandleShowCurrentWeapon()
+    private void HandleShowCurrentWeapon() //현재 무기 데이터 표시
     {
-        PlayerWeaponData data = _inventoryManager.CurrentWeaponData;
+        PlayerWeaponData data = _inventoryManager.CurrentWeaponData.ItemData;
         _inventoryUIView.SelectedWeapon(data);
-        _inventoryUIView.ItemButtonActive(true);
+        _inventoryUIView.ItemEquipButtonActive(false);
+        _inventoryUIView.ItemDropButtonActive(false);
     }
     
     private void HandleShowCurrentEquipment()
     {
-        PlayerEquipmentData data = _inventoryManager.CurrentEquipmentData;
+        PlayerEquipmentData data = _inventoryManager.CurrentEquipmentData.ItemData;
         if (data != null)
         {
             _inventoryUIView.SelectedEquipment(data);
-            _inventoryUIView.ItemButtonActive(true);
+            _inventoryUIView.ItemEquipButtonActive(false);
+            _inventoryUIView.ItemDropButtonActive(false);
         }
         
     }
     private void HandleShowCurrentQuick1()
     {
-        ConsumableItemData data = _inventoryManager.ItemQuickSlot1;
+        InventoryManager.ConsumableDataWithQuantity data = _inventoryManager.ItemQuickSlot1;
         if (data != null)
         {
             _inventoryUIView.SelectedConsumable(data);
-            _inventoryUIView.ItemButtonActive(true);
+            _inventoryUIView.ItemEquipButtonActive(false);
+            _inventoryUIView.ItemDropButtonActive(false);
+            
         }
         
     }
 
     private void HandleShowCurrentQuick2()
     {
-        ConsumableItemData data = _inventoryManager.ItemQuickSlot2;
+        InventoryManager.ConsumableDataWithQuantity data = _inventoryManager.ItemQuickSlot2;
         if (data != null)
         {
             _inventoryUIView.SelectedConsumable(data);
-            _inventoryUIView.ItemButtonActive(true);
+            _inventoryUIView.ItemEquipButtonActive(false);
+            _inventoryUIView.ItemDropButtonActive(false);        
         }
     }
 
-    private void HandleSelectInventorySlot(ItemTypes type, int index)
+    private void HandleSelectInventorySlot(ItemTypes type, int index) //선택한 인벤토리 슬롯 아이템 데이터 표시
     {
         switch (type)
         {
             case ItemTypes.Weapon:
                 if (index < _inventoryManager.weaponInventoryCount)
                 {
-                    PlayerWeaponData data = _inventoryManager.WeaponDataList[index];
-                    _inventoryUIView.SelectedWeapon(data);
-                    _inventoryUIView.ItemButtonActive(true);
+                    InventoryManager.WeaponDataWithIndex item = _inventoryManager.WeaponDataList[index];
+                    _inventoryUIView.SelectedWeapon(item.ItemData);
+                    if (item.ItemData.IsDefaultWeapon || item.Index == _inventoryManager.CurrentWeaponData.Index)
+                    {
+                        _inventoryUIView.ItemEquipButtonActive(false);
+                        _inventoryUIView.ItemDropButtonActive(false);
+                    }
+                    else
+                    {
+                        _inventoryUIView.ItemEquipButtonActive(true);
+                        _inventoryUIView.ItemDropButtonActive(true);
+                    }
+                    
                 }
                 break;
             case ItemTypes.Equipment:
                 if (index < _inventoryManager.equipmentInventoryCount)
                 {
-                    PlayerEquipmentData data = _inventoryManager.EquipmentDataList[index];
-                    _inventoryUIView.SelectedEquipment(data);
-                    _inventoryUIView.ItemButtonActive(true);
+                    InventoryManager.EquipmentDataWithIndex item = _inventoryManager.EquipmentDataList[index];
+                    _inventoryUIView.SelectedEquipment(item.ItemData);
+                    if (item.Index == _inventoryManager.CurrentEquipmentData.Index)
+                    {
+                        _inventoryUIView.ItemEquipButtonActive(false);
+                        _inventoryUIView.ItemDropButtonActive(false);
+                    }
+                    else
+                    {
+                        _inventoryUIView.ItemEquipButtonActive(true);
+                        _inventoryUIView.ItemDropButtonActive(true);
+                    }
                 }
                 break;
             case ItemTypes.Consumable:
                 if (index < _inventoryManager.consumableInventoryCount)
                 {
-                    ConsumableItemData data = _inventoryManager.ConsumableDataList[index].ItemData;
-                    //int quantity = _inventoryManager.ConsumableDataList[index].Quantity;
+                    InventoryManager.ConsumableDataWithQuantity data = _inventoryManager.ConsumableDataList[index];
                     _inventoryUIView.SelectedConsumable(data);
-                    _inventoryUIView.ItemButtonActive(true);
+                    _inventoryUIView.ItemEquipButtonActive(true);
+                    _inventoryUIView.ItemDropButtonActive(true); //수량따라 작동하게 수정필요
                 }
                 break;
             default:
@@ -129,7 +154,7 @@ public class InventoryUIPresenter
                 int index = 0;
                 foreach (var weaponData in _inventoryManager.WeaponDataList)
                 {
-                    _inventoryUIView.UpdateInventoryIcon(index, weaponData.Icon);
+                    _inventoryUIView.UpdateInventoryIcon(index, weaponData.ItemData.Icon);
                     index++;
                 }
                 
@@ -142,7 +167,7 @@ public class InventoryUIPresenter
                 index = 0;
                 foreach (var equipmentData in _inventoryManager.EquipmentDataList)
                 {
-                    _inventoryUIView.UpdateInventoryIcon(index, equipmentData.Icon);
+                    _inventoryUIView.UpdateInventoryIcon(index, equipmentData.ItemData.Icon);
                     index++;
                 }
                 break;

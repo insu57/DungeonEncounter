@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Scriptable_Objects;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace UI
@@ -40,13 +41,14 @@ namespace UI
         [SerializeField] private TextMeshProUGUI itemNameText;
         [SerializeField] private TextMeshProUGUI itemRarityText;
         [SerializeField] private TextMeshProUGUI itemTypeText;
-        [SerializeField] private TextMeshProUGUI itemEffectText;
         [SerializeField] private TextMeshProUGUI itemDescriptionText;
         [SerializeField] private Button itemEquipButton;
         [SerializeField] private Image equipButtonInactiveImage;
         [SerializeField] private Button itemDropButton;
         [SerializeField] private Image dropButtonInactiveImage;
-
+        [SerializeField] private TextMeshProUGUI itemValueText;
+        [SerializeField] private TextMeshProUGUI itemEffectText;
+        
         private ItemTypes _currentInventoryType;
         public event Action<ItemTypes> OnInventoryOpen;
         public event Action<ItemTypes,int> OnSelectInventorySlot;
@@ -74,7 +76,7 @@ namespace UI
             inventory.SetActive(false);
         }
 
-        private void OpenInventory(ItemTypes type)
+        private void OpenInventory(ItemTypes type)//인벤토리 열기(타입별로)
         {
             inventory.SetActive(true);
             _currentInventoryType = type;
@@ -83,49 +85,59 @@ namespace UI
 
         public void UpdateCurrentWeapon(Sprite sprite)
         {
-            currentWeaponImg.sprite = sprite;
-            Color alpha = new Color(1,1,1, 1);
-            currentWeaponImg.color = alpha;
+            UpdateSelectItemIcon(currentWeaponImg,sprite);
         }
 
-        public void UpdateSelectItemIcon(Image image, Sprite sprite)
+        public void UpdateCurrentEquipment(Sprite sprite)
+        {
+            UpdateSelectItemIcon(currentEquipmentImg,sprite);
+        }
+
+        public void UpdateCurrentQuick1(Sprite sprite)
+        {
+            UpdateSelectItemIcon(currentQuick1Img,sprite);
+        }
+
+        public void UpdateCurrentQuick2(Sprite sprite)
+        {
+            UpdateSelectItemIcon(currentQuick2Img,sprite);
+        }
+
+        private static void UpdateSelectItemIcon(Image image, Sprite sprite)
         {
             image.sprite = sprite;
             Color alpha = new Color(image.color.r, image.color.g, image.color.b, 1);
-            image.color = alpha;
+            image.color = alpha;//알파값1로 변경. 이미지 sprite로 변경
         }
         
         public void UpdateInventoryCount(int count, int maxCount)
         {
-            countText.text = $"{count} / {maxCount}";
+            countText.text = $"{count} / {maxCount}"; //현재개수 / 최대개수
         }
         public void UpdateInventoryIcon(int index, Sprite sprite)
         { 
             Image icon = inventoryGridParent.GetChild(index)
                 .transform.Find("SlotBackground/ImageSlot").GetComponent<Image>();
-            Color alpha = new Color(icon.color.r, icon.color.g, icon.color.b, 1);
-            icon.color = alpha;
-            icon.sprite = sprite;
+            UpdateSelectItemIcon(icon, sprite);
         }
         
         public void UpdateInventoryIconWithQuantity(int index, Sprite sprite, int quantity)
         {
             Image icon = inventoryGridParent.GetChild(index)
                 .transform.Find("SlotBackground/ImageSlot").GetComponent<Image>();
-            Color alpha = new Color(icon.color.r, icon.color.g, icon.color.b, 1);
-            icon.color = alpha;
-            icon.sprite = sprite;
+            UpdateSelectItemIcon(icon, sprite);
             TextMeshProUGUI quantityText = inventoryGridParent.GetChild(index)
                 .transform.Find("SlotBackground/Quantity").GetComponent<TextMeshProUGUI>();
+            Color alpha = new Color(icon.color.r, icon.color.g, icon.color.b, 1);
             quantityText.text = $"{quantity}";
-            quantityText.color = alpha;
+            quantityText.color = alpha; //수량값도 받아와서 표시.
         }
 
-        public void ClearInventoryIcon(int maxCount)
+        public void ClearInventoryIcon(int maxCount)//인벤토리 초기화.
         {
             for (int i = 0; i < inventoryGridParent.childCount; i++)
             {
-                if (maxCount <= i)
+                if (maxCount <= i)//인벤토리 최대개수 넘는 슬롯 비활성
                 {
                     inventoryGridParent.GetChild(i).gameObject.SetActive(false);
                 }
@@ -138,7 +150,7 @@ namespace UI
                     icon.color = alpha;
                     TextMeshProUGUI quantityText = inventoryGridParent.GetChild(i)
                         .transform.Find("SlotBackground/Quantity").GetComponent<TextMeshProUGUI>();
-                    quantityText.color = alpha;
+                    quantityText.color = alpha; //알파값 0으로 변경시킴(이전에 있던 아이콘 투명하게)
                 }
             }
         }
@@ -149,11 +161,11 @@ namespace UI
             GameObject inventorySlot = Instantiate(inventoryIconPrefab, inventoryGridParent);
             Button slotButton = inventorySlot.GetComponentInChildren<Button>();
             slotButton.onClick.AddListener(
-                ()=> SelectItemInventory(_currentInventoryType, count));
+                ()=> SelectItemInventory(_currentInventoryType, count));//콜백이벤트 등록
             //인벤토리 슬롯 초기 생성 
         }
         
-        public void SelectedWeapon(PlayerWeaponData data)
+        public void SelectedWeapon(PlayerWeaponData data)//ItemInfo에 아이템 데이터 표시
         {
             infoText.SetActive(true);
             UpdateSelectItemIcon(itemImage, data.Icon);
@@ -161,7 +173,8 @@ namespace UI
             itemRarityText.text = EnumManager.RarityToString(data.Rarity);
             itemTypeText.text = $"{EnumManager.WeaponTypeToString(data.WeaponType)}" +
                                 $" / {EnumManager.AttackTypeToString(data.AttackType)}";
-            itemEffectText.text = data.ItemEffects != null ? "Have Effect" : "None."; //Temp. 효과별로 항복마다 처리 필요
+            itemValueText.text = $"공격력: {data.AttackValue}";
+            itemEffectText.text = data.ItemEffects.Length != 0 ? "Have Effect" : "None."; //Temp. 효과별로 항복마다 처리 필요
             itemDescriptionText.text = data.Description;
         }
 
@@ -172,32 +185,37 @@ namespace UI
             itemNameText.text = data.EquipmentName;
             itemRarityText.text = EnumManager.RarityToString(data.Rarity);
             itemTypeText.text = data.Type;
-            itemEffectText.text = data.ItemEffect != null ? "Have Effect" : "None."; //Temp. 효과별로 항복마다 처리 필요
+            itemValueText.text = $"방어력: {data.DefenseValue}";
+            itemEffectText.text = data.ItemEffect.Length != 0 ? "Have Effect" : "None."; //Temp. 효과별로 항복마다 처리 필요
             itemDescriptionText.text = data.Description;
         }
-
-        public void SelectedConsumable(ConsumableItemData data)
+        public void SelectedConsumable(InventoryManager.ConsumableDataWithQuantity consumableItem)
         {
             infoText.SetActive(true);
-            UpdateSelectItemIcon(itemImage, data.Icon);
+            ConsumableItemData data = consumableItem.ItemData;
+            UpdateSelectItemIcon(itemImage,data.Icon);
             itemNameText.text = data.ItemName;
             itemRarityText.text = EnumManager.RarityToString(data.Rarity);
             itemTypeText.text = EnumManager.ConsumableTypeToString(data.Type);
+            itemValueText.text = $"수량: {consumableItem.Quantity}";
+            itemEffectText.text = data.ItemData.Length != 0 ? "Have Effect" : "None.";
             itemDescriptionText.text = data.Description;
         }
-
-        public void ItemButtonActive(bool isActive)
+        
+        public void ItemEquipButtonActive(bool isActive)//장착,드랍 버튼 활성/비활성
         {
             itemEquipButton.interactable = isActive;
             equipButtonInactiveImage.gameObject.SetActive(!isActive);
+        }
+        public void ItemDropButtonActive(bool isActive)//장착,드랍 버튼 활성/비활성
+        {
             itemDropButton.interactable = isActive;
             dropButtonInactiveImage.gameObject.SetActive(!isActive);
         }
-        
         private void SelectItemInventory(ItemTypes  itemTypes,int index)
         {
             //Debug.Log($"Selected Item!: {itemTypes.ToString()} {index}");
-            OnSelectInventorySlot?.Invoke(itemTypes, index);
+            OnSelectInventorySlot?.Invoke(itemTypes, index);//현재 클릭한 인벤토리 슬롯 이벤트
         }
         
         private void Awake()
@@ -208,17 +226,16 @@ namespace UI
             equipmentButton.onClick.AddListener(() => OpenInventory(ItemTypes.Equipment));
             consumableButton.onClick.AddListener(() => OpenInventory(ItemTypes.Consumable));
             _currentWeaponButton = currentWeaponImg.gameObject.GetComponent<Button>();
-            _currentWeaponButton.onClick.AddListener(() => OnCurrentWeapon?.Invoke());
+            _currentWeaponButton.onClick.AddListener(() => OnCurrentWeapon?.Invoke());//현재 장착한 아이템 이벤트
             _currentEquipmentButton = currentEquipmentImg.gameObject.GetComponent<Button>();
-            _currentEquipmentButton.onClick.AddListener(() => OnCurrentWeapon?.Invoke());
+            _currentEquipmentButton.onClick.AddListener(() => OnCurrentEquipment?.Invoke());
             _currentQuick1Button = currentQuick1Img.gameObject.GetComponent<Button>();
-            _currentQuick1Button.onClick.AddListener(() => OnCurrentWeapon?.Invoke());
+            _currentQuick1Button.onClick.AddListener(() => OnQuickSlot1?.Invoke());
             _currentQuick2Button = currentQuick2Img.gameObject.GetComponent<Button>();
-            _currentQuick2Button.onClick.AddListener(() => OnCurrentWeapon?.Invoke());
+            _currentQuick2Button.onClick.AddListener(() => OnQuickSlot2?.Invoke());
         }
 
-        // Update is called once per frame
-        void Update()
+        private void Update()
         {
             //PlayerMenu
             if (Input.GetKeyDown(KeyCode.I) || Input.GetKeyDown(KeyCode.Tab))

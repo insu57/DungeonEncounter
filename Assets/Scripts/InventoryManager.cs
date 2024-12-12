@@ -9,7 +9,18 @@ using UnityEngine.Serialization;
 
 public class InventoryManager : MonoBehaviour
 {
-    public class ConsumableItem
+    public class WeaponDataWithIndex
+    {
+        public PlayerWeaponData ItemData;
+        public int Index;
+    }
+
+    public class EquipmentDataWithIndex
+    {
+        public PlayerEquipmentData ItemData;
+        public int Index;
+    }
+    public class ConsumableDataWithQuantity
     {
         public ConsumableItemData ItemData;
         public int Quantity;
@@ -22,15 +33,15 @@ public class InventoryManager : MonoBehaviour
     private GameObject _itemQuickSlot2;
     
     private int _moneyAmount;
-    public PlayerWeaponData CurrentWeaponData { private set; get; }
-    public PlayerEquipmentData CurrentEquipmentData { private set; get; }
-    public ConsumableItemData ItemQuickSlot1 { private set; get; }
-    public ConsumableItemData ItemQuickSlot2 { private set; get; }
+    public WeaponDataWithIndex CurrentWeaponData { private set; get; } = new WeaponDataWithIndex();
+    public EquipmentDataWithIndex CurrentEquipmentData { private set; get; } = new EquipmentDataWithIndex();
+    public ConsumableDataWithQuantity ItemQuickSlot1 { private set; get; } = new ConsumableDataWithQuantity();
+    public ConsumableDataWithQuantity ItemQuickSlot2 { private set; get; } = new ConsumableDataWithQuantity();
 
     private GameObject _selectedItem; //GameObject?Data?...
-    public List<PlayerWeaponData> WeaponDataList { get; } = new List<PlayerWeaponData>();
-    public List<PlayerEquipmentData> EquipmentDataList { get; } = new List<PlayerEquipmentData>();
-    public List<ConsumableItem> ConsumableDataList { get; } = new List<ConsumableItem>();
+    public List<WeaponDataWithIndex> WeaponDataList { get; } = new List<WeaponDataWithIndex>();
+    public List<EquipmentDataWithIndex> EquipmentDataList { get; } = new List<EquipmentDataWithIndex>();
+    public List<ConsumableDataWithQuantity> ConsumableDataList { get; } = new List<ConsumableDataWithQuantity>();
 
     //public Action 
     //public Event changeWeapon;
@@ -51,40 +62,42 @@ public class InventoryManager : MonoBehaviour
     
     //inventory
 
-    public void SetWeapon(PlayerWeaponData data)
+    public void SetWeapon(PlayerWeaponData data, int index)
     {
-        CurrentWeaponData = data;
+        CurrentWeaponData.ItemData = data;
+        CurrentWeaponData.Index = index;
     }
 
-    public void SetEquipment(PlayerEquipmentData data)
+    public void SetEquipment(PlayerEquipmentData data, int index)
     {
-        CurrentEquipmentData = data;
+        CurrentEquipmentData.ItemData = data;
+        CurrentEquipmentData.Index = index;
     }
 
-    public void SetQuickSlot1(ConsumableItemData data)
+    public void SetQuickSlot1(ConsumableDataWithQuantity data)
     {
         ItemQuickSlot1 = data;
     }
 
-    public void SetQuickSlot2(ConsumableItemData data)
+    public void SetQuickSlot2(ConsumableDataWithQuantity data)
     {
         ItemQuickSlot2 = data;
     }
 
     public void AddWeaponData(PlayerWeaponData data)
     {
-        WeaponDataList.Add(data);
+        WeaponDataList.Add(new WeaponDataWithIndex { ItemData = data, Index = weaponInventoryCount });
         weaponInventoryCount = WeaponDataList.Count;
         WeaponDataList.Sort((a, b)
-            => string.Compare(a.WeaponName, b.WeaponName, StringComparison.Ordinal));
+            => string.Compare(a.ItemData.WeaponName, b.ItemData.WeaponName, StringComparison.Ordinal));
     }
 
     public void AddEquipmentData(PlayerEquipmentData data)
     {
-        EquipmentDataList.Add(data);
+        EquipmentDataList.Add(new EquipmentDataWithIndex { ItemData = data, Index = equipmentInventoryCount });
         equipmentInventoryCount = EquipmentDataList.Count;
         EquipmentDataList.Sort( (a,b) 
-            => string.Compare(a.EquipmentName, b.EquipmentName, StringComparison.Ordinal));
+            => string.Compare(a.ItemData.EquipmentName, b.ItemData.EquipmentName, StringComparison.Ordinal));
     }
 
     public void AddConsumableData(ConsumableItemData data)
@@ -96,7 +109,7 @@ public class InventoryManager : MonoBehaviour
         }
         else
         {
-            ConsumableDataList.Add(new ConsumableItem { ItemData = data, Quantity = 1 });
+            ConsumableDataList.Add(new ConsumableDataWithQuantity { ItemData = data, Quantity = 1 });
             consumableInventoryCount = ConsumableDataList.Count;
             ConsumableDataList.Sort( (a,b)
                 => string.Compare(a.ItemData.ItemName, b.ItemData.ItemName, StringComparison.Ordinal));
