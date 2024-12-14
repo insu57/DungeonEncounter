@@ -25,20 +25,27 @@ public class InventoryManager : MonoBehaviour
         public ConsumableItemData ItemData;
         public int Quantity;
     }
+
+    public class SelectedItemData
+    {
+        public ItemTypes ItemType;
+        public bool IsEquipped;
+        public WeaponDataWithIndex Weapon;
+        public EquipmentDataWithIndex Equipment;
+        public ConsumableDataWithQuantity Consumable;
+    }
     
     private PlayerManager _playerManager;
-    [SerializeField] private ItemPrefabData itemPrefabData;
-    private GameObject _currentEquipment;
-    private GameObject _itemQuickSlot1;
-    private GameObject _itemQuickSlot2;
+    [SerializeField] private ItemPrefabData itemPrefabData;//아이템데이터-프리팹 매핑
+    public SelectedItemData SelectedItem;
+    
     
     private int _moneyAmount;
     public WeaponDataWithIndex CurrentWeaponData { private set; get; } = new WeaponDataWithIndex();
     public EquipmentDataWithIndex CurrentEquipmentData { private set; get; } = new EquipmentDataWithIndex();
     public ConsumableDataWithQuantity ItemQuickSlot1 { private set; get; } = new ConsumableDataWithQuantity();
     public ConsumableDataWithQuantity ItemQuickSlot2 { private set; get; } = new ConsumableDataWithQuantity();
-
-    private GameObject _selectedItem; //GameObject?Data?...
+    
     public List<WeaponDataWithIndex> WeaponDataList { get; } = new List<WeaponDataWithIndex>();
     public List<EquipmentDataWithIndex> EquipmentDataList { get; } = new List<EquipmentDataWithIndex>();
     public List<ConsumableDataWithQuantity> ConsumableDataList { get; } = new List<ConsumableDataWithQuantity>();
@@ -46,7 +53,7 @@ public class InventoryManager : MonoBehaviour
     //public Action 
     //public Event changeWeapon;
     //public Event changeEquipment;
-    public event Action<int> UpdateMoneyAmount; 
+    public event Action<int> OnUpdateMoneyAmount; 
     public Event UpdateInventory;
 
     public int weaponInventoryCount { private set; get; }
@@ -62,7 +69,7 @@ public class InventoryManager : MonoBehaviour
     
     //inventory
 
-    public void SetWeapon(PlayerWeaponData data, int index)
+    public void SetWeapon(PlayerWeaponData data, int index) // PlayerManager 영향 필요
     {
         CurrentWeaponData.ItemData = data;
         CurrentWeaponData.Index = index;
@@ -119,7 +126,7 @@ public class InventoryManager : MonoBehaviour
     public void AddMoney(int amount)
     {
         _moneyAmount += amount;
-        UpdateMoneyAmount?.Invoke(_moneyAmount);
+        OnUpdateMoneyAmount?.Invoke(_moneyAmount);
     }
     
     private void Awake()
@@ -136,5 +143,7 @@ public class InventoryManager : MonoBehaviour
         consumableItemMaxQuantity = 10;//현재-모든 소비템 최대 보유 개수 통일
 
         _moneyAmount = 0;
+        
+        SelectedItem = new SelectedItemData();
     }
 }

@@ -42,12 +42,21 @@ namespace UI
         [SerializeField] private TextMeshProUGUI itemRarityText;
         [SerializeField] private TextMeshProUGUI itemTypeText;
         [SerializeField] private TextMeshProUGUI itemDescriptionText;
-        [SerializeField] private Button itemEquipButton;
-        [SerializeField] private Image equipButtonInactiveImage;
-        [SerializeField] private Button itemDropButton;
-        [SerializeField] private Image dropButtonInactiveImage;
         [SerializeField] private TextMeshProUGUI itemValueText;
         [SerializeField] private TextMeshProUGUI itemEffectText;
+        [Header("Item Info Button")]
+        [SerializeField] private Button itemEquipButton;
+        [SerializeField] private TextMeshProUGUI itemEquipButtonText;
+        [SerializeField] private Image equipButtonInactiveImage;
+        [SerializeField] private GameObject setQuickSlot;
+        [SerializeField] private Button setQuick1Button;
+        [SerializeField] private TextMeshProUGUI setQuick1ButtonText;
+        [SerializeField] private Image quick1InactiveImage;
+        [SerializeField] private Button setQuick2Button;
+        [SerializeField] private Image quick2InactiveImage;
+        [SerializeField] private TextMeshProUGUI setQuick2ButtonText;
+        [SerializeField] private Button itemDropButton;
+        [SerializeField] private Image dropButtonInactiveImage;
         
         private ItemTypes _currentInventoryType;
         public event Action<ItemTypes> OnInventoryOpen;
@@ -56,13 +65,15 @@ namespace UI
         public event Action OnCurrentEquipment;
         public event Action OnQuickSlot1;
         public event Action OnQuickSlot2;
-        
-        
+        public event Action OnEquipButton;
+        public event Action OnDropButton;
+        public event Action<int> OnSetQuickSlot;
         
         private void TogglePlayerMenu()
         {
             playerMenu.SetActive(!playerMenu.activeSelf);
             inventory.SetActive(false);
+            
         }
         
         public void UpdateMoney(int money)
@@ -76,7 +87,7 @@ namespace UI
             inventory.SetActive(false);
         }
 
-        private void OpenInventory(ItemTypes type)//인벤토리 열기(타입별로)
+        private void OpenInventory(ItemTypes type)//인벤토리 열기 이벤트(타입별로)
         {
             inventory.SetActive(true);
             _currentInventoryType = type;
@@ -207,6 +218,27 @@ namespace UI
             itemEquipButton.interactable = isActive;
             equipButtonInactiveImage.gameObject.SetActive(!isActive);
         }
+
+        public void SetQuickSlotActive(bool isActive)
+        {
+            setQuickSlot.SetActive(isActive);
+            itemEquipButton.gameObject.SetActive(!isActive);
+        }
+
+        public void SetItemEquipButton(bool isEquipped)
+        {
+            itemEquipButtonText.text = isEquipped ? "장착해제" : "장착하기";
+        }
+
+        public void SetQuick1Button(bool isEquipped)
+        {
+            setQuick1ButtonText.text = isEquipped ? "해제" : "장착";
+        }
+
+        public void SetQuick2Button(bool isEquipped)
+        {
+            setQuick2ButtonText.text = isEquipped ? "해제" : "장착";
+        }
         public void ItemDropButtonActive(bool isActive)//장착,드랍 버튼 활성/비활성
         {
             itemDropButton.interactable = isActive;
@@ -233,6 +265,10 @@ namespace UI
             _currentQuick1Button.onClick.AddListener(() => OnQuickSlot1?.Invoke());
             _currentQuick2Button = currentQuick2Img.gameObject.GetComponent<Button>();
             _currentQuick2Button.onClick.AddListener(() => OnQuickSlot2?.Invoke());
+            itemEquipButton.onClick.AddListener(()=>OnEquipButton?.Invoke());
+            itemDropButton.onClick.AddListener(()=>OnDropButton?.Invoke());
+            setQuick1Button.onClick.AddListener(() => OnSetQuickSlot?.Invoke(1));
+            setQuick2Button.onClick.AddListener(() => OnSetQuickSlot?.Invoke(2));
         }
 
         private void Update()
