@@ -73,7 +73,11 @@ namespace UI
         {
             playerMenu.SetActive(!playerMenu.activeSelf);
             inventory.SetActive(false);
-            
+            infoText.SetActive(false);
+            itemImage.gameObject.SetActive(false);
+            SetQuickSlotBtnActive(false);
+            SetEquipBtnActive(false);
+            SetDropBtnActive(false);
         }
         
         public void UpdateMoney(int money)
@@ -98,27 +102,37 @@ namespace UI
         {
             UpdateSelectItemIcon(currentWeaponImg,sprite);
         }
-
+        
         public void UpdateCurrentEquipment(Sprite sprite)
         {
             UpdateSelectItemIcon(currentEquipmentImg,sprite);
         }
-
+        public void InactiveCurrentEquipment()
+        {
+            currentEquipmentImg.gameObject.SetActive(false);
+        }  
         public void UpdateCurrentQuick1(Sprite sprite)
         {
             UpdateSelectItemIcon(currentQuick1Img,sprite);
         }
 
+        public void InactiveCurrentQuick1()
+        {
+            currentQuick1Img.gameObject.SetActive(false);
+        }
         public void UpdateCurrentQuick2(Sprite sprite)
         {
             UpdateSelectItemIcon(currentQuick2Img,sprite);
         }
 
+        public void InactiveCurrentQuick2()
+        {
+            currentQuick2Img.gameObject.SetActive(false);
+        }
         private static void UpdateSelectItemIcon(Image image, Sprite sprite)
         {
+            image.gameObject.SetActive(true);
             image.sprite = sprite;
-            Color alpha = new Color(image.color.r, image.color.g, image.color.b, 1);
-            image.color = alpha;//알파값1로 변경. 이미지 sprite로 변경
         }
         
         public void UpdateInventoryCount(int count, int maxCount)
@@ -139,9 +153,8 @@ namespace UI
             UpdateSelectItemIcon(icon, sprite);
             TextMeshProUGUI quantityText = inventoryGridParent.GetChild(index)
                 .transform.Find("SlotBackground/Quantity").GetComponent<TextMeshProUGUI>();
-            Color alpha = new Color(icon.color.r, icon.color.g, icon.color.b, 1);
-            quantityText.text = $"{quantity}";
-            quantityText.color = alpha; //수량값도 받아와서 표시.
+            quantityText.gameObject.SetActive(true);
+            quantityText.text = $"{quantity}"; //수량값도 받아와서 표시.
         }
 
         public void ClearInventoryIcon(int maxCount)//인벤토리 초기화.
@@ -157,11 +170,11 @@ namespace UI
                     inventoryGridParent.GetChild(i).gameObject.SetActive(true);
                     Image icon = inventoryGridParent.GetChild(i)
                         .transform.Find("SlotBackground/ImageSlot").GetComponent<Image>();
-                    Color alpha = new Color(icon.color.r, icon.color.g, icon.color.b, 0);
-                    icon.color = alpha;
+                    icon.gameObject.SetActive(false);
                     TextMeshProUGUI quantityText = inventoryGridParent.GetChild(i)
                         .transform.Find("SlotBackground/Quantity").GetComponent<TextMeshProUGUI>();
-                    quantityText.color = alpha; //알파값 0으로 변경시킴(이전에 있던 아이콘 투명하게)
+                    quantityText.gameObject.SetActive(false);
+                    //아이템 이미지, 수량 텍스트 비활성.
                 }
             }
         }
@@ -213,33 +226,33 @@ namespace UI
             itemDescriptionText.text = data.Description;
         }
         
-        public void ItemEquipButtonActive(bool isActive)//장착,드랍 버튼 활성/비활성
+        public void SetEquipBtnActive(bool isActive)//장착버튼 상호작용 활성/비활성
         {
             itemEquipButton.interactable = isActive;
             equipButtonInactiveImage.gameObject.SetActive(!isActive);
         }
 
-        public void SetQuickSlotActive(bool isActive)
+        public void SetQuickSlotBtnActive(bool isActive)//퀵슬롯 장착 버튼
         {
             setQuickSlot.SetActive(isActive);
             itemEquipButton.gameObject.SetActive(!isActive);
         }
 
-        public void SetItemEquipButton(bool isEquipped)
+        public void ToggleItemEquipBtn(bool isEquipped) //장착 토글
         {
             itemEquipButtonText.text = isEquipped ? "장착해제" : "장착하기";
         }
 
-        public void SetQuick1Button(bool isEquipped)
+        public void ToggleQuick1Btn(bool isEquipped) //장착 토글...퀵슬롯
         {
             setQuick1ButtonText.text = isEquipped ? "해제" : "장착";
         }
 
-        public void SetQuick2Button(bool isEquipped)
+        public void ToggleQuick2Btn(bool isEquipped)
         {
             setQuick2ButtonText.text = isEquipped ? "해제" : "장착";
         }
-        public void ItemDropButtonActive(bool isActive)//장착,드랍 버튼 활성/비활성
+        public void SetDropBtnActive(bool isActive)//드랍버튼 상호작용  활성/비활성
         {
             itemDropButton.interactable = isActive;
             dropButtonInactiveImage.gameObject.SetActive(!isActive);
