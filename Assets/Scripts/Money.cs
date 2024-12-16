@@ -9,6 +9,5 @@ public class Money : MonoBehaviour
     public void SetMoneyAmount(int money)
     {
         moneyAmount = money;
-        Debug.Log("Drop Money: "+moneyAmount);
     }
 }

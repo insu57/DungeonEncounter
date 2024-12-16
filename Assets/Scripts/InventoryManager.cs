@@ -1,24 +1,24 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Player;
 using Scriptable_Objects;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class InventoryManager : MonoBehaviour
 {
-    public class WeaponDataWithIndex
+    private int _weaponID = 1;
+    private int _equipmentID = 1;
+    public class WeaponDataWithID
     {
         public PlayerWeaponData ItemData;
-        public int Index;
+        public int WeaponID;
     }
 
-    public class EquipmentDataWithIndex
+    public class EquipmentDataWithID
     {
         public PlayerEquipmentData ItemData;
-        public int Index;
+        public int EquipmentID;
     }
     public class ConsumableDataWithQuantity
     {
@@ -28,10 +28,10 @@ public class InventoryManager : MonoBehaviour
 
     public class SelectedItemData
     {
-        public ItemTypes ItemType;
-        public bool IsEquipped;
-        public WeaponDataWithIndex Weapon;
-        public EquipmentDataWithIndex Equipment;
+        public ItemTypes ItemType; //아이템 타입
+        public bool IsEquipped; //장착여부
+        public WeaponDataWithID Weapon; //타입에 따라 불러올 데이터
+        public EquipmentDataWithID Equipment;
         public ConsumableDataWithQuantity Consumable;
     }
     
@@ -41,13 +41,13 @@ public class InventoryManager : MonoBehaviour
     
     private int _moneyAmount;
     //CurrentItem의 IsEquipped==false -> 현재 장착된 것이 없음.
-    public SelectedItemData CurrentWeaponData { private set; get; }
-    public SelectedItemData CurrentEquipmentData { private set; get; }
-    public SelectedItemData ItemQuickSlot1 { private set; get; }
-    public SelectedItemData ItemQuickSlot2 { private set; get; }
+    public WeaponDataWithID EquippedWeaponData { private set; get; }
+    public EquipmentDataWithID EquippedEquipmentData { private set; get; }
+    public ConsumableDataWithQuantity ItemQuickSlot1 { private set; get; }
+    public ConsumableDataWithQuantity ItemQuickSlot2 { private set; get; }
     
-    public List<WeaponDataWithIndex> WeaponDataList { get; } = new List<WeaponDataWithIndex>();
-    public List<EquipmentDataWithIndex> EquipmentDataList { get; } = new List<EquipmentDataWithIndex>();
+    public List<WeaponDataWithID> WeaponDataList { get; } = new List<WeaponDataWithID>();
+    public List<EquipmentDataWithID> EquipmentDataList { get; } = new List<EquipmentDataWithID>();
     public List<ConsumableDataWithQuantity> ConsumableDataList { get; } = new List<ConsumableDataWithQuantity>();
 
     //public Action 
@@ -69,48 +69,61 @@ public class InventoryManager : MonoBehaviour
     
     //inventory
 
-    public void SetWeapon(PlayerWeaponData data, int index) // PlayerManager 영향 필요
+    public void SetWeapon(PlayerWeaponData data, int weaponID)
     {
-        CurrentWeaponData.Weapon.ItemData = data;
-        CurrentWeaponData.Weapon.Index = index;
-        CurrentWeaponData.IsEquipped = true;
+        EquippedWeaponData.ItemData = data;
+        EquippedWeaponData.WeaponID = weaponID;
     }
 
     public void SetEquipment(PlayerEquipmentData data, int index)
     {
-        CurrentEquipmentData.Equipment.ItemData = data;
-        CurrentEquipmentData.Equipment.Index = index;
-        CurrentEquipmentData.IsEquipped = true;
+        EquippedEquipmentData.ItemData = data;
+        EquippedEquipmentData.EquipmentID = index;
     }
 
     public void SetQuickSlot1(ConsumableDataWithQuantity data)
     {
-        ItemQuickSlot1.Consumable = data;
-        ItemQuickSlot1.IsEquipped = true;
+        ItemQuickSlot1 = data;
     }
 
     public void SetQuickSlot2(ConsumableDataWithQuantity data)
     {
-        ItemQuickSlot2.Consumable = data;
-        ItemQuickSlot2.IsEquipped = true;
+        ItemQuickSlot2 = data;
     }
 
     public void AddWeaponData(PlayerWeaponData data)
     {
-        WeaponDataList.Add(new WeaponDataWithIndex { ItemData = data, Index = weaponInventoryCount });
+        WeaponDataList.Add(new WeaponDataWithID { ItemData = data, WeaponID = _weaponID++ });
         weaponInventoryCount = WeaponDataList.Count;
         WeaponDataList.Sort((a, b)
             => string.Compare(a.ItemData.WeaponName, b.ItemData.WeaponName, StringComparison.Ordinal));
     }
 
+    public void RemoveWeaponData(WeaponDataWithID weapon, Transform playerTransform)
+    {
+        WeaponDataList.Remove(weapon);
+        weaponInventoryCount = WeaponDataList.Count;
+        //오브젝트 풀링?
+        Instantiate(itemPrefabData.GetWeaponPrefab(weapon.ItemData),
+            playerTransform.position + Vector3.back,Quaternion.identity);
+    }
+    
     public void AddEquipmentData(PlayerEquipmentData data)
     {
-        EquipmentDataList.Add(new EquipmentDataWithIndex { ItemData = data, Index = equipmentInventoryCount });
+        EquipmentDataList.Add(new EquipmentDataWithID { ItemData = data, EquipmentID = _equipmentID++ });
         equipmentInventoryCount = EquipmentDataList.Count;
         EquipmentDataList.Sort( (a,b) 
             => string.Compare(a.ItemData.EquipmentName, b.ItemData.EquipmentName, StringComparison.Ordinal));
     }
 
+    public void RemoveEquipmentData(EquipmentDataWithID equipment, Transform playerTransform)
+    {
+        EquipmentDataList.Remove(equipment);
+        equipmentInventoryCount = EquipmentDataList.Count;
+        Instantiate(itemPrefabData.GetEquipmentPrefab(equipment.ItemData),
+            playerTransform.position + Vector3.back,Quaternion.identity);
+    }
+    
     public void AddConsumableData(ConsumableItemData data)
     {
         var existingItem = ConsumableDataList.FirstOrDefault(x => x.ItemData == data);
@@ -125,6 +138,22 @@ public class InventoryManager : MonoBehaviour
             ConsumableDataList.Sort( (a,b)
                 => string.Compare(a.ItemData.ItemName, b.ItemData.ItemName, StringComparison.Ordinal));
         }
+    }
+
+    public void RemoveConsumableData(ConsumableDataWithQuantity consumable, Transform playerTransform)
+    {
+        var index = ConsumableDataList.FindIndex(x => x == consumable);
+        if (ConsumableDataList[index].Quantity > 1)
+        {
+            ConsumableDataList[index].Quantity--;
+        }
+        else
+        {
+            ConsumableDataList.RemoveAt(index);
+            consumableInventoryCount = ConsumableDataList.Count;
+        }
+        Instantiate(itemPrefabData.GetConsumablePrefab(consumable.ItemData),
+            playerTransform.position + Vector3.back,Quaternion.identity);
     }
     
     public void AddMoney(int amount)
@@ -149,25 +178,27 @@ public class InventoryManager : MonoBehaviour
         _moneyAmount = 0;
         
         SelectedItem = new SelectedItemData();
-        CurrentWeaponData = new SelectedItemData
+        EquippedWeaponData = new WeaponDataWithID
         {
-            Weapon = new WeaponDataWithIndex(),
-            IsEquipped = false
+            ItemData = null,
+            WeaponID = -1
         };
-        CurrentEquipmentData = new SelectedItemData
+        
+        EquippedEquipmentData = new EquipmentDataWithID()
         {
-            Equipment = new EquipmentDataWithIndex(),
-            IsEquipped = false
+            ItemData = null,
+            EquipmentID = -1
         };
-        ItemQuickSlot1 = new SelectedItemData
+        ItemQuickSlot1 = new ConsumableDataWithQuantity()
         {
-            Consumable = new ConsumableDataWithQuantity(),
-            IsEquipped = false
+            ItemData = null,
+            Quantity = 0
         };
-        ItemQuickSlot2 = new SelectedItemData
+        ItemQuickSlot2 = new ConsumableDataWithQuantity()
         {
-            Consumable = new ConsumableDataWithQuantity(),
-            IsEquipped = false
+            ItemData = null,
+            Quantity = 0
         };
+        //초기화(빈 상태)
     }
 }

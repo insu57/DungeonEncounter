@@ -16,14 +16,14 @@ namespace UI
         [SerializeField] private TextMeshProUGUI jobText;
         [SerializeField] private TextMeshProUGUI moneyMainText;//MainUI
         [SerializeField] private TextMeshProUGUI moneyMenuText;
-        [SerializeField] private Image currentWeaponImg;
-        private Button _currentWeaponButton;
-        [SerializeField] private Image currentEquipmentImg;
-        private Button _currentEquipmentButton;
-        [SerializeField] private Image currentQuick1Img;
-        private Button _currentQuick1Button;
-        [SerializeField] private Image currentQuick2Img;
-        private Button _currentQuick2Button;
+        [SerializeField] private Image equippedWeaponImg;
+        private Button _equippedWeaponButton;
+        [SerializeField] private Image equippedEquipmentImg;
+        private Button _equippedEquipmentButton;
+        [SerializeField] private Image itemQuick1Img;
+        private Button _itemQuick1Button;
+        [SerializeField] private Image itemQuick2Img;
+        private Button _itemQuick2Button;
         
         [Header("Inventory")]
         [SerializeField] private GameObject inventory;
@@ -73,11 +73,7 @@ namespace UI
         {
             playerMenu.SetActive(!playerMenu.activeSelf);
             inventory.SetActive(false);
-            infoText.SetActive(false);
-            itemImage.gameObject.SetActive(false);
-            SetQuickSlotBtnActive(false);
-            SetEquipBtnActive(false);
-            SetDropBtnActive(false);
+            ClearItemInfo();
         }
         
         public void UpdateMoney(int money)
@@ -98,36 +94,36 @@ namespace UI
             OnInventoryOpen?.Invoke(type);
         }
 
-        public void UpdateCurrentWeapon(Sprite sprite)
+        public void UpdateEquippedWeapon(Sprite sprite)
         {
-            UpdateSelectItemIcon(currentWeaponImg,sprite);
+            UpdateSelectItemIcon(equippedWeaponImg,sprite);
         }
         
-        public void UpdateCurrentEquipment(Sprite sprite)
+        public void UpdateEquippedEquipment(Sprite sprite)
         {
-            UpdateSelectItemIcon(currentEquipmentImg,sprite);
+            UpdateSelectItemIcon(equippedEquipmentImg,sprite);
         }
-        public void InactiveCurrentEquipment()
+        public void ClearEquippedEquipment()
         {
-            currentEquipmentImg.gameObject.SetActive(false);
+            equippedEquipmentImg.gameObject.SetActive(false);
         }  
-        public void UpdateCurrentQuick1(Sprite sprite)
+        public void UpdateItemQuick1(Sprite sprite)
         {
-            UpdateSelectItemIcon(currentQuick1Img,sprite);
+            UpdateSelectItemIcon(itemQuick1Img,sprite);
         }
 
-        public void InactiveCurrentQuick1()
+        public void ClearItemQuick1()
         {
-            currentQuick1Img.gameObject.SetActive(false);
+            itemQuick1Img.gameObject.SetActive(false);
         }
-        public void UpdateCurrentQuick2(Sprite sprite)
+        public void UpdateItemQuick2(Sprite sprite)
         {
-            UpdateSelectItemIcon(currentQuick2Img,sprite);
+            UpdateSelectItemIcon(itemQuick2Img,sprite);
         }
 
-        public void InactiveCurrentQuick2()
+        public void ClearItemQuick2()
         {
-            currentQuick2Img.gameObject.SetActive(false);
+            itemQuick2Img.gameObject.SetActive(false);
         }
         private static void UpdateSelectItemIcon(Image image, Sprite sprite)
         {
@@ -192,6 +188,9 @@ namespace UI
         public void SelectedWeapon(PlayerWeaponData data)//ItemInfo에 아이템 데이터 표시
         {
             infoText.SetActive(true);
+            SetEquipBtnInteractable(true);
+            SetQuickSlotBtnActive(false); //장착버튼으로 변경
+            
             UpdateSelectItemIcon(itemImage, data.Icon);
             itemNameText.text = data.WeaponName;
             itemRarityText.text = EnumManager.RarityToString(data.Rarity);
@@ -204,7 +203,10 @@ namespace UI
 
         public void SelectedEquipment(PlayerEquipmentData data)
         {
-            infoText.SetActive(true);
+            infoText.SetActive(true);//정보 텍스트 활성화
+            SetEquipBtnInteractable(true);
+            SetQuickSlotBtnActive(false);
+            
             UpdateSelectItemIcon(itemImage, data.Icon);
             itemNameText.text = data.EquipmentName;
             itemRarityText.text = EnumManager.RarityToString(data.Rarity);
@@ -217,6 +219,8 @@ namespace UI
         {
             infoText.SetActive(true);
             ConsumableItemData data = consumableItem.ItemData;
+            SetQuickSlotBtnActive(true);//퀵슬롯 버튼으로 변경
+            
             UpdateSelectItemIcon(itemImage,data.Icon);
             itemNameText.text = data.ItemName;
             itemRarityText.text = EnumManager.RarityToString(data.Rarity);
@@ -226,10 +230,15 @@ namespace UI
             itemDescriptionText.text = data.Description;
         }
         
-        public void SetEquipBtnActive(bool isActive)//장착버튼 상호작용 활성/비활성
+        public void SetEquipBtnInteractable(bool isActive)//장착버튼 상호작용 활성/비활성
         {
             itemEquipButton.interactable = isActive;
             equipButtonInactiveImage.gameObject.SetActive(!isActive);
+        }
+        public void SetDropBtnInteractable(bool isActive)//드랍버튼 상호작용  활성/비활성
+        {
+            itemDropButton.interactable = isActive;
+            dropButtonInactiveImage.gameObject.SetActive(!isActive);
         }
 
         public void SetQuickSlotBtnActive(bool isActive)//퀵슬롯 장착 버튼
@@ -252,14 +261,21 @@ namespace UI
         {
             setQuick2ButtonText.text = isEquipped ? "해제" : "장착";
         }
-        public void SetDropBtnActive(bool isActive)//드랍버튼 상호작용  활성/비활성
+
+        public void ClearItemInfo()//초기화
         {
-            itemDropButton.interactable = isActive;
-            dropButtonInactiveImage.gameObject.SetActive(!isActive);
+            infoText.SetActive(false);
+            itemImage.gameObject.SetActive(false);
+            SetQuickSlotBtnActive(false);
+            ToggleItemEquipBtn(false);
+            ToggleQuick1Btn(false);
+            ToggleQuick2Btn(false);
+            SetEquipBtnInteractable(false);
+            SetDropBtnInteractable(false);
         }
+        
         private void SelectItemInventory(ItemTypes  itemTypes,int index)
         {
-            //Debug.Log($"Selected Item!: {itemTypes.ToString()} {index}");
             OnSelectInventorySlot?.Invoke(itemTypes, index);//현재 클릭한 인벤토리 슬롯 이벤트
         }
         
@@ -270,14 +286,14 @@ namespace UI
             weaponButton.onClick.AddListener(() => OpenInventory(ItemTypes.Weapon));
             equipmentButton.onClick.AddListener(() => OpenInventory(ItemTypes.Equipment));
             consumableButton.onClick.AddListener(() => OpenInventory(ItemTypes.Consumable));
-            _currentWeaponButton = currentWeaponImg.gameObject.GetComponent<Button>();
-            _currentWeaponButton.onClick.AddListener(() => OnCurrentWeapon?.Invoke());//현재 장착한 아이템 이벤트
-            _currentEquipmentButton = currentEquipmentImg.gameObject.GetComponent<Button>();
-            _currentEquipmentButton.onClick.AddListener(() => OnCurrentEquipment?.Invoke());
-            _currentQuick1Button = currentQuick1Img.gameObject.GetComponent<Button>();
-            _currentQuick1Button.onClick.AddListener(() => OnQuickSlot1?.Invoke());
-            _currentQuick2Button = currentQuick2Img.gameObject.GetComponent<Button>();
-            _currentQuick2Button.onClick.AddListener(() => OnQuickSlot2?.Invoke());
+            _equippedWeaponButton = equippedWeaponImg.gameObject.GetComponent<Button>();
+            _equippedWeaponButton.onClick.AddListener(() => OnCurrentWeapon?.Invoke());//현재 장착한 아이템 이벤트
+            _equippedEquipmentButton = equippedEquipmentImg.gameObject.GetComponent<Button>();
+            _equippedEquipmentButton.onClick.AddListener(() => OnCurrentEquipment?.Invoke());
+            _itemQuick1Button = itemQuick1Img.gameObject.GetComponent<Button>();
+            _itemQuick1Button.onClick.AddListener(() => OnQuickSlot1?.Invoke());
+            _itemQuick2Button = itemQuick2Img.gameObject.GetComponent<Button>();
+            _itemQuick2Button.onClick.AddListener(() => OnQuickSlot2?.Invoke());
             itemEquipButton.onClick.AddListener(()=>OnEquipButton?.Invoke());
             itemDropButton.onClick.AddListener(()=>OnDropButton?.Invoke());
             setQuick1Button.onClick.AddListener(() => OnSetQuickSlot?.Invoke(1));

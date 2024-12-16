@@ -518,7 +518,7 @@ GameObject:
   - component: {fileID: 205487044}
   - component: {fileID: 205487043}
   m_Layer: 5
-  m_Name: CurrentWeapon
+  m_Name: EquippedWeapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -563,7 +563,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uD604\uC7AC \uBB34\uAE30"
+  m_text: "\uC7A5\uCC29 \uBB34\uAE30"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2a8da332e3b6ece498810fcbc4ed1581, type: 2}
   m_sharedMaterial: {fileID: -301481973798160173, guid: 2a8da332e3b6ece498810fcbc4ed1581, type: 2}
@@ -626,7 +626,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -5.4870605, w: 0}
+  m_margin: {x: 0, y: 0, z: -12.575378, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -2319,10 +2319,10 @@ MonoBehaviour:
   jobText: {fileID: 831722747}
   moneyMainText: {fileID: 1446051291}
   moneyMenuText: {fileID: 1399051955}
-  currentWeaponImg: {fileID: 2098011886}
-  currentEquipmentImg: {fileID: 663069763}
-  currentQuick1Img: {fileID: 313790973}
-  currentQuick2Img: {fileID: 1703405224}
+  equippedWeaponImg: {fileID: 2098011886}
+  equippedEquipmentImg: {fileID: 663069763}
+  itemQuick1Img: {fileID: 313790973}
+  itemQuick2Img: {fileID: 1703405224}
   inventory: {fileID: 1871051947}
   inventoryGridParent: {fileID: 2033673940}
   inventoryIconPrefab: {fileID: 658624820891042958, guid: 1f01a04a65323da4a867a2fc77944e78, type: 3}
@@ -2364,7 +2364,7 @@ GameObject:
   - component: {fileID: 663069763}
   - component: {fileID: 663069765}
   m_Layer: 5
-  m_Name: CurrentEquipmentIcon
+  m_Name: EquippedEquipmentIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4299,7 +4299,7 @@ GameObject:
   - component: {fileID: 976822576}
   - component: {fileID: 976822575}
   m_Layer: 5
-  m_Name: KeyEImage
+  m_Name: KeyE_Img
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4374,7 +4374,7 @@ GameObject:
   - component: {fileID: 1015739363}
   - component: {fileID: 1015739362}
   m_Layer: 5
-  m_Name: CurrentQuickSlot2Background
+  m_Name: QuickSlot2BG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4974,7 +4974,7 @@ GameObject:
   - component: {fileID: 1119446346}
   - component: {fileID: 1119446345}
   m_Layer: 5
-  m_Name: CurrentWeaponBackground
+  m_Name: EquippedWeaponBG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6728,7 +6728,7 @@ GameObject:
   - component: {fileID: 1390187574}
   - component: {fileID: 1390187573}
   m_Layer: 5
-  m_Name: CurrentQuickSlot1Background
+  m_Name: QuickSlot1BG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8497,7 +8497,7 @@ GameObject:
   - component: {fileID: 1635214516}
   - component: {fileID: 1635214515}
   m_Layer: 5
-  m_Name: KeyQImage
+  m_Name: KeyQ_Img
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8904,7 +8904,7 @@ GameObject:
   - component: {fileID: 1723587982}
   - component: {fileID: 1723587981}
   m_Layer: 5
-  m_Name: CurrentEquipmentBackground
+  m_Name: EquippedEquipmentBG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9241,7 +9241,7 @@ GameObject:
   - component: {fileID: 1803136196}
   - component: {fileID: 1803136195}
   m_Layer: 5
-  m_Name: CurrentEquipment
+  m_Name: EquippedEquipment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9286,7 +9286,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uD604\uC7AC \uC7A5\uBE44"
+  m_text: "\uC7A5\uCC29 \uC7A5\uBE44 "
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2a8da332e3b6ece498810fcbc4ed1581, type: 2}
   m_sharedMaterial: {fileID: -301481973798160173, guid: 2a8da332e3b6ece498810fcbc4ed1581, type: 2}
@@ -9349,7 +9349,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -5.4870605, w: 0}
+  m_margin: {x: 0, y: 0, z: -15.2948, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -10973,7 +10973,7 @@ GameObject:
   - component: {fileID: 2098011886}
   - component: {fileID: 2098011888}
   m_Layer: 5
-  m_Name: CurrentWeaponIcon
+  m_Name: EquippedWeaponIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
