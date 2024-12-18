@@ -7371,6 +7371,51 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1462900617
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1462900618}
+  - component: {fileID: 1462900619}
+  m_Layer: 0
+  m_Name: ObjectPoolingManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1462900618
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1462900617}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 8.657439, y: 0.46837634, z: -8.526956}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1462900619
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1462900617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fb0d25eb6f9a4448be14789ec5e047b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  arrowPrefab: {fileID: 5422603927206643936, guid: 7763080958edc594f92566e5b5fa1c85, type: 3}
 --- !u!1 &1464705173
 GameObject:
   m_ObjectHideFlags: 0
@@ -12070,6 +12115,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 8510475005573366069, guid: 12c2d292a031c184db7ab95cc6dafa10, type: 3}
+      propertyPath: itemPrefabData
+      value: 
+      objectReference: {fileID: 11400000, guid: ff1fc2cb9f880ea48835b59c97ead294, type: 2}
     - target: {fileID: 8572892446689743603, guid: 12c2d292a031c184db7ab95cc6dafa10, type: 3}
       propertyPath: m_Layer
       value: 6
@@ -12418,11 +12467,12 @@ SceneRoots:
   - {fileID: 171187390}
   - {fileID: 130563120}
   - {fileID: 654836101}
+  - {fileID: 136570128}
   - {fileID: 1452341604}
   - {fileID: 1881709721}
   - {fileID: 1967478178}
-  - {fileID: 136570128}
   - {fileID: 2036609274}
+  - {fileID: 27726404}
   - {fileID: 714147675}
   - {fileID: 492519086}
   - {fileID: 1410851522}
@@ -12430,6 +12480,6 @@ SceneRoots:
   - {fileID: 1241118263}
   - {fileID: 8151936368610768731}
   - {fileID: 1278547949}
-  - {fileID: 27726404}
   - {fileID: 811524206}
   - {fileID: 1522603423}
+  - {fileID: 1462900618}

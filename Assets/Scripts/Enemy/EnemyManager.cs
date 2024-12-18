@@ -29,7 +29,6 @@ namespace Enemy
         private WorldUIView _worldUIView;
         private EnemyWorldUIPresenter _uiPresenter;
         public event Action<float,float> OnHealthChanged;
-        public event Action OnTest;
         
         private float GetStat(EnemyStatTypes type)
         {
@@ -44,7 +43,6 @@ namespace Enemy
 
         private void DropItem()
         {
-            Debug.Log("Drop Item");
             //Money min~max Consumable Chest
             //일단 Instantiate로 생성. 드랍테이블 등 데이터 입력 방식 변경 필요(xml...)
             Vector3 pos = transform.position;
@@ -133,10 +131,12 @@ namespace Enemy
                                                  && _enemyControl.IsDead == false)
             {
                 //데미지...현재 플레이어 공격력 기준... 공격별 데미지 배수, 스킬 추가 대응필요
-                float damage = _playerManager.GetStat(PlayerStatTypes.AttackValue);
+                //float damage = _playerManager.GetStat(PlayerStatTypes.AttackValue);
+                float damage = _playerManager.FinalAttackValue;
                 UpdateHealth(damage);
                 float health = GetStat(EnemyStatTypes.Health);
-                //test
+                Debug.Log("Damage: "+damage+" LeftHealth: " + health);
+                //death
                 if (health <= 0)
                 {
                     _enemyControl.IsAttack = false;

@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
-    private int _weaponID = 1;
+    private int _weaponID = 1;//초기 ID 1부터
     private int _equipmentID = 1;
     public class WeaponDataWithID
     {
@@ -26,7 +26,7 @@ public class InventoryManager : MonoBehaviour
         public int Quantity;
     }
 
-    public class SelectedItemData
+    public class SelectedItemData//현재 선택한 아이템
     {
         public ItemTypes ItemType; //아이템 타입
         public bool IsEquipped; //장착여부
@@ -53,8 +53,8 @@ public class InventoryManager : MonoBehaviour
     //public Action 
     //public Event changeWeapon;
     //public Event changeEquipment;
-    public event Action<int> OnUpdateMoneyAmount; 
-    public Event UpdateInventory;
+    public event Action<int> OnUpdateMoneyAmount;
+    public event Action OnEquipUseItem;
 
     public int weaponInventoryCount { private set; get; }
     public int weaponInventoryMaxCount { private set; get; }
@@ -69,7 +69,7 @@ public class InventoryManager : MonoBehaviour
     
     //inventory
 
-    public void SetWeapon(PlayerWeaponData data, int weaponID)
+    public void SetWeapon(PlayerWeaponData data, int weaponID)//장착 무기 갱신(데이터, ID)
     {
         EquippedWeaponData.ItemData = data;
         EquippedWeaponData.WeaponID = weaponID;
@@ -91,20 +91,20 @@ public class InventoryManager : MonoBehaviour
         ItemQuickSlot2 = data;
     }
 
-    public void AddWeaponData(PlayerWeaponData data)
+    public void AddWeaponData(PlayerWeaponData data)//무기 아이템 데이터 추가
     {
-        WeaponDataList.Add(new WeaponDataWithID { ItemData = data, WeaponID = _weaponID++ });
-        weaponInventoryCount = WeaponDataList.Count;
-        WeaponDataList.Sort((a, b)
+        WeaponDataList.Add(new WeaponDataWithID { ItemData = data, WeaponID = _weaponID++ });//ID로 구분
+        weaponInventoryCount = WeaponDataList.Count; //무기 개수 갱신
+        WeaponDataList.Sort((a, b)//이름 오름차순 정렬
             => string.Compare(a.ItemData.WeaponName, b.ItemData.WeaponName, StringComparison.Ordinal));
     }
 
     public void RemoveWeaponData(WeaponDataWithID weapon, Transform playerTransform)
     {
         WeaponDataList.Remove(weapon);
-        weaponInventoryCount = WeaponDataList.Count;
+        weaponInventoryCount = WeaponDataList.Count;//개수 갱신
         //오브젝트 풀링?
-        Instantiate(itemPrefabData.GetWeaponPrefab(weapon.ItemData),
+        Instantiate(itemPrefabData.GetWeaponPrefab(weapon.ItemData), //플레이어 위치 기준 생성
             playerTransform.position + Vector3.back,Quaternion.identity);
     }
     
@@ -127,13 +127,13 @@ public class InventoryManager : MonoBehaviour
     public void AddConsumableData(ConsumableItemData data)
     {
         var existingItem = ConsumableDataList.FirstOrDefault(x => x.ItemData == data);
-        if (existingItem != null)
+        if (existingItem != null)//해당 아이템이 리스트에 있으면
         {
-            existingItem.Quantity++;
+            existingItem.Quantity++;//수량증가
         }
         else
         {
-            ConsumableDataList.Add(new ConsumableDataWithQuantity { ItemData = data, Quantity = 1 });
+            ConsumableDataList.Add(new ConsumableDataWithQuantity { ItemData = data, Quantity = 1 });//없으면 리스트에 추가
             consumableInventoryCount = ConsumableDataList.Count;
             ConsumableDataList.Sort( (a,b)
                 => string.Compare(a.ItemData.ItemName, b.ItemData.ItemName, StringComparison.Ordinal));
@@ -143,23 +143,23 @@ public class InventoryManager : MonoBehaviour
     public void RemoveConsumableData(ConsumableDataWithQuantity consumable, Transform playerTransform)
     {
         var index = ConsumableDataList.FindIndex(x => x == consumable);
-        if (ConsumableDataList[index].Quantity > 1)
+        if (ConsumableDataList[index].Quantity > 1)//수량이 1보다 크면 수량 감소
         {
             ConsumableDataList[index].Quantity--;
         }
         else
         {
-            ConsumableDataList.RemoveAt(index);
-            consumableInventoryCount = ConsumableDataList.Count;
+            ConsumableDataList.RemoveAt(index);//1이면 리스트에서 제거
+            consumableInventoryCount = ConsumableDataList.Count;//개수 갱신
         }
         Instantiate(itemPrefabData.GetConsumablePrefab(consumable.ItemData),
             playerTransform.position + Vector3.back,Quaternion.identity);
     }
     
-    public void AddMoney(int amount)
+    public void AddMoney(int amount)//인벤토리 돈 추가
     {
         _moneyAmount += amount;
-        OnUpdateMoneyAmount?.Invoke(_moneyAmount);
+        OnUpdateMoneyAmount?.Invoke(_moneyAmount);//총 보유량 갱신 이벤트
     }
     
     private void Awake()

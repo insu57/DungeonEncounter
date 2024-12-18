@@ -21,23 +21,89 @@ namespace Player
     {
         [SerializeField]private PlayerJobData playerJobData;
         private PlayerControl _playerControl;
-        private GameObject _playerWeaponPrefab;//Weapon...Prefab
         [SerializeField]private GameObject playerRightHand;
         [SerializeField]private GameObject playerHead;
         private EnemyMeleeAttack _enemyMeleeAttack;
         private EnemyProjectile _enemyProjectile;
+        [SerializeField] private ItemPrefabData itemPrefabData;
         public PlayerWeaponData WeaponData { get; private set; }
+        public PlayerEquipmentData EquipmentData { get; private set; }
         private Dictionary<PlayerStatTypes, float> _playerStats; 
         public event Action<PlayerStatTypes,float> OnStatChanged;
-        public float FinalDamage { get; private set; }
+        private GameObject _equippedWeapon;
+        private float _weaponAttackValue;
+        private WeaponType _playerWeaponType;
+        private GameObject _equippedEquipment;
+        private float _equipmentDefenseValue;
+        private List<ItemEffect> _currentItemEffects;//다른 형태?(아이템별 효과 구분)
+        public float FinalAttackValue { get; private set; }
         
-        private InventoryManager _playerInventoryManager;
         public event Action<int> OnGetMoney;
         public event Action<GameObject> OnGetItem;
         
         private Camera _mainCamera;
+        public void UpdateFinalAttackValue()//각종 효과 구현 진행 필요...ui 플레이어 정보->최종 스탯(아이템 효과 포함)?기본 스탯?
+        {
+            FinalAttackValue = _weaponAttackValue;
+            //+itemEffect...
+        }
 
+        public void PlayerEquipWeapon(PlayerWeaponData data)
+        {
+            WeaponData = data;//제거?
+           
+            Destroy(_equippedWeapon);
+            GameObject newWeapon = itemPrefabData.GetWeaponPrefab(data);
+            _equippedWeapon = Instantiate(newWeapon, playerRightHand.transform);
+            if (data.AttackType == AttackType.Melee)
+            {
+                _equippedWeapon.AddComponent<PlayerMeleeAttack>();
+                _equippedWeapon.tag = "PlayerAttack";
+            }
+            _weaponAttackValue = data.AttackValue;
+            SetStat(PlayerStatTypes.AttackValue, _weaponAttackValue);
+            UpdateFinalAttackValue();
+            _playerWeaponType = data.WeaponType;//WeaponType -> Animator change(애니메이터 추가 필요)
+            if (data.ItemEffects.Length != 0)
+            {
+                Debug.Log("have Effect");
+            }
+            else
+            {
+                Debug.Log("no Effect");
+            }
+        }
 
+        public void PlayerEquipEquipment(PlayerEquipmentData data)
+        {
+            
+            EquipmentData = data;//제거?
+            if(_equippedEquipment != null) Destroy(_equippedEquipment);
+            _equippedEquipment.GetComponent<Collider>().enabled = false;
+            if (data == null)
+            {
+                _equipmentDefenseValue = 0;
+                SetStat(PlayerStatTypes.DefenseValue, 0);
+                //itemEffects Remove
+            }
+            else
+            {
+                GameObject newEquipment = itemPrefabData.GetEquipmentPrefab(data);
+                _equippedEquipment = Instantiate(newEquipment, playerHead.transform);
+                _equipmentDefenseValue = data.DefenseValue;
+                SetStat(PlayerStatTypes.DefenseValue, _equipmentDefenseValue);
+                if (data.ItemEffect.Length != 0)
+                {
+                    Debug.Log("have Effect");
+                }
+                else
+                {
+                    Debug.Log("no Effect");
+                }
+            }
+            
+        }
+        
         private void SetStat(PlayerStatTypes statType, float value)
         {
             if (_playerStats.ContainsKey(statType) && Mathf.Approximately(_playerStats[statType], value)) return;
@@ -63,23 +129,30 @@ namespace Player
             }
             Destroy(item);
         }
-        
+
+        private void ChangeWeapon(GameObject weapon)
+        {
+            
+        }
         
         private void Awake()
         {
             
             _playerControl = GetComponent<PlayerControl>();
             _mainCamera = Camera.main;
+            _currentItemEffects = new List<ItemEffect>();
+            _equipmentDefenseValue = 0f;
             //실제 들고있는 무기에... 무기교체 기능
-            _playerWeaponPrefab = playerJobData.DefaultWeapon;
-            PlayerWeapon playerWeapon = _playerWeaponPrefab.GetComponent<PlayerWeapon>();
+            GameObject playerWeaponPrefab = playerJobData.DefaultWeapon;
+            PlayerWeapon playerWeapon = playerWeaponPrefab.GetComponent<PlayerWeapon>();
             WeaponData = playerWeapon.WeaponData;
-            GameObject currentWeapon = Instantiate(_playerWeaponPrefab, playerRightHand.transform);
+            _weaponAttackValue = WeaponData.AttackValue;//default weapon attack value
+            _equippedWeapon = Instantiate(playerWeaponPrefab, playerRightHand.transform);
             //if(WeaponData.Type == )
             if (WeaponData.AttackType == AttackType.Melee)
             {
-                currentWeapon.AddComponent<PlayerMeleeAttack>();
-                currentWeapon.tag = "PlayerAttack";
+                _equippedWeapon.AddComponent<PlayerMeleeAttack>();
+                _equippedWeapon.tag = "PlayerAttack";
             }
             //else...Ranged
            
@@ -93,7 +166,7 @@ namespace Player
                 { PlayerStatTypes.AttackValue, WeaponData.AttackValue},
                 { PlayerStatTypes.DefenseValue, 0f}
             };
-
+            UpdateFinalAttackValue();//최종 공격력 갱신
         }
         
         private void OnTriggerEnter(Collider other)

@@ -144,7 +144,16 @@ namespace Player
                 }
             
                 _characterController.Move(_moveVector * (_moveSpeed * Time.deltaTime)); //Player Move 이동
-            
+
+                if (Input.GetKeyDown(KeyCode.Q))
+                {
+                    //QuickSlot1
+                }
+
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    //QuickSlot2
+                }
             
                 /* 원거리 플레이어 회전... 마우스기준 회전
             _lookVec -= transform.position;

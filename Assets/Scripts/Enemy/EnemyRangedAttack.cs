@@ -41,7 +41,8 @@ namespace Enemy
             if (_enemyControl.IsAttack && !_isShoot &&_attackStartTime <= animTime && animTime <= _attackEndTime)
             {
                 _isShoot = true;
-                Instantiate(_projectilePrefab, transform.position, transform.rotation, transform);
+                //Instantiate(_projectilePrefab, transform.position, transform.rotation, transform);
+                ObjectPoolingManager.Instance.ArrowPool.Get();
             }
         
             if(animTime > _attackEndTime)

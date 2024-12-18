@@ -237,20 +237,26 @@ public class InventoryUIPresenter
 
     private void HandleAddItem(GameObject item)//아이템 획득
     {
-        if (item.layer == (int)ItemLayers.Weapon)
+        switch (item.layer)
         {
-            PlayerWeaponData weaponData = item.GetComponent<PlayerWeapon>().WeaponData;
-            _inventoryManager.AddWeaponData(weaponData);
-        }
-        else if (item.layer == (int)ItemLayers.Equipment)
-        {
-            PlayerEquipmentData equipmentData = item.GetComponent<PlayerEquipment>().Data;
-            _inventoryManager.AddEquipmentData(equipmentData);
-        }
-        else if (item.layer == (int)ItemLayers.Consumable)
-        {
-            ConsumableItemData consumableData = item.GetComponent<ConsumableItem>().Data;
-            _inventoryManager.AddConsumableData(consumableData);
+            case (int)ItemLayers.Weapon:
+            {
+                PlayerWeaponData weaponData = item.GetComponent<PlayerWeapon>().WeaponData;
+                _inventoryManager.AddWeaponData(weaponData);
+                break;
+            }
+            case (int)ItemLayers.Equipment:
+            {
+                PlayerEquipmentData equipmentData = item.GetComponent<PlayerEquipment>().Data;
+                _inventoryManager.AddEquipmentData(equipmentData);
+                break;
+            }
+            case (int)ItemLayers.Consumable:
+            {
+                ConsumableItemData consumableData = item.GetComponent<ConsumableItem>().Data;
+                _inventoryManager.AddConsumableData(consumableData);
+                break;
+            }
         }
     }
 
@@ -269,6 +275,8 @@ public class InventoryUIPresenter
             {
                 InventoryManager.WeaponDataWithID dataWithID = _inventoryManager.SelectedItem.Weapon;
                 _inventoryManager.SetWeapon(dataWithID.ItemData,dataWithID.WeaponID);
+                _playerManager.PlayerEquipWeapon(dataWithID.ItemData);//player equip weapon
+                
                 _inventoryUIView.UpdateEquippedWeapon(dataWithID.ItemData.Icon);//현재 장착 무기 아이콘
                 _inventoryUIView.SetEquipBtnInteractable(false);
                 _inventoryUIView.SetDropBtnInteractable(false);//장착, 드랍 상호작용 비활성
@@ -280,6 +288,7 @@ public class InventoryUIPresenter
                 {
                     _inventoryManager.SelectedItem.IsEquipped = false;  //선택 장비 장착 해제
                     _inventoryManager.SetEquipment(null, -1); //장착 장비 초기화
+                    _playerManager.PlayerEquipEquipment(null);
                     
                     _inventoryUIView.ToggleItemEquipBtn(false); //장착버튼 토글(장착/해제 텍스트)
                     _inventoryUIView.SetDropBtnInteractable(true); //드랍 가능
@@ -290,6 +299,7 @@ public class InventoryUIPresenter
                     InventoryManager.EquipmentDataWithID dataWithID = _inventoryManager.SelectedItem.Equipment;
                     _inventoryManager.SetEquipment(dataWithID.ItemData,dataWithID.EquipmentID);
                     _inventoryManager.SelectedItem.IsEquipped = true;
+                    _playerManager.PlayerEquipEquipment(dataWithID.ItemData);
                     
                     _inventoryUIView.UpdateEquippedEquipment(dataWithID.ItemData.Icon);//아이콘 업데이트
                     _inventoryUIView.ToggleItemEquipBtn(true);//토글
