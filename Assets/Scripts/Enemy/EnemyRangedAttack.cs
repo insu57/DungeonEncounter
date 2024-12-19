@@ -10,6 +10,7 @@ namespace Enemy
         private EnemyControl _enemyControl;
         private EnemyData _data;
         private GameObject _projectilePrefab;//원거리 투사체
+        private string _projectileKey;
         private float _projectileSpeed;
         private TrailRenderer _trailRenderer;
         private Animator _animator;
@@ -20,6 +21,12 @@ namespace Enemy
         public float Damage => _damage;
         public float ProjectileSpeed => _projectileSpeed;
         //적 캐릭터 패턴이 다양해 지면 적용 어려워짐...추상화 리팩터링 필요
+
+        public string GetProjectileKey()
+        {
+            return _projectileKey;
+        }
+        
         private void Awake()
         {
             _enemyManager = GetComponentInParent<EnemyManager>();
@@ -28,6 +35,7 @@ namespace Enemy
             _attackStartTime = _data.AttackStartFrame / _data.AttackFullFrame;
             _attackEndTime = _data.AttackEndFrame / _data.AttackFullFrame;
             _projectilePrefab = _data.ProjectilePrefab;
+            _projectileKey = _data.ProjectileKey;
             _animator = _enemyManager.GetComponent<Animator>();
             _isShoot = false;
             _damage = _data.Damage;
@@ -42,7 +50,10 @@ namespace Enemy
             {
                 _isShoot = true;
                 //Instantiate(_projectilePrefab, transform.position, transform.rotation, transform);
-                ObjectPoolingManager.Instance.ArrowPool.Get();
+                GameObject projectileObj = ObjectPoolingManager.Instance.GetObjectFromPool(_projectileKey,transform.position,transform.rotation);//ErrorMessage
+                EnemyProjectile projectile = projectileObj.GetComponent<EnemyProjectile>();
+                projectile.enabled = true;
+                projectile.InitEnemyProjectile(this,_enemyManager.EnemyTargetPos());
             }
         
             if(animTime > _attackEndTime)

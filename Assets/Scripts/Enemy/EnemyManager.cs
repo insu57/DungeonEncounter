@@ -41,6 +41,11 @@ namespace Enemy
             OnHealthChanged?.Invoke(GetStat(EnemyStatTypes.Health),GetStat(EnemyStatTypes.MaxHealth));
         }
 
+        public Vector3 EnemyTargetPos()
+        {
+            return _playerManager.transform.position;
+        }
+        
         private void DropItem()
         {
             //Money min~max Consumable Chest
