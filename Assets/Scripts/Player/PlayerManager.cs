@@ -78,8 +78,10 @@ namespace Player
         {
             
             EquipmentData = data;//제거?
-            if(_equippedEquipment != null) Destroy(_equippedEquipment);
-            _equippedEquipment.GetComponent<Collider>().enabled = false;
+            if (_equippedEquipment != null)
+            {
+                Destroy(_equippedEquipment);
+            }
             if (data == null)
             {
                 _equipmentDefenseValue = 0;
@@ -90,6 +92,7 @@ namespace Player
             {
                 GameObject newEquipment = itemPrefabData.GetEquipmentPrefab(data);
                 _equippedEquipment = Instantiate(newEquipment, playerHead.transform);
+                _equippedEquipment.GetComponent<Collider>().enabled = false;
                 _equipmentDefenseValue = data.DefenseValue;
                 SetStat(PlayerStatTypes.DefenseValue, _equipmentDefenseValue);
                 if (data.ItemEffect.Length != 0)
@@ -127,12 +130,7 @@ namespace Player
             {
                 OnGetItem?.Invoke(item);
             }
-            Destroy(item);
-        }
-
-        private void ChangeWeapon(GameObject weapon)
-        {
-            
+            Destroy(item);//ObjectPool 관리필요.
         }
         
         private void Awake()

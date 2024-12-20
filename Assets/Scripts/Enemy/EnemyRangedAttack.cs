@@ -11,15 +11,13 @@ namespace Enemy
         private EnemyData _data;
         private GameObject _projectilePrefab;//원거리 투사체
         private string _projectileKey;
-        private float _projectileSpeed;
         private TrailRenderer _trailRenderer;
         private Animator _animator;
         private float _attackStartTime;
         private float _attackEndTime;
         private bool _isShoot;
-        private float _damage;
-        public float Damage => _damage;
-        public float ProjectileSpeed => _projectileSpeed;
+        public float Damage { get; private set; }
+        public float ProjectileSpeed { get; private set; }
         //적 캐릭터 패턴이 다양해 지면 적용 어려워짐...추상화 리팩터링 필요
 
         public string GetProjectileKey()
@@ -38,8 +36,8 @@ namespace Enemy
             _projectileKey = _data.ProjectileKey;
             _animator = _enemyManager.GetComponent<Animator>();
             _isShoot = false;
-            _damage = _data.Damage;
-            _projectileSpeed = _data.ProjectileSpeed;
+            Damage = _data.Damage;
+            ProjectileSpeed = _data.ProjectileSpeed;
         }
     
         private void Update()

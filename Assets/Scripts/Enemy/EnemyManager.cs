@@ -49,11 +49,11 @@ namespace Enemy
         private void DropItem()
         {
             //Money min~max Consumable Chest
-            //일단 Instantiate로 생성. 드랍테이블 등 데이터 입력 방식 변경 필요(xml...)
+            //드랍테이블 등 데이터 입력 방식 변경 필요(xml...)
             Vector3 pos = transform.position;
             //Money
             int moneyAmount = Random.Range(_dropTable.MoneyRangeStart, _dropTable.MoneyRangeEnd+1);
-            GameObject money = Instantiate(_dropTable.MoneyPrefab, pos+Vector3.back, Quaternion.identity);
+            GameObject money = ObjectPoolingManager.Instance.GetObjectFromPool("Money", pos+Vector3.back, Quaternion.identity);
             money.GetComponent<Money>().SetMoneyAmount(moneyAmount);
             //Consumable
             float consumableChance = _dropTable.ConsumableChance;
@@ -87,7 +87,8 @@ namespace Enemy
                 {
                     cumulativeWeight += drop.dropWeight;
                     if (cumulativeWeight <= randomWeight) continue;
-                    GameObject chest = Instantiate(_dropTable.ChestPrefab, pos+Vector3.right, Quaternion.identity);
+                    //GameObject chest = Instantiate(_dropTable.ChestPrefab, pos+Vector3.right, Quaternion.identity);
+                    GameObject chest = ObjectPoolingManager.Instance.GetObjectFromPool("Chest01", pos+Vector3.right, Quaternion.identity);
                     chest.GetComponent<Chest>().SetItem(drop.dropPrefab);
                     break;
                 }

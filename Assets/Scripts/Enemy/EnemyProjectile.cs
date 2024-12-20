@@ -1,3 +1,6 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using Player;
 using UnityEngine;
 
@@ -8,10 +11,11 @@ namespace Enemy
         private string _projectileKey;
         private Vector3 _targetPos;
         private Vector3 _startPos;
+        private Vector3 _direction;
         private Rigidbody _rigidbody;
         private float _speed;
         private EnemyRangedAttack _enemyRangedAttack;
-    
+
         public float Damage { get; private set; }
 
         public void InitEnemyProjectile(EnemyRangedAttack enemyRangedAttack, Vector3 targetPos)
@@ -19,42 +23,51 @@ namespace Enemy
             _enemyRangedAttack = enemyRangedAttack;
             _projectileKey = _enemyRangedAttack.GetProjectileKey();
             _speed = _enemyRangedAttack.ProjectileSpeed;
-            Damage = _enemyRangedAttack.Damage;
+            Damage = _enemyRangedAttack.Damage; //Data받아오기
             _targetPos = targetPos;
             _targetPos.y += 1f;
             _startPos = _enemyRangedAttack.transform.position;
-            Debug.Log("StartPos: " + _startPos + " TargetPos: " + _targetPos);
+            _direction = (_targetPos - _startPos).normalized;
+            transform.rotation = Quaternion.LookRotation(_direction);
+            //방향
+            _rigidbody.velocity = Vector3.zero;
+            _rigidbody.angularVelocity = Vector3.zero;
+            //속력 초기화
+            StartCoroutine(ReturnEnemyProjectile());
         }
 
-        private void Awake()
+        private IEnumerator ReturnEnemyProjectile()//2초 지나면 비활성화
+        {
+            yield return new WaitForSeconds(2f);
+            ObjectPoolingManager.Instance.ReturnToPool(_projectileKey, gameObject);
+            //null check할 때 Debug.Log때문(실질적으로 비용이 높지않음)
+        }
+
+    private void Awake()
         {
             _rigidbody = GetComponentInChildren<Rigidbody>();
             _rigidbody.isKinematic = false;
         }
-
-        private void Start()
+    
+        private void FixedUpdate()
         {
-            //transform.SetParent(null);
-            //_rigidbody.AddForce((_targetPos - _startPos).normalized * _speed ,ForceMode.Impulse);//
+            _rigidbody.AddForce(_direction * _speed, ForceMode.Impulse);//화살이동
         }
 
         private void Update()
         {
-            _rigidbody.AddForce((_targetPos - _startPos).normalized * _speed ,ForceMode.Impulse);//
+            if (_rigidbody.velocity != Vector3.zero)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(_rigidbody.velocity);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
+            }
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Player"))
+            if (other.CompareTag("Player") || other.CompareTag("Floor"))//Player or Floor 충돌시
             {
-                ObjectPoolingManager.Instance.ReturnToPool(_projectileKey,gameObject);
-                //Destroy(gameObject); //추후 오브젝트 풀링으로 관리로 수정 예정
-            }
-            else if(other.CompareTag("Floor"))
-            {
-                // _rigidbody.isKinematic = true;
-                ObjectPoolingManager.Instance.ReturnToPool(_projectileKey,gameObject);
-                //Destroy(gameObject, 1f);
+                ObjectPoolingManager.Instance.ReturnToPool(_projectileKey,gameObject);//비활성
             }
         }
     }
