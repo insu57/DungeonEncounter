@@ -7416,19 +7416,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolPrefabs:
-  - key: Arrow01
+  - key: 2
     prefab: {fileID: 5422603927206643936, guid: 7763080958edc594f92566e5b5fa1c85, type: 3}
     defaultCapacity: 20
-    maxSize: 200
-  - key: Money
+    maxSize: 100
+  - key: 0
     prefab: {fileID: 9051860450588113054, guid: 4b9e9b78378f846459138cedfe5a51f1, type: 3}
     defaultCapacity: 20
-    maxSize: 200
-  - key: Chest01
+    maxSize: 100
+  - key: 1
     prefab: {fileID: 8547558045587734986, guid: 34ca5d5f1125faf46a8c60b7f34a2ae1, type: 3}
     defaultCapacity: 20
-    maxSize: 200
-  arrowPrefab: {fileID: 5422603927206643936, guid: 7763080958edc594f92566e5b5fa1c85, type: 3}
+    maxSize: 100
+  - key: 3
+    prefab: {fileID: 2344367398292239192, guid: 0d016ae4dc251744ab08a60d7c5a6822, type: 3}
+    defaultCapacity: 20
+    maxSize: 100
 --- !u!1 &1464705173
 GameObject:
   m_ObjectHideFlags: 0

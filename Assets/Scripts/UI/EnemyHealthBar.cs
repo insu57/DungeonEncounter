@@ -16,7 +16,7 @@ namespace UI
          _enemyManager = enemyManager;
       }
 
-      public void UpdateHealthBar(float health, float maxHealth)
+      public void UpdateHealthBar(float health, float maxHealth)//체력바 업데이트
       {
          healthBar.fillAmount = health / maxHealth;
       }

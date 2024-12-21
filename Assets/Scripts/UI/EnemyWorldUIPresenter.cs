@@ -18,16 +18,23 @@ namespace UI
             _enemy = enemy;
             _healthBar = healthBar;
             _enemy.OnHealthChanged += HandleEnemyHealthChange;
+            _enemy.OnDeath += HandleEnemyDeath;
         }
         
         private void HandleEnemyHealthChange(float health, float maxHealth)
         {
-            _healthBar.UpdateHealthBar(health, maxHealth);
+            _healthBar.UpdateHealthBar(health, maxHealth); //체력 변경시 업데이트
         }
 
+        private void HandleEnemyDeath()
+        {
+            ObjectPoolingManager.Instance.ReturnToPool(PoolKeys.HealthBar, _healthBar.gameObject);//사망시 ReturnToPool
+        }
+        
         public void Dispose()
         {
             _enemy.OnHealthChanged -= HandleEnemyHealthChange;
+            _enemy.OnDeath -= HandleEnemyDeath;
         }
     }
 }

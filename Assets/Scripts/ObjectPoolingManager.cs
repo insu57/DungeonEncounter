@@ -10,7 +10,7 @@ public class ObjectPoolingManager : Singleton<ObjectPoolingManager>
     [Serializable]
     public class PoolPrefab
     {
-        public string key;
+        public PoolKeys key;
         public GameObject prefab;
         public int defaultCapacity;
         public int maxSize;
@@ -18,10 +18,9 @@ public class ObjectPoolingManager : Singleton<ObjectPoolingManager>
     
     //추후 개선-(Data 받아와서...)//현재: Inspector에서 받아오기(SerializeField). -> ScriptableObject?(Xml등에서 받아옴)
     [SerializeField] private List<PoolPrefab> poolPrefabs = new List<PoolPrefab>();
-    private readonly Dictionary<string, ObjectPool<GameObject>> _pools = new Dictionary<string, ObjectPool<GameObject>>();
-    public ObjectPool<GameObject> ArrowPool{get; private set;}
-    [SerializeField] private GameObject arrowPrefab;
-
+    private readonly Dictionary<PoolKeys, ObjectPool<GameObject>> _pools = new Dictionary<PoolKeys, ObjectPool<GameObject>>();
+   
+    
     private void InitPools()
     {
         foreach (var poolPrefab in poolPrefabs)
@@ -35,7 +34,7 @@ public class ObjectPoolingManager : Singleton<ObjectPoolingManager>
                 maxSize: poolPrefab.maxSize
                 );
             _pools.Add(poolPrefab.key, pool);
-
+            
             var tempList = new List<GameObject>();
             for (int i = 0; i < poolPrefab.defaultCapacity; i++)
             {
@@ -73,7 +72,7 @@ public class ObjectPoolingManager : Singleton<ObjectPoolingManager>
         Destroy(prefab);
     }
 
-    public GameObject GetObjectFromPool(string key, Vector3 position, Quaternion rotation)
+    public GameObject GetObjectFromPool(PoolKeys key, Vector3 position, Quaternion rotation)
     {
         if (_pools.TryGetValue(key, out ObjectPool<GameObject> pool))
         {
@@ -83,11 +82,11 @@ public class ObjectPoolingManager : Singleton<ObjectPoolingManager>
             return obj;
         }
         //null error
-        Debug.LogError("OBJECT POOL KEY ERROR : "+ key);
+        Debug.LogError("Get Pool Error");
         return null;
     }
 
-    public void ReturnToPool(string key, GameObject obj)
+    public void ReturnToPool(PoolKeys key, GameObject obj)
     {
         if (_pools.TryGetValue(key, out ObjectPool<GameObject> pool))
         {
@@ -95,7 +94,7 @@ public class ObjectPoolingManager : Singleton<ObjectPoolingManager>
         }
         else
         {
-            Debug.LogError("OBJECT POOL KEY ERROR : " + key);
+            Debug.LogError("Return Pool ERROR");
         }
     }
     

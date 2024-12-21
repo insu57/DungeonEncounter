@@ -36,7 +36,8 @@ public class InventoryManager : MonoBehaviour
     }
     
     private PlayerManager _playerManager;
-    [SerializeField] private ItemPrefabData itemPrefabData;//아이템데이터-프리팹 매핑
+    [SerializeField] private ItemPrefabData itemPrefabData; //아이템데이터-프리팹 매핑
+    public ItemPrefabData ItemPrefabData => itemPrefabData;
     public SelectedItemData SelectedItem;
     
     private int _moneyAmount;
@@ -54,7 +55,6 @@ public class InventoryManager : MonoBehaviour
     //public Event changeWeapon;
     //public Event changeEquipment;
     public event Action<int> OnUpdateMoneyAmount;
-    public event Action OnEquipUseItem;
 
     public int weaponInventoryCount { private set; get; }
     public int weaponInventoryMaxCount { private set; get; }
@@ -99,13 +99,11 @@ public class InventoryManager : MonoBehaviour
             => string.Compare(a.ItemData.WeaponName, b.ItemData.WeaponName, StringComparison.Ordinal));
     }
 
-    public void RemoveWeaponData(WeaponDataWithID weapon, Transform playerTransform)
+    public void RemoveWeaponData(WeaponDataWithID weapon)
     {
         WeaponDataList.Remove(weapon);
         weaponInventoryCount = WeaponDataList.Count;//개수 갱신
-        //오브젝트 풀링?
-        Instantiate(itemPrefabData.GetWeaponPrefab(weapon.ItemData), //플레이어 위치 기준 생성
-            playerTransform.position + Vector3.back,Quaternion.identity);
+        
     }
     
     public void AddEquipmentData(PlayerEquipmentData data)
@@ -116,12 +114,10 @@ public class InventoryManager : MonoBehaviour
             => string.Compare(a.ItemData.EquipmentName, b.ItemData.EquipmentName, StringComparison.Ordinal));
     }
 
-    public void RemoveEquipmentData(EquipmentDataWithID equipment, Transform playerTransform)
+    public void RemoveEquipmentData(EquipmentDataWithID equipment)
     {
         EquipmentDataList.Remove(equipment);
         equipmentInventoryCount = EquipmentDataList.Count;
-        Instantiate(itemPrefabData.GetEquipmentPrefab(equipment.ItemData),
-            playerTransform.position + Vector3.back,Quaternion.identity);
     }
     
     public void AddConsumableData(ConsumableItemData data)
@@ -140,7 +136,7 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    public void RemoveConsumableData(ConsumableDataWithQuantity consumable, Transform playerTransform)
+    public void RemoveConsumableData(ConsumableDataWithQuantity consumable)
     {
         var index = ConsumableDataList.FindIndex(x => x == consumable);
         if (ConsumableDataList[index].Quantity > 1)//수량이 1보다 크면 수량 감소
@@ -152,8 +148,6 @@ public class InventoryManager : MonoBehaviour
             ConsumableDataList.RemoveAt(index);//1이면 리스트에서 제거
             consumableInventoryCount = ConsumableDataList.Count;//개수 갱신
         }
-        Instantiate(itemPrefabData.GetConsumablePrefab(consumable.ItemData),
-            playerTransform.position + Vector3.back,Quaternion.identity);
     }
     
     public void AddMoney(int amount)//인벤토리 돈 추가

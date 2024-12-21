@@ -40,7 +40,7 @@ namespace UI
         {
             playerHealthBar.fillAmount = health / maxHealth;
             healthText.text = $"{health}/{maxHealth}";
-            Debug.Log($"{health}/{maxHealth}");
+            //Debug.Log($"{health}/{maxHealth}");
         }
 
         public void UpdatePlayerEnergyBar(float energy, float maxEnergy)

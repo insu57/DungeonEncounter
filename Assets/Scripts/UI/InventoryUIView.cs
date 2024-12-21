@@ -286,6 +286,7 @@ namespace UI
             weaponButton.onClick.AddListener(() => OpenInventory(ItemTypes.Weapon));
             equipmentButton.onClick.AddListener(() => OpenInventory(ItemTypes.Equipment));
             consumableButton.onClick.AddListener(() => OpenInventory(ItemTypes.Consumable));
+           
             _equippedWeaponButton = equippedWeaponImg.gameObject.GetComponent<Button>();
             _equippedWeaponButton.onClick.AddListener(() => OnCurrentWeapon?.Invoke());//현재 장착한 아이템 이벤트
             _equippedEquipmentButton = equippedEquipmentImg.gameObject.GetComponent<Button>();
@@ -294,6 +295,7 @@ namespace UI
             _itemQuick1Button.onClick.AddListener(() => OnQuickSlot1?.Invoke());
             _itemQuick2Button = itemQuick2Img.gameObject.GetComponent<Button>();
             _itemQuick2Button.onClick.AddListener(() => OnQuickSlot2?.Invoke());
+            
             itemEquipButton.onClick.AddListener(()=>OnEquipButton?.Invoke());
             itemDropButton.onClick.AddListener(()=>OnDropButton?.Invoke());
             setQuick1Button.onClick.AddListener(() => OnSetQuickSlot?.Invoke(1));

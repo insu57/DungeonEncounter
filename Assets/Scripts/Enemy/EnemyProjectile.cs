@@ -8,7 +8,7 @@ namespace Enemy
 {
     public class EnemyProjectile : MonoBehaviour
     {
-        private string _projectileKey;
+        private PoolKeys _projectileKey;
         private Vector3 _targetPos;
         private Vector3 _startPos;
         private Vector3 _direction;
@@ -29,7 +29,7 @@ namespace Enemy
             _startPos = _enemyRangedAttack.transform.position;
             _direction = (_targetPos - _startPos).normalized;
             transform.rotation = Quaternion.LookRotation(_direction);
-            //방향
+            
             _rigidbody.velocity = Vector3.zero;
             _rigidbody.angularVelocity = Vector3.zero;
             //속력 초기화
@@ -46,7 +46,6 @@ namespace Enemy
     private void Awake()
         {
             _rigidbody = GetComponentInChildren<Rigidbody>();
-            _rigidbody.isKinematic = false;
         }
     
         private void FixedUpdate()
@@ -56,7 +55,7 @@ namespace Enemy
 
         private void Update()
         {
-            if (_rigidbody.velocity != Vector3.zero)
+            if (_rigidbody.velocity != Vector3.zero)//각도 조절
             {
                 Quaternion targetRotation = Quaternion.LookRotation(_rigidbody.velocity);
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);

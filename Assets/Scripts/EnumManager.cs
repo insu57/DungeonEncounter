@@ -66,6 +66,11 @@ public enum Rarity
     Common, Uncommon, Rare, Epic, Legendary,
 }
 
+public enum PoolKeys
+{
+    Money, Chest01, Arrow01, HealthBar
+}
+
 public static class EnumManager
 {
     public static string RarityToString(Rarity rarity)

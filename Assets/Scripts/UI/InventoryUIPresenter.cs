@@ -1,11 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using Player;
 using Scriptable_Objects;
-using Sirenix.Reflection.Editor;
 using UI;
-using Unity.VisualScripting;
-using UnityEditor.Localization.Plugins.XLIFF.V20;
 using UnityEngine;
 
 public class InventoryUIPresenter
@@ -17,6 +12,7 @@ public class InventoryUIPresenter
     public InventoryUIPresenter(PlayerManager playerManager, InventoryManager inventoryManager,
         InventoryUIView inventoryUIView)
     {
+        //Refactoring?
         _playerManager = playerManager;
         _inventoryManager = inventoryManager;
         _inventoryUIView = inventoryUIView;
@@ -30,8 +26,9 @@ public class InventoryUIPresenter
 
         _playerManager.OnGetMoney += HandleAddMoney;
         _playerManager.OnGetItem += HandleAddItem;
+        _playerManager.OnUseItemQuickSlot += HandleOnUseItemQuickSlot;
         _inventoryManager.OnUpdateMoneyAmount += HandleUpdateTotalMoney;
-        //InventoryManager StatChange -> PlayerManager
+     
         _inventoryUIView.OnEquipButton += HandleOnEquipButton;
         _inventoryUIView.OnDropButton += HandleOnDropButton;
         _inventoryUIView.OnSetQuickSlot += HandleOnSetQuickSlot;
@@ -381,26 +378,75 @@ public class InventoryUIPresenter
         switch (itemType)
         {
             case ItemTypes.Weapon:
-                _inventoryManager.RemoveWeaponData(_inventoryManager.SelectedItem.Weapon,_playerManager.transform);
+                InventoryManager.WeaponDataWithID weapon = _inventoryManager.SelectedItem.Weapon;
+                _inventoryManager.RemoveWeaponData(weapon);//리스트에서 제거
+                GameObject dropWeapon = _inventoryManager.ItemPrefabData.GetWeaponPrefab(weapon.ItemData);//GameObject가져오기
+                _playerManager.DropItem(dropWeapon);//아이템 드랍 
                 HandleOnInventoryOpen(ItemTypes.Weapon);//새로고침
-                _inventoryUIView.ClearItemInfo();
+                _inventoryUIView.ClearItemInfo();//아이템정보 clear
                 break;
             case ItemTypes.Equipment:
-                _inventoryManager.RemoveEquipmentData(_inventoryManager.SelectedItem.Equipment,_playerManager.transform);
+                InventoryManager.EquipmentDataWithID equipment = _inventoryManager.SelectedItem.Equipment;
+                _inventoryManager.RemoveEquipmentData(equipment);
+                GameObject dropEquipment = _inventoryManager.ItemPrefabData.GetEquipmentPrefab(equipment.ItemData);
+                _playerManager.DropItem(dropEquipment);
                 HandleOnInventoryOpen(ItemTypes.Equipment);
                 _inventoryUIView.ClearItemInfo();
                 break;
             case ItemTypes.Consumable:
-                _inventoryManager.RemoveConsumableData(_inventoryManager.SelectedItem.Consumable,_playerManager.transform);
+                InventoryManager.ConsumableDataWithQuantity consumable = _inventoryManager.SelectedItem.Consumable;
+                var quantity = consumable.Quantity;
+                _inventoryManager.RemoveConsumableData(consumable);
+                GameObject dropConsumable = _inventoryManager.ItemPrefabData.GetConsumablePrefab(consumable.ItemData);
+                _playerManager.DropItem(dropConsumable);
                 HandleOnInventoryOpen(ItemTypes.Consumable);
-                var quantity = _inventoryManager.SelectedItem.Consumable.Quantity;
-                if (quantity < 1) _inventoryUIView.ClearItemInfo();
-                else _inventoryUIView.SelectedConsumable(_inventoryManager.SelectedItem.Consumable);
+                if (quantity <= 1)//수량이 1이하였으면
+                {
+                    _inventoryUIView.ClearItemInfo();
+                    _inventoryManager.SelectedItem.Consumable.ItemData = null;
+                    _inventoryManager.SelectedItem.Consumable.Quantity = 0;
+                }
+                else
+                {
+                    _inventoryUIView.SelectedConsumable(consumable);//아이템 정보 갱신
+                }
                 break;
             default:
                 break;
         }
     }
+
+    private void HandleOnUseItemQuickSlot(int quickSlot)
+    {
+        switch (quickSlot)
+        {
+            case 1:
+                InventoryManager.ConsumableDataWithQuantity quick1 = _inventoryManager.ItemQuickSlot1;//현재 퀵슬롯1 정보
+                if(!quick1.ItemData) return; //null(빈상태)이면 작동x
+                _playerManager.UseConsumableItem(_inventoryManager.ItemQuickSlot1.ItemData);//아이템 사용
+                if (quick1.Quantity <= 1)
+                {
+                    _inventoryManager.ItemQuickSlot1.ItemData = null;//수량이 1이하면 null로 초기화
+                    _inventoryManager.ItemQuickSlot1.Quantity = 0;
+                    _inventoryUIView.ClearItemQuick1();//퀵슬롯1 UI 초기화
+                }
+                _inventoryManager.RemoveConsumableData(quick1);//인벤토리에서 처리(수량에 따라)
+                break;
+            case 2:
+                InventoryManager.ConsumableDataWithQuantity quick2 = _inventoryManager.ItemQuickSlot2;
+                if (!quick2.ItemData) return;
+                _playerManager.UseConsumableItem(_inventoryManager.ItemQuickSlot2.ItemData);
+                if (quick2.Quantity <= 1)
+                {
+                    _inventoryManager.ItemQuickSlot2.ItemData = null;
+                    _inventoryManager.ItemQuickSlot2.Quantity = 0;
+                    _inventoryUIView.ClearItemQuick2();
+                }
+                _inventoryManager.RemoveConsumableData(quick2);
+                break;
+        }
+    }
+    
     public void Dispose()
     {
         _inventoryUIView.OnInventoryOpen -= HandleOnInventoryOpen;

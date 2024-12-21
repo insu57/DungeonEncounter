@@ -14,7 +14,7 @@ namespace Scriptable_Objects
         [SerializeField] private int maxHealth;
         [SerializeField] private float damage;
         [SerializeField] private GameObject projectilePrefab;
-        [SerializeField] private string projectileKey;
+        [SerializeField] private PoolKeys projectileKey;
         [SerializeField] private float projectileSpeed;
         [SerializeField] private float attackFullFrame; //전체
         [SerializeField] private float attackStartFrame; //공격 판정 시작
@@ -28,7 +28,7 @@ namespace Scriptable_Objects
         public float MaxHealth => maxHealth;
         public float Damage => damage;
         public GameObject ProjectilePrefab => projectilePrefab;
-        public string ProjectileKey => projectileKey;
+        public PoolKeys ProjectileKey => projectileKey;
         public float ProjectileSpeed => projectileSpeed;
         public float AttackFullFrame => attackFullFrame;
         public float AttackStartFrame => attackStartFrame;

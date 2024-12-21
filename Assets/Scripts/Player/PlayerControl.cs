@@ -148,11 +148,13 @@ namespace Player
                 if (Input.GetKeyDown(KeyCode.Q))
                 {
                     //QuickSlot1
+                    _playerManager.UseItemQuickSlot(1);
                 }
 
                 if (Input.GetKeyDown(KeyCode.E))
                 {
                     //QuickSlot2
+                    _playerManager.UseItemQuickSlot(2);
                 }
             
                 /* 원거리 플레이어 회전... 마우스기준 회전

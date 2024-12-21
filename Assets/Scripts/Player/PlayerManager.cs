@@ -40,9 +40,10 @@ namespace Player
         
         public event Action<int> OnGetMoney;
         public event Action<GameObject> OnGetItem;
+        public event Action<int> OnUseItemQuickSlot;
         
         private Camera _mainCamera;
-        public void UpdateFinalAttackValue()//각종 효과 구현 진행 필요...ui 플레이어 정보->최종 스탯(아이템 효과 포함)?기본 스탯?
+        public void UpdateFinalAttackValue()//각종 효과 구현 진행 필요.
         {
             FinalAttackValue = _weaponAttackValue;
             //+itemEffect...
@@ -125,12 +126,61 @@ namespace Player
             {
                 Money money = item.GetComponent<Money>();
                 OnGetMoney?.Invoke(money.moneyAmount);
+                ObjectPoolingManager.Instance.ReturnToPool(PoolKeys.Money, item);
             }
             else
             {
                 OnGetItem?.Invoke(item);
+                if (item.layer == (int)ItemLayers.Chest)
+                {
+                    ObjectPoolingManager.Instance.ReturnToPool(PoolKeys.Chest01, item);
+                }
+                else
+                {
+                    Destroy(item);
+                }
             }
-            Destroy(item);//ObjectPool 관리필요.
+        }
+
+        public void DropItem(GameObject item)
+        {
+            Instantiate(item,transform.position + Vector3.back,Quaternion.identity);
+        }
+        
+        public void UseItemQuickSlot(int slotNumber)
+        {
+            OnUseItemQuickSlot?.Invoke(slotNumber);
+        }
+
+        public void UseConsumableItem(ConsumableItemData data)
+        {
+            foreach (var itemEffect in data.ItemData)
+            {
+                if (itemEffect.effectType == EffectType.Instant)
+                {
+                    float effectAmount = itemEffect.effectAmount;
+                    float currentValue = GetStat(itemEffect.effectStat);
+                    switch (itemEffect.effectCalculate)
+                    {
+                        case CalculateType.Plus:
+                            currentValue += effectAmount;
+                            break;
+                        case CalculateType.Multiply:
+                            currentValue *= effectAmount;
+                            break;
+                        default:
+                            break;
+                    }
+                    SetStat(itemEffect.effectStat, currentValue);
+                }
+                else
+                {
+                    //another effectType...
+                    //Debug.Log("");
+                }
+                
+                
+            }
         }
         
         private void Awake()

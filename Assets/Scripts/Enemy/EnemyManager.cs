@@ -29,7 +29,7 @@ namespace Enemy
         private WorldUIView _worldUIView;
         private EnemyWorldUIPresenter _uiPresenter;
         public event Action<float,float> OnHealthChanged;
-        
+        public event Action OnDeath;
         private float GetStat(EnemyStatTypes type)
         {
             return _enemyStats.GetValueOrDefault(type, 0);
@@ -53,7 +53,8 @@ namespace Enemy
             Vector3 pos = transform.position;
             //Money
             int moneyAmount = Random.Range(_dropTable.MoneyRangeStart, _dropTable.MoneyRangeEnd+1);
-            GameObject money = ObjectPoolingManager.Instance.GetObjectFromPool("Money", pos+Vector3.back, Quaternion.identity);
+            GameObject money = ObjectPoolingManager.Instance
+                .GetObjectFromPool(PoolKeys.Money, pos+Vector3.back, Quaternion.identity);
             money.GetComponent<Money>().SetMoneyAmount(moneyAmount);
             //Consumable
             float consumableChance = _dropTable.ConsumableChance;
@@ -88,7 +89,8 @@ namespace Enemy
                     cumulativeWeight += drop.dropWeight;
                     if (cumulativeWeight <= randomWeight) continue;
                     //GameObject chest = Instantiate(_dropTable.ChestPrefab, pos+Vector3.right, Quaternion.identity);
-                    GameObject chest = ObjectPoolingManager.Instance.GetObjectFromPool("Chest01", pos+Vector3.right, Quaternion.identity);
+                    GameObject chest = ObjectPoolingManager.Instance
+                        .GetObjectFromPool(PoolKeys.Chest01, pos+Vector3.right, Quaternion.identity);
                     chest.GetComponent<Chest>().SetItem(drop.dropPrefab);
                     break;
                 }
@@ -148,8 +150,9 @@ namespace Enemy
                     _enemyControl.IsAttack = false;
                     _enemyControl.IsMove = false;
                     _enemyControl.IsDead = true;
-                    DropItem();
-                    _enemyCollider.enabled = false;
+                    DropItem();//아이템 드랍
+                    OnDeath?.Invoke();//사망이벤트
+                    _enemyCollider.enabled = false;//충돌 비활성
                     _uiPresenter.Dispose();
                 }
                 
