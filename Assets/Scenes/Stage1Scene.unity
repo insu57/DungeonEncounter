@@ -241,12 +241,11 @@ MonoBehaviour:
   minDivideRate: 0.4
   maxDivideRate: 0.6
   minRoomSize: 0
+  line3d: {fileID: 8044381844635015991, guid: 834c85b3e4cb7f242a99ea1be0985def, type: 3}
+  floorPrefab: {fileID: 4858445005982683616, guid: 34fc369a561715b4ab1179983bd9989c, type: 3}
   line: {fileID: 6544971132720134193, guid: 41fec322d7ad08d48b08e0b3f298bbf3, type: 3}
-  lineHolder: {fileID: 0}
   rectangle: {fileID: 1928986867630209245, guid: a4a69f0e9d60b034f822e7d6a73d4cf7, type: 3}
   roomLine: {fileID: 6544971132720134193, guid: 4b438dc8038acf04c8d351df0ff2b0d8, type: 3}
-  tile: {fileID: 0}
-  tilemap: {fileID: 0}
 --- !u!1 &1588927291
 GameObject:
   m_ObjectHideFlags: 0
@@ -333,13 +332,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1588927291}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -50}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 50, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!114 &1588927295
 MonoBehaviour:
   m_ObjectHideFlags: 0
