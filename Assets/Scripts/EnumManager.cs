@@ -85,6 +85,19 @@ public static class EnumManager
             _ => rarity.ToString()
         };
     }
+
+    public static Color RarityToColor(Rarity rarity)
+    {
+        return rarity switch
+        {
+            Rarity.Common => Color.gray,
+            Rarity.Uncommon => Color.green,
+            Rarity.Rare => Color.blue,
+            Rarity.Epic => Color.magenta,
+            Rarity.Legendary => Color.yellow,
+            _ => Color.white
+        };
+    }
     
     public static string WeaponTypeToString(WeaponType type)
     {

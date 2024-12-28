@@ -50,10 +50,7 @@ public class InventoryManager : MonoBehaviour
     public List<WeaponDataWithID> WeaponDataList { get; } = new List<WeaponDataWithID>();
     public List<EquipmentDataWithID> EquipmentDataList { get; } = new List<EquipmentDataWithID>();
     public List<ConsumableDataWithQuantity> ConsumableDataList { get; } = new List<ConsumableDataWithQuantity>();
-
-    //public Action 
-    //public Event changeWeapon;
-    //public Event changeEquipment;
+    
     public event Action<int> OnUpdateMoneyAmount;
 
     public int weaponInventoryCount { private set; get; }
@@ -75,10 +72,10 @@ public class InventoryManager : MonoBehaviour
         EquippedWeaponData.WeaponID = weaponID;
     }
 
-    public void SetEquipment(PlayerEquipmentData data, int index)
+    public void SetEquipment(PlayerEquipmentData data, int equipmentID)
     {
         EquippedEquipmentData.ItemData = data;
-        EquippedEquipmentData.EquipmentID = index;
+        EquippedEquipmentData.EquipmentID = equipmentID;
     }
 
     public void SetQuickSlot1(ConsumableDataWithQuantity data)

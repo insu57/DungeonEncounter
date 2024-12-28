@@ -56,7 +56,13 @@ namespace Player
             Destroy(_equippedWeapon);
             GameObject newWeapon = itemPrefabData.GetWeaponPrefab(data);
             _equippedWeapon = Instantiate(newWeapon, playerRightHand.transform);
-            if (data.AttackType == AttackType.Melee)
+            if (!data.IsDefaultWeapon)//기본무기가 아니면
+            {
+                _equippedWeapon.GetComponent<BoxCollider>().enabled = false; //드랍 아이템 체크용 BoxCollider 비활성
+                _equippedWeapon.GetComponentInChildren<ParticleSystem>().Stop();//자식객체 ParticleSystem 이펙트 정지
+            }
+            
+            if (data.AttackType == AttackType.Melee)//근접무기일시
             {
                 _equippedWeapon.AddComponent<PlayerMeleeAttack>();
                 _equippedWeapon.tag = "PlayerAttack";

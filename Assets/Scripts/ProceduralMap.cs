@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
 
-public class ProceduralMap : MonoBehaviour
+public class ProceduralMap : MonoBehaviour//일단 후순위로
 {
     public class TreeNode
     {
@@ -162,21 +162,26 @@ public class ProceduralMap : MonoBehaviour
     }
 
     private void GenerateRoad3D(TreeNode treeNode, int n)//가장 중요 어떻게?
-    {
-       if(n == maxNode) return;
-       Vector2Int leftNodeCenter = treeNode.LeftTree.Center;
-       Vector2Int rightNodeCenter = treeNode.RightTree.Center;
-        
-       //OnDrawLine(new Vector2(leftNodeCenter.x, leftNodeCenter.y), new Vector2(rightNodeCenter.x, leftNodeCenter.y));
-       //OnDrawLine(new Vector2(rightNodeCenter.x, leftNodeCenter.y), new Vector2(rightNodeCenter.x, rightNodeCenter.y));
-       CreateLine(new Vector3(leftNodeCenter.x, 0, leftNodeCenter.y),
-           new Vector3(rightNodeCenter.x, 0, leftNodeCenter.y), 5);
-       CreateLine(new Vector3(rightNodeCenter.x, 0, leftNodeCenter.y),
-           new Vector3(rightNodeCenter.x, 0, rightNodeCenter.y), 5);
-       
-       GenerateRoad3D(treeNode.LeftTree, n+1);
-       GenerateRoad3D(treeNode.RightTree, n+1);
-    }
+         {
+            if(n == maxNode) return;
+            Vector2Int leftNodeCenter = treeNode.LeftTree.Center;
+            Vector2Int rightNodeCenter = treeNode.RightTree.Center;
+            
+            CreateLine(new Vector3(leftNodeCenter.x, 0, leftNodeCenter.y),
+                new Vector3(rightNodeCenter.x, 0, leftNodeCenter.y), 3);
+            Vector3 start = new Vector3(leftNodeCenter.x, 0, leftNodeCenter.y);
+            Vector3 end = new Vector3(rightNodeCenter.x, 0, leftNodeCenter.y);
+            Debug.Log("Road1: " +(end-start).normalized);
+            
+            CreateLine(new Vector3(rightNodeCenter.x, 0, leftNodeCenter.y),
+                new Vector3(rightNodeCenter.x, 0, rightNodeCenter.y), 3);
+            //door..?
+            
+            
+            
+            GenerateRoad3D(treeNode.LeftTree, n+1);
+            GenerateRoad3D(treeNode.RightTree, n+1);
+         }
     
     private void CreateLine(Vector3 start, Vector3 end, float height)
     {

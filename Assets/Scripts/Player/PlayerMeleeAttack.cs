@@ -7,12 +7,12 @@ namespace Player
         //private PlayerManager _playerManager;
         private PlayerControl _playerControl;
         private TrailRenderer _trailRenderer;
-        private Collider _attackArea;
+        private CapsuleCollider _attackArea;
         private void Awake()
         {
             _playerControl = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControl>();
             _trailRenderer = GetComponentInChildren<TrailRenderer>(); //이펙트 수정 필요. 
-            _attackArea = GetComponent<Collider>();
+            _attackArea = GetComponent<CapsuleCollider>();
             
         }
 

@@ -36,7 +36,7 @@ public class InventoryUIPresenter
         
         //init
         _inventoryManager.AddWeaponData(_playerManager.WeaponData);
-        _inventoryManager.SetWeapon(_playerManager.WeaponData, 0);
+        _inventoryManager.SetWeapon(_playerManager.WeaponData, 1);
         _inventoryUIView.UpdateEquippedWeapon(_playerManager.WeaponData.Icon);
         int maxCount = _inventoryManager.weaponInventoryMaxCount;  //생성은 초기화, 최대칸 증가 시에만
         for (int i = 0; i < maxCount; i++)
@@ -263,7 +263,7 @@ public class InventoryUIPresenter
         
     }
 
-    private void HandleOnEquipButton()//장착버튼 ->스탯 반영 구현 필요
+    private void HandleOnEquipButton()//장착버튼 ->스탯 반영
     {
         ItemTypes itemType = _inventoryManager.SelectedItem.ItemType;
         switch (itemType)//아이템 타입 따라
