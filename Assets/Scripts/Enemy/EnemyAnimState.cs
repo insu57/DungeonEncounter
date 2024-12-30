@@ -4,7 +4,8 @@ namespace Enemy
     {
         public override void Enter(EnemyControl enemy)
         {
-            enemy.EnemyAnimator.Play("Idle");
+            //enemy.EnemyAnimator.Play("Idle");
+            enemy.ChangeAnimation("Idle");
         }
 
         public override void Execute(EnemyControl enemy)
@@ -26,7 +27,8 @@ namespace Enemy
     {
         public override void Enter(EnemyControl enemy)
         {
-            enemy.EnemyAnimator.Play("Move");
+            //enemy.EnemyAnimator.Play("Move");
+            enemy.ChangeAnimation("Move");
         }
 
         public override void Execute(EnemyControl enemy)
@@ -47,7 +49,8 @@ namespace Enemy
     {
         public override void Enter(EnemyControl enemy)
         {
-            enemy.EnemyAnimator.Play("Attack");
+            //enemy.EnemyAnimator.Play("Attack");
+            enemy.ChangeAnimation("Attack");
         }
 
         public override void Execute(EnemyControl enemy)
@@ -84,7 +87,8 @@ namespace Enemy
     {
         public override void Enter(EnemyControl enemy)
         {
-            enemy.EnemyAnimator.Play("Dead");
+            //enemy.EnemyAnimator.Play("Dead");
+            enemy.ChangeAnimation("Dead");
         }
 
         public override void Execute(EnemyControl enemy)

@@ -6,7 +6,7 @@ namespace Player
 {
     public enum PlayerStates
     {
-        Idle = 0, Run, Attack, Dodge, UseItem, Damaged, Global
+        Idle = 0, Run, Attack, Dodge, Global
     }
     public class PlayerControl : MonoBehaviour
     {
@@ -29,6 +29,7 @@ namespace Player
         
         public PlayerStates CurrentState { private set; get; }
         public Animator PlayerAnimator { private set; get; }
+        private string _currentAnimation = "";
         public bool IsMove { private set; get; }
         public bool IsAttack { set; get; }
         public bool IsDodge { private set; get; }
@@ -40,9 +41,41 @@ namespace Player
             CurrentState = newState;
             _stateMachine.ChangeState(_states[(int)newState]);
         }
-        public void RevertToPreviousState()
+        public void ChangeAnimation(string newAnimation, float crossFadeTime = 0.2f)
         {
-            _stateMachine.RevertToPreviousState();
+            //애니메이션 변경
+            if (_currentAnimation != newAnimation)
+            {
+                _currentAnimation = newAnimation;
+                if (newAnimation == "Attack")
+                {
+                    PlayerAnimator.Play("Attack");
+                }
+                else
+                {
+                    PlayerAnimator.CrossFade(newAnimation, crossFadeTime, -1, 0);
+                }
+               
+            }
+        }
+        private IEnumerator Dodge(Vector3 dodgeTarget) //회피 계산
+        {
+            var elapsedTime = 0f;
+            _isDodgeCool = true;
+        
+            while (elapsedTime < _dodgeDuration) //dodgeDuration동안 dodgeTarget으로 움직임(lerp)
+            {
+                IsDodge = true;
+                var newPosition = Vector3.Lerp(transform.position, dodgeTarget, elapsedTime / _dodgeDuration);
+                _characterController.Move(newPosition - transform.position);
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+            _characterController.Move(dodgeTarget - transform.position);
+            IsDodge = false;
+        
+            yield return new WaitForSeconds(_dodgeCoolTime); //회피 쿨타임
+            _isDodgeCool = false;
         }
         
         private void Awake()
@@ -52,13 +85,11 @@ namespace Player
             PlayerAnimator = _animator;
             _characterController = GetComponent<CharacterController>();
             
-            _states = new State<PlayerControl>[7];
+            _states = new State<PlayerControl>[5];
             _states[(int)PlayerStates.Idle] = new Idle();
             _states[(int)PlayerStates.Run] = new Run();
             _states[(int)PlayerStates.Attack] = new Attack();
             _states[(int)PlayerStates.Dodge] = new Dodge();
-            _states[(int)PlayerStates.UseItem] = new UseItem();
-            _states[(int)PlayerStates.Damaged] = new Damaged();
             _states[(int)PlayerStates.Global] =  new StateGlobal();
             
             _stateMachine = new StateMachine<PlayerControl>();
@@ -80,25 +111,6 @@ namespace Player
             _lookRotation = Quaternion.LookRotation(Vector3.back);
             _lookVector = Vector3.back;
             
-        }
-
-        private IEnumerator Dodge(Vector3 dodgeTarget) //회피 계산
-        {
-            var elapsedTime = 0f;
-            _isDodgeCool = true;
-        
-            while (elapsedTime < _dodgeDuration) //dodgeDuration동안 dodgeTarget으로 움직임(lerp)
-            {
-                var newPosition = Vector3.Lerp(transform.position, dodgeTarget, elapsedTime / _dodgeDuration);
-                _characterController.Move(newPosition - transform.position);
-                elapsedTime += Time.deltaTime;
-                yield return null;
-            }
-            _characterController.Move(dodgeTarget - transform.position);
-            IsDodge = false;
-        
-            yield return new WaitForSeconds(_dodgeCoolTime); //회피 쿨타임
-            _isDodgeCool = false;
         }
 
         private void Update()
@@ -142,7 +154,13 @@ namespace Player
                     AudioManager.Instance.PlaySfx(AudioManager.Sfx.AttackSfx); //Sfx Play
                     AudioManager.Instance.PlaySfx(AudioManager.Sfx.AttackVoice);
                 }
-            
+
+                if (Input.GetMouseButtonDown(1)) //우클릭 스킬 공격
+                {
+                    _moveVector = Vector3.zero;
+                    
+                }
+                
                 _characterController.Move(_moveVector * (_moveSpeed * Time.deltaTime)); //Player Move 이동
 
                 if (Input.GetKeyDown(KeyCode.Q))

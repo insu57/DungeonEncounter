@@ -100,6 +100,7 @@ namespace Player
                 GameObject newEquipment = itemPrefabData.GetEquipmentPrefab(data);
                 _equippedEquipment = Instantiate(newEquipment, playerHead.transform);
                 _equippedEquipment.GetComponent<Collider>().enabled = false;
+                _equippedEquipment.GetComponentInChildren<ParticleSystem>().Stop();
                 _equipmentDefenseValue = data.DefenseValue;
                 SetStat(PlayerStatTypes.DefenseValue, _equipmentDefenseValue);
                 if (data.ItemEffect.Length != 0)

@@ -44,18 +44,20 @@ namespace Enemy
         {
             float animTime = Mathf.Repeat(_animator.GetCurrentAnimatorStateInfo(0).normalizedTime, 1.0f);
         
-            if (_enemyControl.IsAttack && !_isShoot &&_attackStartTime <= animTime && animTime <= _attackEndTime)
+            if(animTime > _attackEndTime || animTime < _attackStartTime || !_enemyControl.IsAttack)
+                _isShoot = false;
+            
+            if (_enemyControl.IsAttack && !_isShoot &&_attackStartTime <= animTime && animTime <= _attackEndTime
+                && _animator.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
             {
                 _isShoot = true;
-                //Instantiate(_projectilePrefab, transform.position, transform.rotation, transform);
                 GameObject projectileObj = ObjectPoolingManager.Instance.GetObjectFromPool(_projectileKey,transform.position,transform.rotation);//ErrorMessage
                 EnemyProjectile projectile = projectileObj.GetComponent<EnemyProjectile>();
                 projectile.enabled = true;
                 projectile.InitEnemyProjectile(this,_enemyManager.EnemyTargetPos());
             }
         
-            if(animTime > _attackEndTime)
-                _isShoot = false;
+            
         
         }
     

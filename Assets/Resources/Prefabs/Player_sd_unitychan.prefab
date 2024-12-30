@@ -4389,7 +4389,7 @@ GameObject:
   - component: {fileID: 9065338972789093801}
   - component: {fileID: 8976641303431507846}
   - component: {fileID: 1011984129514734113}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player_sd_unitychan
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -4450,6 +4450,7 @@ MonoBehaviour:
   playerJobData: {fileID: 11400000, guid: e803b4da493044c4caf718a45d5e5d7b, type: 2}
   playerRightHand: {fileID: 3410862352568738653}
   playerHead: {fileID: 7421672318361746349}
+  itemPrefabData: {fileID: 11400000, guid: ff1fc2cb9f880ea48835b59c97ead294, type: 2}
 --- !u!114 &3867414371824004852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4598,8 +4599,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7421672318361746349}
   serializedVersion: 2
-  m_LocalRotation: {x: 1, y: 0, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: -0, z: 0.6}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: -0, z: 0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

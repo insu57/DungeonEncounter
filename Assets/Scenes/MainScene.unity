@@ -11488,6 +11488,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 901334103008617326, guid: 12c2d292a031c184db7ab95cc6dafa10, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 90
+      objectReference: {fileID: 0}
     - target: {fileID: 1009974020721243181, guid: 12c2d292a031c184db7ab95cc6dafa10, type: 3}
       propertyPath: m_Layer
       value: 6
@@ -11989,10 +11993,6 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 7317299313002242658, guid: 12c2d292a031c184db7ab95cc6dafa10, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 7317299313002242658, guid: 12c2d292a031c184db7ab95cc6dafa10, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -12084,10 +12084,6 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
-    - target: {fileID: 8510475005573366069, guid: 12c2d292a031c184db7ab95cc6dafa10, type: 3}
-      propertyPath: itemPrefabData
-      value: 
-      objectReference: {fileID: 11400000, guid: ff1fc2cb9f880ea48835b59c97ead294, type: 2}
     - target: {fileID: 8572892446689743603, guid: 12c2d292a031c184db7ab95cc6dafa10, type: 3}
       propertyPath: m_Layer
       value: 6

@@ -12,6 +12,7 @@ namespace Player
 
         private void Awake()
         {
+            //이펙트 색상
             var particleMain = particleMainCircle.main;
             particleMain.startColor = EnumManager.RarityToColor(data.Rarity);
             particleMain = particleLight.main;

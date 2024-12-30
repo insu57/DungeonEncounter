@@ -18,6 +18,7 @@ namespace Enemy
         public EnemyStates CurrentState { private set; get; }
         
         public Animator EnemyAnimator { private set; get; }
+        private string _currentAnimation;
         private GameObject _player;
         private PlayerManager _playerManager;
         private NavMeshAgent _agent;
@@ -32,6 +33,15 @@ namespace Enemy
         {
             CurrentState = newState;
             _stateMachine.ChangeState(_states[(int)newState]);
+        }
+
+        public void ChangeAnimation(string newAnimation, float crossFadeTime = 0.2f)//애니메이션 변경
+        {
+            if (_currentAnimation != newAnimation)
+            {
+                _currentAnimation = newAnimation;
+                EnemyAnimator.CrossFade(newAnimation,crossFadeTime,-1,0);
+            }
         }
         private IEnumerator AttackDelay(float duration)
         {
@@ -82,8 +92,6 @@ namespace Enemy
             {
                 _agent.isStopped = true;
                 IsMove = false;
-            
-                //StartCoroutine(AttackDelay(1f));
             
                 if (InAttackDelay) return;
                 IsAttack = true;
