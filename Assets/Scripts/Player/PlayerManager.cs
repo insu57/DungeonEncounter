@@ -36,6 +36,7 @@ namespace Player
         private GameObject _equippedEquipment;
         private float _equipmentDefenseValue;
         private List<ItemEffect> _currentItemEffects;//다른 형태?(아이템별 효과 구분)
+        private bool _isRecoverEnergy = false;
         public float FinalAttackValue { get; private set; }
         
         public event Action<int> OnGetMoney;
@@ -49,6 +50,31 @@ namespace Player
             //+itemEffect...
         }
 
+        public float GetFinalAttackValue()
+        {
+            FinalAttackValue = _weaponAttackValue;
+            if (_playerControl.IsSkill)//skill damage x1.5 (...구조 개선 수정 필요)
+                FinalAttackValue *= 1.5f;
+            return FinalAttackValue;
+        }
+
+        public void UseSkill()
+        {
+            SetStat(PlayerStatTypes.Energy, GetStat(PlayerStatTypes.Energy) - 100f);
+        }
+        
+        private IEnumerator RecoveryEnergy()//에너지회복
+        {
+            _isRecoverEnergy = true;
+            yield return new WaitForSeconds(1f);
+            SetStat(PlayerStatTypes.Energy, GetStat(PlayerStatTypes.Energy) + 20f);
+            if (GetStat(PlayerStatTypes.Energy) >= GetStat(PlayerStatTypes.MaxEnergy))
+            {
+                SetStat(PlayerStatTypes.Energy, GetStat(PlayerStatTypes.MaxEnergy));
+            }
+            _isRecoverEnergy = false;
+        }
+        
         public void PlayerEquipWeapon(PlayerWeaponData data)
         {
             WeaponData = data;//제거?
@@ -222,6 +248,15 @@ namespace Player
                 { PlayerStatTypes.DefenseValue, 0f}
             };
             UpdateFinalAttackValue();//최종 공격력 갱신
+        }
+
+        private void Update()
+        {
+            if (GetStat(PlayerStatTypes.Energy) < GetStat(PlayerStatTypes.MaxEnergy) 
+                && _isRecoverEnergy == false)
+            {
+                StartCoroutine(RecoveryEnergy());//에너지 회복
+            }
         }
         
         private void OnTriggerEnter(Collider other)

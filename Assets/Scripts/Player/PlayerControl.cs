@@ -6,7 +6,7 @@ namespace Player
 {
     public enum PlayerStates
     {
-        Idle = 0, Run, Attack, Dodge, Global
+        Idle = 0, Run, Attack, Skill, Dodge, Global
     }
     public class PlayerControl : MonoBehaviour
     {
@@ -32,8 +32,8 @@ namespace Player
         private string _currentAnimation = "";
         public bool IsMove { private set; get; }
         public bool IsAttack { set; get; }
+        public bool IsSkill { set; get; }
         public bool IsDodge { private set; get; }
-        public bool IsUseItem { set; get; }
         public bool IsDamaged { set; get; }
         
         public void ChangeState(PlayerStates newState)
@@ -50,6 +50,10 @@ namespace Player
                 if (newAnimation == "Attack")
                 {
                     PlayerAnimator.Play("Attack");
+                }
+                else if (newAnimation == "Skill")
+                {
+                    PlayerAnimator.Play("Skill");
                 }
                 else
                 {
@@ -85,10 +89,11 @@ namespace Player
             PlayerAnimator = _animator;
             _characterController = GetComponent<CharacterController>();
             
-            _states = new State<PlayerControl>[5];
+            _states = new State<PlayerControl>[6];
             _states[(int)PlayerStates.Idle] = new Idle();
             _states[(int)PlayerStates.Run] = new Run();
             _states[(int)PlayerStates.Attack] = new Attack();
+            _states[(int)PlayerStates.Skill] = new Skill();
             _states[(int)PlayerStates.Dodge] = new Dodge();
             _states[(int)PlayerStates.Global] =  new StateGlobal();
             
@@ -98,9 +103,9 @@ namespace Player
             
             IsMove = false;
             IsAttack = false;
+            IsSkill = false;
             IsDodge = false;
             IsDamaged = false;
-            IsUseItem = false;
             
             _moveSpeed = 7f; //5f SO에서 가져오게 수정
             _dodgeDuration = 0.3f;
@@ -155,11 +160,16 @@ namespace Player
                     AudioManager.Instance.PlaySfx(AudioManager.Sfx.AttackVoice);
                 }
 
-                if (Input.GetMouseButtonDown(1)) //우클릭 스킬 공격
+                if (Input.GetMouseButtonDown(1) && _playerManager.GetStat(PlayerStatTypes.Energy) >= 100f)
+                    //우클릭 스킬 공격, 에너지 100이상일때만
                 {
+                    IsAttack = true;
+                    IsSkill = true;
                     _moveVector = Vector3.zero;
-                    
+                    _playerManager.UseSkill();//플레이어 스탯 에너지 소모
+                    //sound
                 }
+                
                 
                 _characterController.Move(_moveVector * (_moveSpeed * Time.deltaTime)); //Player Move 이동
 

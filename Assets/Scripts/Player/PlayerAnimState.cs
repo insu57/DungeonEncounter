@@ -51,7 +51,14 @@ namespace Player
         public override void Enter(PlayerControl player)
         {
             //player.PlayerAnimator.Play("Attack");
-            player.ChangeAnimation("Attack");
+            if (player.IsSkill)
+            {
+                player.ChangeAnimation("Skill");
+            }
+            else
+            {
+                player.ChangeAnimation("Attack");
+            }
         }
 
         public override void Execute(PlayerControl player)
@@ -61,6 +68,8 @@ namespace Player
             //Attack Animation End, State return to Idle. 공격 애니메이션 종료 시 상태종료 Idle로 돌아감
             {
                 player.IsAttack = false;
+                if(player.IsSkill) 
+                    player.IsSkill = false;
                 player.ChangeState(PlayerStates.Idle); 
             }
         }
@@ -71,6 +80,24 @@ namespace Player
         }
     }
 
+    public class Skill : State<PlayerControl>
+    {
+        public override void Enter(PlayerControl player)
+        {
+            
+        }
+
+        public override void Execute(PlayerControl player)
+        {
+            
+        }
+
+        public override void Exit(PlayerControl player)
+        {
+            
+        }
+    }
+    
     public class Dodge : State<PlayerControl>
     {
         public override void Enter(PlayerControl player)

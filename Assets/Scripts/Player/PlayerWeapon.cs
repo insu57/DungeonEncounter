@@ -14,6 +14,7 @@ namespace Player
 
         private void Awake()
         {
+            if (particleMainCircle == null) return;
             var particleMain = particleMainCircle.main;
             particleMain.startColor = EnumManager.RarityToColor(weaponData.Rarity);
             particleMain = particleLight.main;

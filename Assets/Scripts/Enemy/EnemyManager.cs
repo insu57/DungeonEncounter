@@ -140,7 +140,7 @@ namespace Enemy
             {
                 //데미지...현재 플레이어 공격력 기준... 공격별 데미지 배수, 스킬 추가 대응필요
                 //float damage = _playerManager.GetStat(PlayerStatTypes.AttackValue);
-                float damage = _playerManager.FinalAttackValue;
+                float damage = _playerManager.GetFinalAttackValue();
                 UpdateHealth(damage);
                 float health = GetStat(EnemyStatTypes.Health);
                 Debug.Log("Damage: "+damage+" LeftHealth: " + health);
