@@ -142,16 +142,7 @@ namespace Player
                         StartCoroutine(Dodge(dodgeTarget));
                     }
                 }
-            
-                if (_moveVector != Vector3.zero)
-                {
-                    _lookVector = _moveVector;//입력이 없을때 필요한 플레이어 방향 저장
-                    AudioManager.Instance.PlayFootstep(AudioManager.Footstep.RockFootstep); //Footstep Play
-                }
-                _lookRotation = Quaternion.LookRotation(_lookVector);
-                transform.rotation = Quaternion.Lerp(transform.rotation, _lookRotation, 8f * Time.deltaTime);
-                // lerp 부드러운 회전...8f:회전속도
-            
+                
                 if (Input.GetMouseButtonDown(0)) //Mouse left click Attack 마우스 좌클릭 공격
                 {
                     IsAttack = true;
@@ -169,6 +160,18 @@ namespace Player
                     _playerManager.UseSkill();//플레이어 스탯 에너지 소모
                     //sound
                 }
+                
+            
+                if (_moveVector != Vector3.zero)
+                {
+                    _lookVector = _moveVector;//입력이 없을때 필요한 플레이어 방향 저장
+                    AudioManager.Instance.PlayFootstep(AudioManager.Footstep.RockFootstep); //Footstep Play
+                }
+                _lookRotation = Quaternion.LookRotation(_lookVector);
+                transform.rotation = Quaternion.Lerp(transform.rotation, _lookRotation, 8f * Time.deltaTime);
+                // lerp 부드러운 회전...8f:회전속도
+            
+               
                 
                 
                 _characterController.Move(_moveVector * (_moveSpeed * Time.deltaTime)); //Player Move 이동

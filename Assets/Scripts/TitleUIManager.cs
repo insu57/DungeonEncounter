@@ -68,11 +68,12 @@ public class TitleUIManager : MonoBehaviour
 
     private void ChangeMainScene()
     {
-        SceneManager.LoadScene("MainScene");
+        //SceneManager.LoadScene("MainScene");
+        LoadingManager.LoadScene(LoadingManager.MainScene);
         AudioManager.Instance.PlayBGM(AudioManager.Bgm.MainBgm);
     }
 
-    private void GameQuit() //나중에 진짜 게임 종료로 수정
+    private void GameQuit() //나중에 종료로 수정
     {
         Debug.Log("Game Close");
     }
