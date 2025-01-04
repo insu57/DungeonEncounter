@@ -37,28 +37,30 @@ namespace Player
         private float _equipmentDefenseValue;
         private List<ItemEffect> _currentItemEffects;//다른 형태?(아이템별 효과 구분)
         private bool _isRecoverEnergy = false;
-        public float FinalAttackValue { get; private set; }
+        private float _finalAttackValue;
+        [SerializeField] private GameObject hitEffect;
+        [SerializeField] private GameObject swordAttackBox;
         
         public event Action<int> OnGetMoney;
         public event Action<GameObject> OnGetItem;
         public event Action<int> OnUseItemQuickSlot;
         
         private Camera _mainCamera;
-        public void UpdateFinalAttackValue()//각종 효과 구현 진행 필요.
+        private void UpdateFinalAttackValue()//각종 효과 구현 진행 필요.
         {
-            FinalAttackValue = _weaponAttackValue;
+            _finalAttackValue = _weaponAttackValue;
             //+itemEffect...
         }
 
         public float GetFinalAttackValue()
         {
-            FinalAttackValue = _weaponAttackValue;
+            _finalAttackValue = _weaponAttackValue;
             if (_playerControl.IsSkill)//skill damage x1.5 (...구조 개선 수정 필요)
-                FinalAttackValue *= 1.5f;
-            return FinalAttackValue;
+                _finalAttackValue *= 1.5f;
+            return _finalAttackValue;
         }
 
-        public void UseSkill()
+        public void UseSkill()//스킬사용 에너지 소모
         {
             SetStat(PlayerStatTypes.Energy, GetStat(PlayerStatTypes.Energy) - 100f);
         }
@@ -91,7 +93,6 @@ namespace Player
             if (data.AttackType == AttackType.Melee)//근접무기일시
             {
                 _equippedWeapon.AddComponent<PlayerMeleeAttack>();
-                _equippedWeapon.tag = "PlayerAttack";
             }
             _weaponAttackValue = data.AttackValue;
             SetStat(PlayerStatTypes.AttackValue, _weaponAttackValue);
@@ -215,6 +216,22 @@ namespace Player
                 
             }
         }
+
+        public void ActiveSwordAttackBox(bool isActive)//공격Collider활성
+        {
+            swordAttackBox.SetActive(isActive);
+        }
+
+        public void ActiveAttackBox(bool isActive)
+        {
+            //WeaponType...동적으로...
+            switch (_playerWeaponType)
+            {
+                case WeaponType.Sword:
+                    break;
+                
+            }
+        }
         
         private void Awake()
         {
@@ -299,8 +316,10 @@ namespace Player
         private IEnumerator Damaged(float duration)
         {
             _playerControl.IsDamaged = true;
+            hitEffect.SetActive(true);
             yield return new WaitForSeconds(duration);
             _playerControl.IsDamaged = false;
+            hitEffect.SetActive(false);
         }
     }
 }

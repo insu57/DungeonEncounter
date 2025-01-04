@@ -26,6 +26,8 @@ namespace Enemy
         private Dictionary<EnemyStatTypes, float> _enemyStats;
         private Collider _enemyCollider;
         public float Height { get; private set; }
+        
+        private FlashOnHit _flashOnHit;
         private WorldUIView _worldUIView;
         private EnemyWorldUIPresenter _uiPresenter;
         public event Action<float,float> OnHealthChanged;
@@ -131,6 +133,8 @@ namespace Enemy
             EnemyHealthBar healthBar = _worldUIView.InitEnemyHealthBar(this);
             _uiPresenter = new EnemyWorldUIPresenter(this, healthBar);
             //EnemyWorldUI초기화
+            
+            _flashOnHit = GetComponent<FlashOnHit>();
         }
         
         private void OnTriggerEnter(Collider other)
@@ -138,8 +142,7 @@ namespace Enemy
             if (other.CompareTag("PlayerAttack") && _enemyControl.WasDamaged == false 
                                                  && _enemyControl.IsDead == false)
             {
-                //데미지...현재 플레이어 공격력 기준... 공격별 데미지 배수, 스킬 추가 대응필요
-                //float damage = _playerManager.GetStat(PlayerStatTypes.AttackValue);
+                _flashOnHit.TriggerFlash();
                 float damage = _playerManager.GetFinalAttackValue();
                 UpdateHealth(damage);
                 float health = GetStat(EnemyStatTypes.Health);

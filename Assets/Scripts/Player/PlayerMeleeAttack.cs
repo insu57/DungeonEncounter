@@ -12,7 +12,7 @@ namespace Player
         {
             _playerControl = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControl>();
             _trailRenderer = GetComponentInChildren<TrailRenderer>(); //이펙트 수정 필요. 
-            _attackArea = GetComponent<CapsuleCollider>();
+            //_attackArea = GetComponent<CapsuleCollider>(); - 공격 Collider 별개로...
             
         }
 
@@ -21,12 +21,12 @@ namespace Player
         {
             if (_playerControl.IsAttack) //이펙트 시간...코루틴으로? 지금은 공격끝나면 바로 사라짐
             {
-                _attackArea.enabled = true;
+                //_attackArea.enabled = true;
                 _trailRenderer.enabled = true;
             }
             else
             {
-                _attackArea.enabled = false;
+                //_attackArea.enabled = false;
                 _trailRenderer.enabled = false;
             }
         }

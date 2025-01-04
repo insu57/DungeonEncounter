@@ -11,7 +11,7 @@ public class LoadingManager : MonoBehaviour
     public const string MainScene = "MainScene";
     public const string Stage1Scene = "Stage1Scene";
     public const string LoadingScene = "LoadingScene";
-    //?
+    
     
     private static string _nextScene;
     
@@ -50,7 +50,7 @@ public class LoadingManager : MonoBehaviour
                 else
                 {
                     progressBar.fillAmount = Mathf.Lerp(progressBar.fillAmount, 1f, timer);
-                    if (Mathf.Approximately(progressBar.fillAmount, 1.0f))
+                    if (progressBar.fillAmount >= 0.99f)
                     {
                         asyncLoad.allowSceneActivation = true;
                         yield break;

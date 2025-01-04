@@ -34,11 +34,14 @@ MonoBehaviour:
     - Assembly-CSharp
     - Assembly-CSharp-firstpass
     - AstarPathfindingProject
+    - CFXRDemo
+    - CFXRRuntime
     - Cinemachine
     - Drawing
     - Gentleland.SteampunkUI.DemoAndExample
     - Gentleland.Utils.SteampunkUI
     - IngameDebugConsole.Runtime
+    - KinoBloom.Runtime
     - PackageTools
     - Sirenix.OdinInspector.Modules.Unity.Addressables
     - Sirenix.OdinInspector.Modules.UnityLocalization
