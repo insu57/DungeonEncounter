@@ -13,6 +13,7 @@ namespace Enemy
         private Vector3 _startPos;
         private Vector3 _direction;
         private Rigidbody _rigidbody;
+        private TrailRenderer _trailRenderer;
         private float _speed;
         private EnemyRangedAttack _enemyRangedAttack;
 
@@ -33,6 +34,10 @@ namespace Enemy
             _rigidbody.velocity = Vector3.zero;
             _rigidbody.angularVelocity = Vector3.zero;
             //속력 초기화
+            
+            //TrailRenderer Init
+            _trailRenderer.Clear();
+            
             StartCoroutine(ReturnEnemyProjectile());
         }
 
@@ -46,6 +51,7 @@ namespace Enemy
     private void Awake()
         {
             _rigidbody = GetComponentInChildren<Rigidbody>();
+            _trailRenderer = GetComponentInChildren<TrailRenderer>();
         }
     
         private void FixedUpdate()

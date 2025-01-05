@@ -1,3 +1,5 @@
+using System;
+using Player;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,18 +9,31 @@ public class MainRoomPortal : MonoBehaviour
     [SerializeField] private Canvas worldCanvas;
     [SerializeField] private GameObject floatEnterStage;
     
-    private void OnTriggerStay(Collider other)
+    private PlayerManager _player;
+    private float _distance;
+    private void Awake()
+    {
+        _player = FindObjectOfType<PlayerManager>();
+    }
+
+    private void Update()
+    {
+        _distance = Vector3.Distance(transform.position, _player.transform.position);//1.5f이내 일 때 
+        if (_distance <= 1.5f)
+        {
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                LoadingManager.LoadScene(LoadingManager.Stage1Scene);
+            }
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
             floatEnterStage.SetActive(true);
             floatEnterStage.transform.position = transform.position + Vector3.back;
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-               //Stage Change(Scene)
-               //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-               LoadingManager.LoadScene(LoadingManager.Stage1Scene);
-            }
         }
     }
 

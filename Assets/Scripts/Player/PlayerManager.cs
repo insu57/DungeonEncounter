@@ -40,10 +40,13 @@ namespace Player
         private float _finalAttackValue;
         [SerializeField] private GameObject hitEffect;
         [SerializeField] private GameObject swordAttackBox;
-        
+        [SerializeField] private GameObject attackEffect;
+        [SerializeField] private GameObject skillEffect;
         public event Action<int> OnGetMoney;
         public event Action<GameObject> OnGetItem;
         public event Action<int> OnUseItemQuickSlot;
+        public event Action<FloatText, Vector3> OnFloatKey;
+        public event Action OnExitFloatKey;
         
         private Camera _mainCamera;
         private void UpdateFinalAttackValue()//각종 효과 구현 진행 필요.
@@ -92,7 +95,7 @@ namespace Player
             
             if (data.AttackType == AttackType.Melee)//근접무기일시
             {
-                _equippedWeapon.AddComponent<PlayerMeleeAttack>();
+                //_equippedWeapon.AddComponent<PlayerMeleeAttack>();
             }
             _weaponAttackValue = data.AttackValue;
             SetStat(PlayerStatTypes.AttackValue, _weaponAttackValue);
@@ -217,9 +220,10 @@ namespace Player
             }
         }
 
-        public void ActiveSwordAttackBox(bool isActive)//공격Collider활성
+        public void ActiveSwordAttackBox(bool isActive, bool isSkill)//공격Collider활성
         {
             swordAttackBox.SetActive(isActive);
+            SetAttackEffect(isSkill);
         }
 
         public void ActiveAttackBox(bool isActive)
@@ -231,6 +235,12 @@ namespace Player
                     break;
                 
             }
+        }
+
+        private void SetAttackEffect(bool isSkill)
+        {
+            attackEffect.SetActive(!isSkill);
+            skillEffect.SetActive(isSkill);
         }
         
         private void Awake()
@@ -246,12 +256,8 @@ namespace Player
             WeaponData = playerWeapon.WeaponData;
             _weaponAttackValue = WeaponData.AttackValue;//default weapon attack value
             _equippedWeapon = Instantiate(playerWeaponPrefab, playerRightHand.transform);
-            //if(WeaponData.Type == )
-            if (WeaponData.AttackType == AttackType.Melee)
-            {
-                _equippedWeapon.AddComponent<PlayerMeleeAttack>();
-                _equippedWeapon.tag = "PlayerAttack";
-            }
+            
+            
             //else...Ranged
            
             //PlayerJobData SO
@@ -265,6 +271,7 @@ namespace Player
                 { PlayerStatTypes.DefenseValue, 0f}
             };
             UpdateFinalAttackValue();//최종 공격력 갱신
+            
         }
 
         private void Update()
@@ -289,26 +296,53 @@ namespace Player
                 Debug.Log("Player Health: "+health);
                 StartCoroutine(Damaged(1f)); //피격 후 무적시간...1초
             }
+
+            if (other.gameObject.layer == (int)ItemLayers.Money)
+            {
+                GetItem(other.gameObject);
+            }
             
         }
 
         private void OnTriggerStay(Collider other)
         {
-            if (other.CompareTag("Item"))
+            //Distance로?(Vector...)
+            if (other.CompareTag("Item") && other.gameObject.layer != (int)ItemLayers.Money)
             {
                 if (other.gameObject.layer == (int)ItemLayers.Chest)
                 {
-                    if(Input.GetKeyDown(KeyCode.F))
-                        other.gameObject.GetComponent<Chest>().OpenChest(); //Float Image OPEN KEY 'F'
-                }
-                else if(other.gameObject.layer == (int)ItemLayers.Money)
-                {
-                    GetItem(other.gameObject);
+                    
+                    
+                    OnFloatKey?.Invoke(FloatText.Open, other.transform.position);
+                    if (Input.GetKeyDown(KeyCode.F))
+                    {
+                        other.gameObject.GetComponent<Chest>().OpenChest(); 
+                        OnExitFloatKey?.Invoke();
+                    }
+                       
                 }
                 else
                 {
-                    if(Input.GetKeyDown(KeyCode.F))
+                    //Debug.Log(other.transform.position);
+                    OnFloatKey?.Invoke(FloatText.Get, other.transform.position);
+                    if (Input.GetKeyDown(KeyCode.F))
+                    {
                         GetItem(other.gameObject);
+                        OnExitFloatKey?.Invoke();
+                    }
+                       
+                   
+                }
+            }
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag("Item"))
+            {
+                if (other.gameObject.layer != (int)ItemLayers.Money)
+                {
+                    OnExitFloatKey?.Invoke();
                 }
             }
         }

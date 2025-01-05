@@ -451,5 +451,19 @@ public class InventoryUIPresenter
     {
         _inventoryUIView.OnInventoryOpen -= HandleOnInventoryOpen;
         _inventoryUIView.OnSelectInventorySlot -= HandleSelectInventorySlot;
+        _inventoryUIView.OnCurrentWeapon -= HandleShowCurrentWeapon;
+        _inventoryUIView.OnCurrentEquipment -= HandleShowCurrentEquipment;
+        _inventoryUIView.OnQuickSlot1 -= HandleShowCurrentQuick1;
+        _inventoryUIView.OnQuickSlot2 -= HandleShowCurrentQuick2;
+      
+        _inventoryUIView.OnEquipButton -= HandleOnEquipButton;
+        _inventoryUIView.OnDropButton -= HandleOnDropButton;
+        _inventoryUIView.OnSetQuickSlot -= HandleOnSetQuickSlot;
+        
+        _playerManager.OnGetMoney -= HandleAddMoney;
+        _playerManager.OnGetItem -= HandleAddItem;
+        _playerManager.OnUseItemQuickSlot -= HandleOnUseItemQuickSlot;
+        _inventoryManager.OnUpdateMoneyAmount -= HandleUpdateTotalMoney;
+
     }
 }

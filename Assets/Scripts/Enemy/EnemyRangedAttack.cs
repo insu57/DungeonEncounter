@@ -53,6 +53,7 @@ namespace Enemy
                 _isShoot = true;
                 GameObject projectileObj = ObjectPoolingManager.Instance.GetObjectFromPool(_projectileKey,transform.position,transform.rotation);//ErrorMessage
                 EnemyProjectile projectile = projectileObj.GetComponent<EnemyProjectile>();
+                
                 projectile.enabled = true;
                 projectile.InitEnemyProjectile(this,_enemyManager.EnemyTargetPos());
             }

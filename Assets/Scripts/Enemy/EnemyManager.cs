@@ -51,7 +51,7 @@ namespace Enemy
         private void DropItem()
         {
             //Money min~max Consumable Chest
-            //드랍테이블 등 데이터 입력 방식 변경 필요(xml...)
+            //드랍테이블 등 데이터 입력 방식 변경 필요
             Vector3 pos = transform.position;
             //Money
             int moneyAmount = Random.Range(_dropTable.MoneyRangeStart, _dropTable.MoneyRangeEnd+1);
@@ -156,7 +156,7 @@ namespace Enemy
                     DropItem();//아이템 드랍
                     OnDeath?.Invoke();//사망이벤트
                     _enemyCollider.enabled = false;//충돌 비활성
-                    _uiPresenter.Dispose();
+                    _uiPresenter.Dispose();//Presenter Dispose
                 }
                 
                 StartCoroutine(Damaged(0.5f));

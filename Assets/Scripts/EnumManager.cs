@@ -68,7 +68,12 @@ public enum Rarity
 
 public enum PoolKeys
 {
-    Money, Chest01, Arrow01, HealthBar
+    Money, Chest01, Arrow01, HealthBar, FloatGetItem, FloatDamage
+}
+
+public enum FloatText
+{
+    Open, Get, Use
 }
 
 public static class EnumManager

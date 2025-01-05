@@ -129,7 +129,7 @@ namespace Player
             _vAxis = Input.GetAxisRaw("Vertical");
             _moveVector = new Vector3(_hAxis, 0, _vAxis).normalized;
             
-            _playerManager.ActiveSwordAttackBox(IsAttack);
+            _playerManager.ActiveSwordAttackBox(IsAttack, IsSkill);
             
             if (!IsAttack && !IsDodge) //Take Action...movement restriction 공격 등 행동 시 이동 제한 
             {

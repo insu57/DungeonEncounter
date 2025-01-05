@@ -66,7 +66,9 @@ namespace Player
         public override void Execute(PlayerControl player)
         {
             float animTime = Mathf.Repeat(player.PlayerAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime,1.0f);    
+            //player.PlayerAnimator.GetCurrentAnimatorStateInfo(0).
             if ( animTime >= 0.98f && player.IsAttack) //애니메이션 종료 체크//개선필요?
+                //끊길때가... 어떻게 개선??? behaviour script?
             //Attack Animation End, State return to Idle. 공격 애니메이션 종료 시 상태종료 Idle로 돌아감
             {
                 player.IsAttack = false;
