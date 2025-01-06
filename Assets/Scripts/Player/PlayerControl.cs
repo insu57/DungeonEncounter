@@ -6,7 +6,7 @@ namespace Player
 {
     public enum PlayerStates
     {
-        Idle = 0, Run, Attack, Skill, Dodge, Global
+        Idle = 0, Run, Attack, Dodge, Global
     }
     public class PlayerControl : MonoBehaviour
     {
@@ -23,6 +23,9 @@ namespace Player
         private float _dodgeDistance;
         private float _dodgeCoolTime;
         private bool _isDodgeCool;
+        
+        private bool _isAttackCool;//공격 등 입력 쿨타임
+        private float _isAttackCoolTime;
         
         private State<PlayerControl>[] _states;
         private StateMachine<PlayerControl> _stateMachine;
@@ -46,10 +49,10 @@ namespace Player
             //애니메이션 변경
             if (_currentAnimation != newAnimation)
             {
-                _currentAnimation = newAnimation;
+                
                 if (newAnimation == "Attack")
                 {
-                    PlayerAnimator.Play("Attack");
+                    PlayerAnimator.Play("Attack",0,0f);
                 }
                 else if (newAnimation == "Skill")
                 {
@@ -57,9 +60,11 @@ namespace Player
                 }
                 else
                 {
+                    //crossFade전환문제
+                    //PlayerAnimator.Play(newAnimation,0,0f);
                     PlayerAnimator.CrossFade(newAnimation, crossFadeTime, -1, 0);
                 }
-               
+                _currentAnimation = newAnimation;
             }
         }
         private IEnumerator Dodge(Vector3 dodgeTarget) //회피 계산
@@ -81,6 +86,13 @@ namespace Player
             yield return new WaitForSeconds(_dodgeCoolTime); //회피 쿨타임
             _isDodgeCool = false;
         }
+
+        private IEnumerator AttackCool()
+        {
+            _isAttackCool = true;
+            yield return new WaitForSeconds(_isAttackCoolTime);
+            _isAttackCool = false;
+        }
         
         private void Awake()
         {
@@ -89,11 +101,10 @@ namespace Player
             PlayerAnimator = _animator;
             _characterController = GetComponent<CharacterController>();
             
-            _states = new State<PlayerControl>[6];
+            _states = new State<PlayerControl>[5];
             _states[(int)PlayerStates.Idle] = new Idle();
             _states[(int)PlayerStates.Run] = new Run();
             _states[(int)PlayerStates.Attack] = new Attack();
-            _states[(int)PlayerStates.Skill] = new Skill();
             _states[(int)PlayerStates.Dodge] = new Dodge();
             _states[(int)PlayerStates.Global] =  new StateGlobal();
             
@@ -112,6 +123,9 @@ namespace Player
             _dodgeDistance = 2.5f;
             _dodgeCoolTime = 0.5f;
             _isDodgeCool = false;
+            
+            _isAttackCool = false;
+            _isAttackCoolTime = 0.2f;
         
             _lookRotation = Quaternion.LookRotation(Vector3.back);
             _lookVector = Vector3.back;
@@ -144,21 +158,26 @@ namespace Player
                         StartCoroutine(Dodge(dodgeTarget));
                     }
                 }
-                
-                if (Input.GetMouseButtonDown(0)) //Mouse left click Attack 마우스 좌클릭 공격
+
+                if (Input.GetMouseButtonDown(0) && !_isAttackCool) //Mouse left click Attack 마우스 좌클릭 공격
                 {
-                    IsAttack = true;
+                    //StartCoroutine(AttackCool());
                     _moveVector = Vector3.zero; //공격 시 정지
+                    IsAttack = true;
+
                     AudioManager.Instance.PlaySfx(AudioManager.Sfx.AttackSfx); //Sfx Play
                     AudioManager.Instance.PlaySfx(AudioManager.Sfx.AttackVoice);
+                    //????
+
                 }
 
-                if (Input.GetMouseButtonDown(1) && _playerManager.GetStat(PlayerStatTypes.Energy) >= 100f)
+                if (Input.GetMouseButtonDown(1) && _playerManager.GetStat(PlayerStatTypes.Energy) >= 100f
+                                                && !_isAttackCool)
                     //우클릭 스킬 공격, 에너지 100이상일때만
                 {
+                    _moveVector = Vector3.zero;
                     IsAttack = true;
                     IsSkill = true;
-                    _moveVector = Vector3.zero;
                     _playerManager.UseSkill();//플레이어 스탯 에너지 소모
                     //sound
                 }

@@ -8,7 +8,6 @@ namespace Player
 
         public override void Enter(PlayerControl player)
         {
-            //player.PlayerAnimator.Play("Idle");
             player.ChangeAnimation("Idle");
         }
 
@@ -30,7 +29,6 @@ namespace Player
     {
         public override void Enter(PlayerControl player)
         {
-            //player.PlayerAnimator.Play("Run");
             player.ChangeAnimation("Run");
         }
 
@@ -50,8 +48,10 @@ namespace Player
 
     public class Attack : State<PlayerControl>
     {
+        private float _startTime;
         public override void Enter(PlayerControl player)
         {
+            _startTime = Time.time;//Enter했을 때 시간
             //player.PlayerAnimator.Play("Attack");
             if (player.IsSkill)
             {
@@ -65,41 +65,23 @@ namespace Player
 
         public override void Execute(PlayerControl player)
         {
-            float animTime = Mathf.Repeat(player.PlayerAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime,1.0f);    
-            //player.PlayerAnimator.GetCurrentAnimatorStateInfo(0).
-            if ( animTime >= 0.98f && player.IsAttack) //애니메이션 종료 체크//개선필요?
-                //끊길때가... 어떻게 개선??? behaviour script?
-            //Attack Animation End, State return to Idle. 공격 애니메이션 종료 시 상태종료 Idle로 돌아감
+            var animatorState = player.PlayerAnimator.GetCurrentAnimatorStateInfo(0);
+            float animTime = Time.time - _startTime; //현재 애니메이션 시간
+            bool isAttack = player.IsAttack && (animatorState.IsName("Attack") || animatorState.IsName("Skill"));
+            if ( animTime >= animatorState.length && isAttack)
             {
-                player.IsAttack = false;
-                if(player.IsSkill) 
-                    player.IsSkill = false;
+                //애니메이션 길이(시간)을 넘으면 Idle
                 player.ChangeState(PlayerStates.Idle); 
             }
         }
 
         public override void Exit(PlayerControl player)
         {
-           
+            player.IsAttack = false;
+            if(player.IsSkill) 
+                player.IsSkill = false;
         }
-    }
-
-    public class Skill : State<PlayerControl>
-    {
-        public override void Enter(PlayerControl player)
-        {
-            
-        }
-
-        public override void Execute(PlayerControl player)
-        {
-            
-        }
-
-        public override void Exit(PlayerControl player)
-        {
-            
-        }
+        
     }
     
     public class Dodge : State<PlayerControl>

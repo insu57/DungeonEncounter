@@ -10,7 +10,7 @@ public class GameManager : Singleton<GameManager> //Singleton Game Manager ì‹±ê¸
     public bool GamePaused { get; private set; }
     private PlayerManager _playerManager;
     private bool _playerDead;
-    
+
     public void TogglePause()
     {
         GamePaused = !GamePaused;
@@ -36,6 +36,7 @@ public class GameManager : Singleton<GameManager> //Singleton Game Manager ì‹±ê¸
             Time.timeScale = 1f;
             DOTween.PlayAll();
         }
+        
         
     }
     
