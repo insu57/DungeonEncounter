@@ -18,9 +18,10 @@ public class UIManager : MonoBehaviour //UI제어
     private PlayerUIPresenter _playerUIPresenter;
     private InventoryUIPresenter _inventoryUIPresenter;
     private PlayerWorldUIPresenter _playerWorldUIPresenter;
-    
+
     private void Awake()
     {
+        //base.Awake();
         _playerManager = FindObjectOfType<PlayerManager>();
         _inventoryManager = FindObjectOfType<InventoryManager>();
         _playerUIView = GetComponent<PlayerUIView>();

@@ -45,7 +45,7 @@ namespace Enemy
         {
             yield return new WaitForSeconds(2f);
             ObjectPoolingManager.Instance.ReturnToPool(_projectileKey, gameObject);
-            //null check할 때 Debug.Log때문(실질적으로 비용이 높지않음)
+            //비용 높음 -> null check할 때 Debug.Log때문(실제로 많이 호출x)
         }
 
     private void Awake()
@@ -70,7 +70,8 @@ namespace Enemy
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Player") || other.CompareTag("Floor"))//Player or Floor 충돌시
+            if (other.CompareTag("Player") || other.CompareTag("Floor") 
+                                           || other.CompareTag("Wall"))//Player or Wall,Floor 충돌시
             {
                 ObjectPoolingManager.Instance.ReturnToPool(_projectileKey,gameObject);//비활성
             }

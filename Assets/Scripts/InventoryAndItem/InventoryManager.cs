@@ -152,9 +152,11 @@ public class InventoryManager : MonoBehaviour
         _moneyAmount += amount;
         OnUpdateMoneyAmount?.Invoke(_moneyAmount);//총 보유량 갱신 이벤트
     }
-    
+
     private void Awake()
     {
+        //base.Awake();
+        
         weaponInventoryCount = 0;
         weaponInventoryMaxCount = 20;
         

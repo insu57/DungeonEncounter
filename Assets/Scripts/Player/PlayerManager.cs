@@ -17,7 +17,7 @@ namespace Player
         AttackValue, DefenseValue,
     }
 
-    public class PlayerManager : MonoBehaviour
+    public class PlayerManager : Singleton<PlayerManager>
     {
         [SerializeField]private PlayerJobData playerJobData;
         private PlayerControl _playerControl;
@@ -242,9 +242,10 @@ namespace Player
             attackEffect.SetActive(!isSkill);
             skillEffect.SetActive(isSkill);
         }
-        
-        private void Awake()
+
+        public override void Awake()
         {
+            base.Awake();
             
             _playerControl = GetComponent<PlayerControl>();
             _mainCamera = Camera.main;

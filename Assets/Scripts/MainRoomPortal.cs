@@ -33,7 +33,7 @@ public class MainRoomPortal : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             floatEnterStage.SetActive(true);
-            floatEnterStage.transform.position = transform.position + Vector3.back;
+            floatEnterStage.transform.position = transform.position;
         }
     }
 
