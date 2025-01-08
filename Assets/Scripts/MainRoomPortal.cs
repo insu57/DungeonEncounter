@@ -24,6 +24,7 @@ public class MainRoomPortal : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.F))
             {
                 LoadingManager.LoadScene(LoadingManager.Stage1Scene);
+                floatEnterStage.SetActive(false);
             }
         }
     }

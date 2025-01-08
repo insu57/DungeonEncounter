@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Enemy;
 using Scriptable_Objects;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Serialization;
 
 namespace Player
@@ -272,6 +272,7 @@ namespace Player
                 { PlayerStatTypes.DefenseValue, 0f}
             };
             UpdateFinalAttackValue();//최종 공격력 갱신
+
             
         }
 
@@ -282,6 +283,8 @@ namespace Player
             {
                 StartCoroutine(RecoveryEnergy());//에너지 회복
             }
+            
+            
         }
         
         private void OnTriggerEnter(Collider other)
