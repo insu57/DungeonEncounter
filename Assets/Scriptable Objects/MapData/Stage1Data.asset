@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30da11f4c847fef45811605708b2cb31, type: 3}
+  m_Name: Stage1Data
+  m_EditorClassIdentifier: 
+  stageName: Stage1
+  roomNumber: 8
+  enemies:
+  - {fileID: 3362123586102918478, guid: 1cf146b6be4e627449a210e6576598fd, type: 3}
+  - {fileID: 3362123586102918478, guid: 88accb75044e5fa4ca6714c76970d718, type: 3}
+  boss:
+  - {fileID: 0}

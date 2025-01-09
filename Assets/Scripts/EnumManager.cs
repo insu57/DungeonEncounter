@@ -76,6 +76,11 @@ public enum FloatText
     Open, Get, Use
 }
 
+public enum RoomType
+{
+    NormalRoom, StartRoom, EndRoom, ChestRoom, NpcRoom, BossRoom,
+}
+
 public static class EnumManager
 {
     public static string RarityToString(Rarity rarity)
