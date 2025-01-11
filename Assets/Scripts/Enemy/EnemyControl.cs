@@ -49,6 +49,12 @@ namespace Enemy
             yield return new WaitForSeconds(duration);
             InAttackDelay = false;
         }
+
+        private void OnEnable()
+        {
+            ChangeState(EnemyStates.Idle);
+        }
+
         private void Awake()
         {
             _player = GameObject.FindGameObjectWithTag("Player");

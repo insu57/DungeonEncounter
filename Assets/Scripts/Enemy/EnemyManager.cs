@@ -28,11 +28,13 @@ namespace Enemy
         public float Height { get; private set; }
         
         private FlashOnHit _flashOnHit;
+        [SerializeField] private ParticleSystem deathSmokeParticle;
+        //할당방식 변경필요?
         private WorldUIView _worldUIView;
         private EnemyWorldUIPresenter _uiPresenter;
         public event Action<float,float> OnHealthChanged;
         public event Action OnDeath;
-        private float GetStat(EnemyStatTypes type)
+        public float GetStat(EnemyStatTypes type)
         {
             return _enemyStats.GetValueOrDefault(type, 0);
         }
@@ -47,6 +49,31 @@ namespace Enemy
         {
             return _playerManager.transform.position;
         }
+
+        public void InitEnemySpawn()
+        {
+            EnemyHealthBar healthBar = _worldUIView.InitEnemyHealthBar(this);
+            _uiPresenter = new EnemyWorldUIPresenter(this, healthBar);
+            //EnemyWorldUI초기화
+        }
+        
+        private void EnemyDeath()
+        {
+            _enemyControl.IsAttack = false;
+            _enemyControl.IsMove = false;
+            _enemyControl.IsDead = true;
+            DropItem();//아이템 드랍
+            OnDeath?.Invoke();//사망이벤트
+            _enemyCollider.enabled = false;//충돌 비활성
+            //사망 이펙트 추가
+            deathSmokeParticle.Play();
+            
+            _uiPresenter.Dispose();//Presenter Dispose
+            ObjectPoolingManager.Instance.ReturnToPool(data.EnemyKey, gameObject);
+            //
+        }
+        
+        
         
         private void DropItem()
         {
@@ -130,9 +157,6 @@ namespace Enemy
             };
             
             _worldUIView = FindObjectOfType<WorldUIView>();
-            EnemyHealthBar healthBar = _worldUIView.InitEnemyHealthBar(this);
-            _uiPresenter = new EnemyWorldUIPresenter(this, healthBar);
-            //EnemyWorldUI초기화
             
             _flashOnHit = GetComponent<FlashOnHit>();
         }
@@ -146,20 +170,16 @@ namespace Enemy
                 float damage = _playerManager.GetFinalAttackValue();
                 UpdateHealth(damage);
                 float health = GetStat(EnemyStatTypes.Health);
-                Debug.Log("Damage: "+damage+" LeftHealth: " + health);
+        
+                StartCoroutine(Damaged(0.5f));//피격무적시간
                 //death
                 if (health <= 0)
                 {
-                    _enemyControl.IsAttack = false;
-                    _enemyControl.IsMove = false;
-                    _enemyControl.IsDead = true;
-                    DropItem();//아이템 드랍
-                    OnDeath?.Invoke();//사망이벤트
-                    _enemyCollider.enabled = false;//충돌 비활성
-                    _uiPresenter.Dispose();//Presenter Dispose
+                    EnemyDeath();
+                    StopAllCoroutines();
                 }
                 
-                StartCoroutine(Damaged(0.5f));
+               
             }
         }
 

@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IStageManager
 {
-   public void SpawnEnemy();
+   public void SpawnEnemy(RoomManager room);
 }

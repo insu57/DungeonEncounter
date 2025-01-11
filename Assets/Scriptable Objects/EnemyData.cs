@@ -20,7 +20,7 @@ namespace Scriptable_Objects
         [SerializeField] private float attackStartFrame; //공격 판정 시작
         [SerializeField] private float attackEndFrame; //공격 판정 끝
         [SerializeField] private EnemyDropTable dropTable;
-        
+        [SerializeField] private PoolKeys enemyKey;
         public string EnemyName => enemyName;
         public string Description => description;
         public string Type => type;
@@ -34,5 +34,6 @@ namespace Scriptable_Objects
         public float AttackStartFrame => attackStartFrame;
         public float AttackEndFrame => attackEndFrame;
         public EnemyDropTable DropTable => dropTable;
+        public PoolKeys EnemyKey => enemyKey;
     }
 }

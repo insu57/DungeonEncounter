@@ -16,7 +16,7 @@ public class ObjectPoolingManager : Singleton<ObjectPoolingManager>
         public int maxSize;
     }
     
-    //추후 개선-(Data 받아와서...)//현재: Inspector에서 받아오기(SerializeField). -> ScriptableObject?(Xml등에서 받아옴)
+    //현재: Inspector에서 받아오기(SerializeField). -> ScriptableObject?(Xml등에서 받아옴)
     [SerializeField] private List<PoolPrefab> poolPrefabs = new List<PoolPrefab>();
     private readonly Dictionary<PoolKeys, ObjectPool<GameObject>> _pools = new Dictionary<PoolKeys, ObjectPool<GameObject>>();
    
@@ -47,9 +47,9 @@ public class ObjectPoolingManager : Singleton<ObjectPoolingManager>
                 pool.Release(obj);
             }
         }
-        
-        
     }
+    
+    
 
     private GameObject CreatePoolItem(GameObject prefab)
     {

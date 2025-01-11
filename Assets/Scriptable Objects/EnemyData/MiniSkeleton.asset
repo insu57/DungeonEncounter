@@ -19,8 +19,10 @@ MonoBehaviour:
   maxHealth: 50
   damage: 20
   projectilePrefab: {fileID: 0}
+  projectileKey: 0
   projectileSpeed: 0
   attackFullFrame: 64
   attackStartFrame: 12
   attackEndFrame: 24
   dropTable: {fileID: 11400000, guid: d7d7f1bd61a51bd4fbb5192562d5df17, type: 2}
+  enemyKey: 5

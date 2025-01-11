@@ -25,3 +25,4 @@ MonoBehaviour:
   attackStartFrame: 13
   attackEndFrame: 14
   dropTable: {fileID: 11400000, guid: b986fcabf37fbcd4d9d9467d788178b0, type: 2}
+  enemyKey: 6

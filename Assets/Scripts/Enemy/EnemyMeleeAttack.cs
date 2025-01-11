@@ -30,7 +30,7 @@ namespace Enemy
             _attackStartTime = _data.AttackStartFrame / _data.AttackFullFrame;
             _attackEndTime = _data.AttackEndFrame / _data.AttackFullFrame;
             _damage = _data.Damage;
-            Debug.Log(_damage);
+            //Debug.Log(_damage);
         }
     
         private void Update()

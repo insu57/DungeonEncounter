@@ -17,6 +17,8 @@ namespace UI
         {
             _enemy = enemy;
             _healthBar = healthBar;
+            _healthBar.UpdateHealthBar(_enemy.GetStat(EnemyStatTypes.Health), 
+                _enemy.GetStat(EnemyStatTypes.MaxHealth));//체력바 초기화
             _enemy.OnHealthChanged += HandleEnemyHealthChange;
             _enemy.OnDeath += HandleEnemyDeath;
         }
