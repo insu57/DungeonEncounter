@@ -11,6 +11,7 @@ public class FlashOnHit : MonoBehaviour
     private Color _flashColor = Color.red;
     private float _flashDuration = 0.2f;
     //null???
+   
     private void Awake()
     {
         _renderers = GetComponentsInChildren<Renderer>();
@@ -21,6 +22,16 @@ public class FlashOnHit : MonoBehaviour
         _originalColor = _materials[0].color;
     }
 
+    private void OnEnable()
+    {
+        foreach (var mat in _materials)
+        {
+            mat.color = _originalColor;
+        }
+    }
+
+    
+    
     public void TriggerFlash()
     {
         StopAllCoroutines();

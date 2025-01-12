@@ -7,36 +7,26 @@ using UnityEngine.Serialization;
 
 public class ObjectPoolingManager : Singleton<ObjectPoolingManager>
 {
-    [Serializable]
-    public class PoolPrefab
-    {
-        public PoolKeys key;
-        public GameObject prefab;
-        public int defaultCapacity;
-        public int maxSize;
-    }
-    
-    //현재: Inspector에서 받아오기(SerializeField). -> ScriptableObject?(Xml등에서 받아옴)
-    [SerializeField] private List<PoolPrefab> poolPrefabs = new List<PoolPrefab>();
     private readonly Dictionary<PoolKeys, ObjectPool<GameObject>> _pools = new Dictionary<PoolKeys, ObjectPool<GameObject>>();
-   
-    
-    private void InitPools()
+
+    public void InitStagePools(List<PoolingObject> poolingObjects)
     {
-        foreach (var poolPrefab in poolPrefabs)
+        _pools.Clear();
+        
+        foreach (var poolingObject in poolingObjects)
         {
             ObjectPool<GameObject> pool = new ObjectPool<GameObject>(
-                createFunc: () => CreatePoolItem(poolPrefab.prefab),
+                createFunc: () => CreatePoolItem(poolingObject.prefab),
                 actionOnGet: OnTakeFromPool,
                 actionOnRelease: OnReturnToPool,
                 actionOnDestroy: OnDestroyPoolObject,
-                defaultCapacity: poolPrefab.defaultCapacity,
-                maxSize: poolPrefab.maxSize
-                );
-            _pools.Add(poolPrefab.key, pool);
+                defaultCapacity: poolingObject.defaultCapacity,
+                maxSize: poolingObject.maxSize
+            );
+            _pools.Add(poolingObject.poolKey, pool);
             
             var tempList = new List<GameObject>();
-            for (int i = 0; i < poolPrefab.defaultCapacity; i++)
+            for (int i = 0; i < poolingObject.defaultCapacity; i++)
             {
                 var obj = pool.Get();
                 tempList.Add(obj);
@@ -48,7 +38,6 @@ public class ObjectPoolingManager : Singleton<ObjectPoolingManager>
             }
         }
     }
-    
     
 
     private GameObject CreatePoolItem(GameObject prefab)
@@ -101,6 +90,6 @@ public class ObjectPoolingManager : Singleton<ObjectPoolingManager>
     public override void Awake()
     {
         base.Awake();
-        InitPools();
+        //InitPools();
     }
 }

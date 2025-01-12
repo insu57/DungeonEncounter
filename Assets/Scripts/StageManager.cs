@@ -89,6 +89,7 @@ public class StageManager : MonoBehaviour
     {
         _roomNumber = stageData.GetRoomNumber(); //StageData 받아오기
         _enemyKeys = stageData.GetEnemies();
+        ObjectPoolingManager.Instance.InitStagePools(stageData.GetPoolingObjects());
     }
     
     private void Start()

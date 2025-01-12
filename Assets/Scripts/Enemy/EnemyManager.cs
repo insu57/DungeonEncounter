@@ -67,12 +67,18 @@ namespace Enemy
             _enemyCollider.enabled = false;//충돌 비활성
             //사망 이펙트 추가
             deathSmokeParticle.Play();
-            
             _uiPresenter.Dispose();//Presenter Dispose
-            ObjectPoolingManager.Instance.ReturnToPool(data.EnemyKey, gameObject);
-            //
+
+            StartCoroutine(EnemyReturnToPool(1f));
         }
-        
+
+        private IEnumerator EnemyReturnToPool(float waitTime)
+        {
+            yield return new WaitForSeconds(waitTime);
+            Debug.Log("Enemy Death");
+            ObjectPoolingManager.Instance.ReturnToPool(data.EnemyKey, gameObject);
+            StopAllCoroutines();
+        }
         
         
         private void DropItem()
@@ -139,7 +145,13 @@ namespace Enemy
                 }
             }
         }
-        
+
+        private void OnEnable()
+        {
+            _enemyCollider.enabled = true;
+            _enemyStats[EnemyStatTypes.Health] = GetStat(EnemyStatTypes.MaxHealth);
+        }
+
         private void Awake()
         {
             _enemyControl = GetComponent<EnemyControl>();
@@ -176,7 +188,6 @@ namespace Enemy
                 if (health <= 0)
                 {
                     EnemyDeath();
-                    StopAllCoroutines();
                 }
                 
                
