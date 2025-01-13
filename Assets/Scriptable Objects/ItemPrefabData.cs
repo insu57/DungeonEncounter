@@ -28,10 +28,23 @@ public class ItemPrefabData : ScriptableObject
         public GameObject prefab;
     }
 
+    [Serializable]
+    public class ItemPrefabMapping
+    {
+        public IItemData ItemData;
+        public GameObject prefab;
+    }
+    
     public List<WeaponItemMapping> weaponPrefabs;
     public List<EquipmentItemMapping> equipmentPrefabs;
     public List<ConsumableItemMapping> consumablePrefabs;
+    public List<ItemPrefabMapping> itemPrefabs;
 
+    public GameObject GetItemPrefab(IItemData itemData)
+    {
+        return itemPrefabs.Find(x => x.ItemData == itemData)?.prefab;
+    }
+    
     public GameObject GetWeaponPrefab(PlayerWeaponData data)
     {
         return weaponPrefabs.Find(x => x.weaponData == data)?.prefab;

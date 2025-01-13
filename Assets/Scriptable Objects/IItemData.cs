@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,5 +13,5 @@ public interface IItemData
     public Rarity GetRarity();
     public Sprite GetIcon();
     public ItemEffect[] GetEffects();
-    
+    public GameObject GetItemPrefab();
 }

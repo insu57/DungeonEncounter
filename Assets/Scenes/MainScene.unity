@@ -20948,7 +20948,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e2bbef214087a346a9c95068fd25588, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemPrefabData: {fileID: 11400000, guid: ff1fc2cb9f880ea48835b59c97ead294, type: 2}
 --- !u!4 &1452341604
 Transform:
   m_ObjectHideFlags: 0
@@ -21018,35 +21017,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fb0d25eb6f9a4448be14789ec5e047b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poolPrefabs:
-  - key: 2
-    prefab: {fileID: 5422603927206643936, guid: 7763080958edc594f92566e5b5fa1c85, type: 3}
-    defaultCapacity: 20
-    maxSize: 100
-  - key: 0
-    prefab: {fileID: 9051860450588113054, guid: 4b9e9b78378f846459138cedfe5a51f1, type: 3}
-    defaultCapacity: 20
-    maxSize: 100
-  - key: 1
-    prefab: {fileID: 8547558045587734986, guid: 34ca5d5f1125faf46a8c60b7f34a2ae1, type: 3}
-    defaultCapacity: 20
-    maxSize: 100
-  - key: 3
-    prefab: {fileID: 2344367398292239192, guid: 0d016ae4dc251744ab08a60d7c5a6822, type: 3}
-    defaultCapacity: 20
-    maxSize: 100
-  - key: 4
-    prefab: {fileID: 6848278529188271849, guid: 4e5a32560ceec234f8da6a2ce349f267, type: 3}
-    defaultCapacity: 20
-    maxSize: 100
-  - key: 5
-    prefab: {fileID: 3362123586102918478, guid: 1cf146b6be4e627449a210e6576598fd, type: 3}
-    defaultCapacity: 5
-    maxSize: 20
-  - key: 6
-    prefab: {fileID: 3362123586102918478, guid: 88accb75044e5fa4ca6714c76970d718, type: 3}
-    defaultCapacity: 5
-    maxSize: 20
 --- !u!1 &1464705173
 GameObject:
   m_ObjectHideFlags: 0

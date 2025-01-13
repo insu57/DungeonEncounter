@@ -191,9 +191,6 @@ namespace Player
                 _lookRotation = Quaternion.LookRotation(_lookVector);
                 transform.rotation = Quaternion.Lerp(transform.rotation, _lookRotation, 8f * Time.deltaTime);
                 // lerp 부드러운 회전...8f:회전속도
-            
-               
-                
                 
                 _characterController.Move(_moveVector * (_moveSpeed * Time.deltaTime)); //Player Move 이동
 

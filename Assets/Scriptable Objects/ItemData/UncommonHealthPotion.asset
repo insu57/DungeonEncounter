@@ -26,3 +26,4 @@ MonoBehaviour:
     tickSecond: 0
     effectType: 0
   icon: {fileID: 21300000, guid: 3fb5a077320e89d4e97af9a20cf8a6e5, type: 3}
+  prefab: {fileID: 6877928846283078665, guid: 633cb1ebbec254849aa77967842467fd, type: 3}

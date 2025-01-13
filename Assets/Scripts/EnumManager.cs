@@ -100,12 +100,12 @@ public static class EnumManager
     {
         return rarity switch
         {
-            Rarity.Common => Color.gray,
+            Rarity.Common => Color.white,
             Rarity.Uncommon => Color.green,
             Rarity.Rare => Color.blue,
             Rarity.Epic => Color.magenta,
             Rarity.Legendary => Color.yellow,
-            _ => Color.white
+            _ => Color.gray
         };
     }
     

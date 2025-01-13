@@ -9,47 +9,38 @@ public class InventoryManager : MonoBehaviour
 {
     private int _weaponID = 1;//초기 ID 1부터
     private int _equipmentID = 1;
-    public class WeaponDataWithID
-    {
-        public PlayerWeaponData ItemData;
-        public int WeaponID;
-    }
 
-    public class EquipmentDataWithID
+    public class ItemDataWithID
     {
-        public PlayerEquipmentData ItemData;
-        public int EquipmentID;
-    }
-    public class ConsumableDataWithQuantity
-    {
-        public ConsumableItemData ItemData;
-        public int Quantity;
+        public ItemTypes ItemType;
+        public IItemData ItemData;
+        public GameObject ItemPrefab;
+        public int ItemID = -1;
+        public int ItemQuantity = 1;
     }
 
     public class SelectedItemData//현재 선택한 아이템
     {
         public ItemTypes ItemType; //아이템 타입
         public bool IsEquipped; //장착여부
-        public WeaponDataWithID Weapon; //타입에 따라 불러올 데이터
-        public EquipmentDataWithID Equipment;
-        public ConsumableDataWithQuantity Consumable;
+        public ItemDataWithID ItemDataWithID;
     }
     
     private PlayerManager _playerManager;
-    [SerializeField] private ItemPrefabData itemPrefabData; //아이템데이터-프리팹 매핑
-    public ItemPrefabData ItemPrefabData => itemPrefabData;
+    //[SerializeField] private ItemPrefabData itemPrefabData; //아이템데이터-프리팹 매핑
+    //public ItemPrefabData ItemPrefabData => itemPrefabData;
     public SelectedItemData SelectedItem;
     
     private int _moneyAmount;
     //CurrentItem의 IsEquipped==false -> 현재 장착된 것이 없음.
-    public WeaponDataWithID EquippedWeaponData { private set; get; }
-    public EquipmentDataWithID EquippedEquipmentData { private set; get; }
-    public ConsumableDataWithQuantity ItemQuickSlot1 { private set; get; }
-    public ConsumableDataWithQuantity ItemQuickSlot2 { private set; get; }
+    public ItemDataWithID EquippedWeaponData { private set; get; }
+    public ItemDataWithID EquippedEquipmentData { private set; get; }
+    public ItemDataWithID ItemQuickSlot1Data { private set; get; }
+    public ItemDataWithID ItemQuickSlot2Data { private set; get; }
     
-    public List<WeaponDataWithID> WeaponDataList { get; } = new List<WeaponDataWithID>();
-    public List<EquipmentDataWithID> EquipmentDataList { get; } = new List<EquipmentDataWithID>();
-    public List<ConsumableDataWithQuantity> ConsumableDataList { get; } = new List<ConsumableDataWithQuantity>();
+    public List<ItemDataWithID> WeaponDataList{get; private set;} = new List<ItemDataWithID>();
+    public List<ItemDataWithID> EquipmentDataList{get; private set;} = new List<ItemDataWithID>();
+    public List<ItemDataWithID> ConsumableDataList { get; } = new List<ItemDataWithID>();
     
     public event Action<int> OnUpdateMoneyAmount;
 
@@ -66,84 +57,90 @@ public class InventoryManager : MonoBehaviour
     
     //inventory
 
-    public void SetWeapon(PlayerWeaponData data, int weaponID)//장착 무기 갱신(데이터, ID)
+    public void SetWeapon(ItemDataWithID itemDataWithID)//장착 무기 갱신(데이터, ID)
     {
-        EquippedWeaponData.ItemData = data;
-        EquippedWeaponData.WeaponID = weaponID;
+        EquippedWeaponData = itemDataWithID;
     }
 
-    public void SetEquipment(PlayerEquipmentData data, int equipmentID)
+    public void SetEquipment(ItemDataWithID itemDataWithID)
     {
-        EquippedEquipmentData.ItemData = data;
-        EquippedEquipmentData.EquipmentID = equipmentID;
+        EquippedEquipmentData = itemDataWithID;
     }
 
-    public void SetQuickSlot1(ConsumableDataWithQuantity data)
+    public void SetQuickSlot1(ItemDataWithID data)
     {
-        ItemQuickSlot1 = data;
+        ItemQuickSlot1Data = data;
     }
 
-    public void SetQuickSlot2(ConsumableDataWithQuantity data)
+    public void SetQuickSlot2(ItemDataWithID data)
     {
-        ItemQuickSlot2 = data;
+        ItemQuickSlot2Data = data;
     }
 
-    public void AddWeaponData(PlayerWeaponData data)//무기 아이템 데이터 추가
+    public void AddItemData(IItemData itemData, GameObject itemPrefab)
     {
-        WeaponDataList.Add(new WeaponDataWithID { ItemData = data, WeaponID = _weaponID++ });//ID로 구분
-        weaponInventoryCount = WeaponDataList.Count; //무기 개수 갱신
-        WeaponDataList.Sort((a, b)//이름 오름차순 정렬
-            => string.Compare(a.ItemData.WeaponName, b.ItemData.WeaponName, StringComparison.Ordinal));
-    }
-
-    public void RemoveWeaponData(WeaponDataWithID weapon)
-    {
-        WeaponDataList.Remove(weapon);
-        weaponInventoryCount = WeaponDataList.Count;//개수 갱신
-        
-    }
-    
-    public void AddEquipmentData(PlayerEquipmentData data)
-    {
-        EquipmentDataList.Add(new EquipmentDataWithID { ItemData = data, EquipmentID = _equipmentID++ });
-        equipmentInventoryCount = EquipmentDataList.Count;
-        EquipmentDataList.Sort( (a,b) 
-            => string.Compare(a.ItemData.EquipmentName, b.ItemData.EquipmentName, StringComparison.Ordinal));
-    }
-
-    public void RemoveEquipmentData(EquipmentDataWithID equipment)
-    {
-        EquipmentDataList.Remove(equipment);
-        equipmentInventoryCount = EquipmentDataList.Count;
-    }
-    
-    public void AddConsumableData(ConsumableItemData data)
-    {
-        var existingItem = ConsumableDataList.FirstOrDefault(x => x.ItemData == data);
-        if (existingItem != null)//해당 아이템이 리스트에 있으면
+        switch (itemData)
         {
-            existingItem.Quantity++;//수량증가
-        }
-        else
-        {
-            ConsumableDataList.Add(new ConsumableDataWithQuantity { ItemData = data, Quantity = 1 });//없으면 리스트에 추가
-            consumableInventoryCount = ConsumableDataList.Count;
-            ConsumableDataList.Sort( (a,b)
-                => string.Compare(a.ItemData.ItemName, b.ItemData.ItemName, StringComparison.Ordinal));
+            case PlayerWeaponData:
+                WeaponDataList.Add(new ItemDataWithID()
+                    { ItemData = itemData, ItemID = _weaponID++, ItemPrefab = itemPrefab});//ID로 구분
+                weaponInventoryCount = WeaponDataList.Count; //무기 개수 갱신
+                WeaponDataList.Sort((a, b)//이름 오름차순 정렬
+                    => string.Compare(a.ItemData.GetName(), b.ItemData.GetName(), StringComparison.Ordinal));
+                break;
+            case PlayerEquipmentData:
+                EquipmentDataList.Add(new ItemDataWithID 
+                    { ItemData = itemData, ItemID = _equipmentID++, ItemPrefab = itemPrefab});
+                equipmentInventoryCount = EquipmentDataList.Count;
+                EquipmentDataList.Sort( (a,b) 
+                    => string.Compare(a.ItemData.GetName(), b.ItemData.GetName(), StringComparison.Ordinal));
+                break;
+            case ConsumableItemData:
+                var existingItem = ConsumableDataList.FirstOrDefault(x => x.ItemData == itemData);
+                if (existingItem != null)//해당 아이템이 리스트에 있으면
+                {
+                    existingItem.ItemQuantity++;//수량증가
+                }
+                else
+                {
+                    ConsumableDataList.Add(new ItemDataWithID()
+                        { ItemData = itemData, ItemPrefab = itemPrefab});//없으면 리스트에 추가
+                    consumableInventoryCount = ConsumableDataList.Count;
+                    ConsumableDataList.Sort( (a,b)
+                        => string.Compare(a.ItemData.GetName(), b.ItemData.GetName(), StringComparison.Ordinal));
+                }
+                break;
+            default:
+                break;
         }
     }
 
-    public void RemoveConsumableData(ConsumableDataWithQuantity consumable)
+    public void RemoveItemData(ItemDataWithID itemDataWithID)
     {
-        var index = ConsumableDataList.FindIndex(x => x == consumable);
-        if (ConsumableDataList[index].Quantity > 1)//수량이 1보다 크면 수량 감소
+        switch (itemDataWithID.ItemData)
         {
-            ConsumableDataList[index].Quantity--;
-        }
-        else
-        {
-            ConsumableDataList.RemoveAt(index);//1이면 리스트에서 제거
-            consumableInventoryCount = ConsumableDataList.Count;//개수 갱신
+            case PlayerWeaponData:
+                WeaponDataList.Remove(itemDataWithID);
+                weaponInventoryCount = WeaponDataList.Count;
+                break;
+            case PlayerEquipmentData:
+                EquipmentDataList.Remove(itemDataWithID);
+                equipmentInventoryCount = EquipmentDataList.Count;
+                break;
+            case ConsumableItemData:
+                var index = ConsumableDataList.FindIndex(x => x == itemDataWithID);
+                if (ConsumableDataList[index].ItemQuantity > 1)//수량이 1보다 크면 수량 감소
+                {
+                    ConsumableDataList[index].ItemQuantity--;
+                }
+                else
+                {
+                    ConsumableDataList.RemoveAt(index);//1이면 리스트에서 제거
+                    consumableInventoryCount = ConsumableDataList.Count;//개수 갱신
+                }
+                break;
+            default:
+                break;
         }
     }
     
@@ -171,26 +168,30 @@ public class InventoryManager : MonoBehaviour
         _moneyAmount = 0;
         
         SelectedItem = new SelectedItemData();
-        EquippedWeaponData = new WeaponDataWithID
+        EquippedWeaponData = new ItemDataWithID()
         {
             ItemData = null,
-            WeaponID = -1
+            ItemID = -1,
+            ItemType = ItemTypes.Weapon
         };
         
-        EquippedEquipmentData = new EquipmentDataWithID()
+        EquippedEquipmentData = new ItemDataWithID()
         {
             ItemData = null,
-            EquipmentID = -1
+            ItemID = -1,
+            ItemType = ItemTypes.Equipment
         };
-        ItemQuickSlot1 = new ConsumableDataWithQuantity()
+        ItemQuickSlot1Data = new ItemDataWithID()
         {
             ItemData = null,
-            Quantity = 0
+            ItemQuantity = 0,
+            ItemType = ItemTypes.Consumable
         };
-        ItemQuickSlot2 = new ConsumableDataWithQuantity()
+        ItemQuickSlot2Data = new ItemDataWithID()
         {
             ItemData = null,
-            Quantity = 0
+            ItemQuantity = 0,
+            ItemType = ItemTypes.Consumable
         };
         //초기화(빈 상태)
     }

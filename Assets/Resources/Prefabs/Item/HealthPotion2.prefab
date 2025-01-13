@@ -325,7 +325,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5296824665888471226}
   - component: {fileID: 3579833787938703385}
-  - component: {fileID: 5385284364600454422}
+  - component: {fileID: -7947590863196510844}
   m_Layer: 11
   m_Name: HealthPotion2
   m_TagString: Item
@@ -347,7 +347,7 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1171104146292664642}
-  - {fileID: 5502704250448163412}
+  - {fileID: 5898183180651392265}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &3579833787938703385
@@ -371,7 +371,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3, y: 3, z: 3}
   m_Center: {x: 0, y: 1.5, z: 0}
---- !u!114 &5385284364600454422
+--- !u!114 &-7947590863196510844
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -380,13 +380,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 7183969217170220544}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e29da2b140d12f74fa72a5a699e957a1, type: 3}
+  m_Script: {fileID: 11500000, guid: 732052c25f636a349afe49cfbd3f1f2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: 23b0c79bd28ec0d46a6dc4833c879efe, type: 2}
-  particleMainCircle: {fileID: 8495592647361888704}
-  particleLight: {fileID: 5723675338363939513}
---- !u!1001 &1428417302035097533
+  itemPrefab: {fileID: 7183969217170220544}
+  consumableData: {fileID: 11400000, guid: 23b0c79bd28ec0d46a6dc4833c879efe, type: 2}
+--- !u!1001 &1032951531609307360
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -394,9 +393,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5296824665888471226}
     m_Modifications:
+    - target: {fileID: 6682310036121341190, guid: 4d6d9e778059f6049956e9fa773a2712, type: 3}
+      propertyPath: m_BoundingSphereOverride.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6682310036121341190, guid: 4d6d9e778059f6049956e9fa773a2712, type: 3}
+      propertyPath: m_BoundingSphereOverride.x
+      value: 6.85e-43
+      objectReference: {fileID: 0}
+    - target: {fileID: 6682310036121341190, guid: 4d6d9e778059f6049956e9fa773a2712, type: 3}
+      propertyPath: m_BoundingSphereOverride.y
+      value: 2.9592986e-31
+      objectReference: {fileID: 0}
+    - target: {fileID: 6682310036121341190, guid: 4d6d9e778059f6049956e9fa773a2712, type: 3}
+      propertyPath: m_BoundingSphereOverride.z
+      value: 6.85e-43
+      objectReference: {fileID: 0}
     - target: {fileID: 6832858180216144988, guid: 4d6d9e778059f6049956e9fa773a2712, type: 3}
       propertyPath: m_Name
-      value: Effect
+      value: ItemEffect
       objectReference: {fileID: 0}
     - target: {fileID: 6885803356765050345, guid: 4d6d9e778059f6049956e9fa773a2712, type: 3}
       propertyPath: m_LocalPosition.x
@@ -443,18 +458,8 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4d6d9e778059f6049956e9fa773a2712, type: 3}
---- !u!4 &5502704250448163412 stripped
+--- !u!4 &5898183180651392265 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6885803356765050345, guid: 4d6d9e778059f6049956e9fa773a2712, type: 3}
-  m_PrefabInstance: {fileID: 1428417302035097533}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &5723675338363939513 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 6682310036121341188, guid: 4d6d9e778059f6049956e9fa773a2712, type: 3}
-  m_PrefabInstance: {fileID: 1428417302035097533}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &8495592647361888704 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 7364697621786519165, guid: 4d6d9e778059f6049956e9fa773a2712, type: 3}
-  m_PrefabInstance: {fileID: 1428417302035097533}
+  m_PrefabInstance: {fileID: 1032951531609307360}
   m_PrefabAsset: {fileID: 0}

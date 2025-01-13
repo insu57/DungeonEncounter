@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 6268496377224927661}
   - component: {fileID: 5090112751292439637}
   - component: {fileID: 18185201911457548}
-  - component: {fileID: -2376996244636854490}
   - component: {fileID: 8606240674856159854}
+  - component: {fileID: 3728919327217421736}
   m_Layer: 10
   m_Name: Doughnut Hat
   m_TagString: Item
@@ -33,7 +33,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2661402417817257171}
+  - {fileID: 5859338830612740705}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &5090112751292439637
@@ -86,21 +86,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &-2376996244636854490
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1162732315936075981}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5569a2c0167f6f942adc1cdcc060ea11, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: 4c78e11e92c584f47ba1bb8acc468e24, type: 2}
-  particleMainCircle: {fileID: 2113546920152446791}
-  particleLight: {fileID: 2872222737114012734}
 --- !u!65 &8606240674856159854
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -122,7 +107,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.5, y: 1.5, z: 1.5}
   m_Center: {x: 0, y: 0.7, z: 0}
---- !u!1001 &8890240691078254906
+--- !u!114 &3728919327217421736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1162732315936075981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a574497c0a3a57f40b5b95e8b04b2a3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemPrefab: {fileID: 1162732315936075981}
+  equipmentData: {fileID: 11400000, guid: 4c78e11e92c584f47ba1bb8acc468e24, type: 2}
+--- !u!1001 &1071790967989694344
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -130,6 +129,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6268496377224927661}
     m_Modifications:
+    - target: {fileID: 6682310036121341190, guid: 4d6d9e778059f6049956e9fa773a2712, type: 3}
+      propertyPath: m_BoundingSphereOverride.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6682310036121341190, guid: 4d6d9e778059f6049956e9fa773a2712, type: 3}
+      propertyPath: m_BoundingSphereOverride.x
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 6682310036121341190, guid: 4d6d9e778059f6049956e9fa773a2712, type: 3}
+      propertyPath: m_BoundingSphereOverride.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6682310036121341190, guid: 4d6d9e778059f6049956e9fa773a2712, type: 3}
+      propertyPath: m_BoundingSphereOverride.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6832858180216144988, guid: 4d6d9e778059f6049956e9fa773a2712, type: 3}
       propertyPath: m_Name
       value: ItemEffect
@@ -179,18 +194,8 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4d6d9e778059f6049956e9fa773a2712, type: 3}
---- !u!198 &2113546920152446791 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 7364697621786519165, guid: 4d6d9e778059f6049956e9fa773a2712, type: 3}
-  m_PrefabInstance: {fileID: 8890240691078254906}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &2661402417817257171 stripped
+--- !u!4 &5859338830612740705 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6885803356765050345, guid: 4d6d9e778059f6049956e9fa773a2712, type: 3}
-  m_PrefabInstance: {fileID: 8890240691078254906}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &2872222737114012734 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 6682310036121341188, guid: 4d6d9e778059f6049956e9fa773a2712, type: 3}
-  m_PrefabInstance: {fileID: 8890240691078254906}
+  m_PrefabInstance: {fileID: 1071790967989694344}
   m_PrefabAsset: {fileID: 0}

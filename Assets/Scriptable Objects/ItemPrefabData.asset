@@ -29,3 +29,11 @@ MonoBehaviour:
     prefab: {fileID: 7183969217170220544, guid: 6f0fc7668c627c2479a0be5f772a0d60, type: 3}
   - consumableData: {fileID: 11400000, guid: 44d989d6787bbf54e86bb771a5364be7, type: 2}
     prefab: {fileID: 6877928846283078665, guid: 633cb1ebbec254849aa77967842467fd, type: 3}
+  itemPrefabs:
+  - prefab: {fileID: 0}
+  - prefab: {fileID: 0}
+  - prefab: {fileID: 0}
+  - prefab: {fileID: 0}
+  - prefab: {fileID: 0}
+  - prefab: {fileID: 0}
+  - prefab: {fileID: 0}

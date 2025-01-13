@@ -259,7 +259,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1631885470551975760}
   - component: {fileID: 4546289594886808723}
-  - component: {fileID: 7991309512248836376}
+  - component: {fileID: 4881176024969050035}
   m_Layer: 11
   m_Name: HealthPotion1
   m_TagString: Item
@@ -281,7 +281,7 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 9089210759564009717}
-  - {fileID: 6331446014900147095}
+  - {fileID: 2711075053985108930}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &4546289594886808723
@@ -305,7 +305,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 4, y: 4, z: 4}
   m_Center: {x: 0, y: 2, z: 0}
---- !u!114 &7991309512248836376
+--- !u!114 &4881176024969050035
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -314,12 +314,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 6877928846283078665}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e29da2b140d12f74fa72a5a699e957a1, type: 3}
+  m_Script: {fileID: 11500000, guid: 732052c25f636a349afe49cfbd3f1f2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: 44d989d6787bbf54e86bb771a5364be7, type: 2}
-  particleMainCircle: {fileID: 7955098872512782339}
-  particleLight: {fileID: 6120053946368756602}
+  itemPrefab: {fileID: 6877928846283078665}
+  consumableData: {fileID: 11400000, guid: 44d989d6787bbf54e86bb771a5364be7, type: 2}
 --- !u!1 &8415433030770510704
 GameObject:
   m_ObjectHideFlags: 0
@@ -386,7 +385,7 @@ Transform:
   - {fileID: 8912794635150842895}
   m_Father: {fileID: 1631885470551975760}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &599710137359517310
+--- !u!1001 &8795782747078051371
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -394,9 +393,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1631885470551975760}
     m_Modifications:
+    - target: {fileID: 6682310036121341190, guid: 4d6d9e778059f6049956e9fa773a2712, type: 3}
+      propertyPath: m_BoundingSphereOverride.w
+      value: 1.469497e-39
+      objectReference: {fileID: 0}
+    - target: {fileID: 6682310036121341190, guid: 4d6d9e778059f6049956e9fa773a2712, type: 3}
+      propertyPath: m_BoundingSphereOverride.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6682310036121341190, guid: 4d6d9e778059f6049956e9fa773a2712, type: 3}
+      propertyPath: m_BoundingSphereOverride.y
+      value: 1.469491e-39
+      objectReference: {fileID: 0}
+    - target: {fileID: 6682310036121341190, guid: 4d6d9e778059f6049956e9fa773a2712, type: 3}
+      propertyPath: m_BoundingSphereOverride.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6832858180216144988, guid: 4d6d9e778059f6049956e9fa773a2712, type: 3}
       propertyPath: m_Name
-      value: Effect
+      value: ItemEffect
       objectReference: {fileID: 0}
     - target: {fileID: 6885803356765050345, guid: 4d6d9e778059f6049956e9fa773a2712, type: 3}
       propertyPath: m_LocalPosition.x
@@ -443,18 +458,8 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4d6d9e778059f6049956e9fa773a2712, type: 3}
---- !u!198 &6120053946368756602 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 6682310036121341188, guid: 4d6d9e778059f6049956e9fa773a2712, type: 3}
-  m_PrefabInstance: {fileID: 599710137359517310}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &6331446014900147095 stripped
+--- !u!4 &2711075053985108930 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6885803356765050345, guid: 4d6d9e778059f6049956e9fa773a2712, type: 3}
-  m_PrefabInstance: {fileID: 599710137359517310}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &7955098872512782339 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 7364697621786519165, guid: 4d6d9e778059f6049956e9fa773a2712, type: 3}
-  m_PrefabInstance: {fileID: 599710137359517310}
+  m_PrefabInstance: {fileID: 8795782747078051371}
   m_PrefabAsset: {fileID: 0}

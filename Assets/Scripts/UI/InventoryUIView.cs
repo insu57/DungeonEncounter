@@ -184,50 +184,38 @@ namespace UI
                 ()=> SelectItemInventory(_currentInventoryType, count));//콜백이벤트 등록
             //인벤토리 슬롯 초기 생성 
         }
-        
-        public void SelectedWeapon(PlayerWeaponData data)//ItemInfo에 아이템 데이터 표시
-        {
-            infoText.SetActive(true);
-            SetEquipBtnInteractable(true);
-            SetQuickSlotBtnActive(false); //장착버튼으로 변경
-            
-            UpdateSelectItemIcon(itemImage, data.Icon);
-            itemNameText.text = data.WeaponName;
-            itemRarityText.text = EnumManager.RarityToString(data.Rarity);
-            itemTypeText.text = $"{EnumManager.WeaponTypeToString(data.WeaponType)}" +
-                                $" / {EnumManager.AttackTypeToString(data.AttackType)}";
-            itemValueText.text = $"공격력: {data.AttackValue}";
-            itemEffectText.text = data.ItemEffects.Length != 0 ? "Have Effect" : "None."; //Temp. 효과별로 항복마다 처리 필요
-            itemDescriptionText.text = data.Description;
-        }
 
-        public void SelectedEquipment(PlayerEquipmentData data)
+        public void SelectedItem(InventoryManager.ItemDataWithID itemDataWithID)
         {
-            infoText.SetActive(true);//정보 텍스트 활성화
-            SetEquipBtnInteractable(true);
-            SetQuickSlotBtnActive(false);
-            
-            UpdateSelectItemIcon(itemImage, data.Icon);
-            itemNameText.text = data.EquipmentName;
-            itemRarityText.text = EnumManager.RarityToString(data.Rarity);
-            itemTypeText.text = data.Type;
-            itemValueText.text = $"방어력: {data.DefenseValue}";
-            itemEffectText.text = data.ItemEffect.Length != 0 ? "Have Effect" : "None."; //Temp. 효과별로 항복마다 처리 필요
-            itemDescriptionText.text = data.Description;
-        }
-        public void SelectedConsumable(InventoryManager.ConsumableDataWithQuantity consumableItem)
-        {
+            IItemData itemData = itemDataWithID.ItemData;
             infoText.SetActive(true);
-            ConsumableItemData data = consumableItem.ItemData;
-            SetQuickSlotBtnActive(true);//퀵슬롯 버튼으로 변경
+            UpdateSelectItemIcon(itemImage, itemData.GetIcon());
+            itemNameText.text = itemData.GetName();
+            itemDescriptionText.text = itemData.GetDescription();
+            itemRarityText.text = EnumManager.RarityToString(itemData.GetRarity());
+            itemEffectText.text = itemData.GetEffects().Length != 0 ? "Have Effect" : "None.";
             
-            UpdateSelectItemIcon(itemImage,data.Icon);
-            itemNameText.text = data.ItemName;
-            itemRarityText.text = EnumManager.RarityToString(data.Rarity);
-            itemTypeText.text = EnumManager.ConsumableTypeToString(data.Type);
-            itemValueText.text = $"수량: {consumableItem.Quantity}";
-            itemEffectText.text = data.ItemData.Length != 0 ? "Have Effect" : "None.";
-            itemDescriptionText.text = data.Description;
+            switch (itemData)
+            {
+                case PlayerWeaponData weaponData:
+                    SetEquipBtnInteractable(true);
+                    SetQuickSlotBtnActive(false);
+                    itemTypeText.text = $"{EnumManager.WeaponTypeToString(weaponData.WeaponType)}" +
+                                        $" / {EnumManager.AttackTypeToString(weaponData.AttackType)}";
+                    itemValueText.text = $"공격력: {weaponData.AttackValue}";
+                    break;
+                case PlayerEquipmentData equipmentData:
+                    SetEquipBtnInteractable(true);
+                    SetQuickSlotBtnActive(false);
+                    itemTypeText.text = equipmentData.Type;
+                    itemValueText.text = $"방어력: {equipmentData.DefenseValue}";
+                    break;
+                case ConsumableItemData consumableData:
+                    SetQuickSlotBtnActive(true);
+                    itemTypeText.text = EnumManager.ConsumableTypeToString(consumableData.Type);
+                    itemValueText.text = $"수량: {itemDataWithID.ItemQuantity}";
+                    break;
+            }
         }
         
         public void SetEquipBtnInteractable(bool isActive)//장착버튼 상호작용 활성/비활성

@@ -25,11 +25,13 @@ namespace Player
         [SerializeField]private GameObject playerHead;
         private EnemyMeleeAttack _enemyMeleeAttack;
         private EnemyProjectile _enemyProjectile;
-        [SerializeField] private ItemPrefabData itemPrefabData;
-        public PlayerWeaponData WeaponData { get; private set; }
-        public PlayerEquipmentData EquipmentData { get; private set; }
+        //[SerializeField] private ItemPrefabData itemPrefabData;
+        //public PlayerWeaponData WeaponData { get; private set; }
+        //public PlayerEquipmentData EquipmentData { get; private set; }
         private Dictionary<PlayerStatTypes, float> _playerStats; 
         public event Action<PlayerStatTypes,float> OnStatChanged;
+        
+        public PlayerWeaponData PlayerDefaultWeaponData {get; private set;}
         private GameObject _equippedWeapon;
         private float _weaponAttackValue;
         private WeaponType _playerWeaponType;
@@ -43,7 +45,7 @@ namespace Player
         [SerializeField] private GameObject attackEffect;
         [SerializeField] private GameObject skillEffect;
         public event Action<int> OnGetMoney;
-        public event Action<GameObject> OnGetItem;
+        public event Action<IItemData,GameObject> OnGetItem;
         public event Action<int> OnUseItemQuickSlot;
         public event Action<FloatText, Vector3> OnFloatKey;
         public event Action OnExitFloatKey;
@@ -79,13 +81,13 @@ namespace Player
             }
             _isRecoverEnergy = false;
         }
-        
-        public void PlayerEquipWeapon(PlayerWeaponData data)
+
+        public void PlayerEquipWeapon(PlayerWeaponData data, GameObject prefab)
         {
-            WeaponData = data;//제거?
+            //WeaponData = data;//제거?
            
             Destroy(_equippedWeapon);
-            GameObject newWeapon = itemPrefabData.GetWeaponPrefab(data);
+            GameObject newWeapon = prefab;
             _equippedWeapon = Instantiate(newWeapon, playerRightHand.transform);
             if (!data.IsDefaultWeapon)//기본무기가 아니면
             {
@@ -101,7 +103,7 @@ namespace Player
             SetStat(PlayerStatTypes.AttackValue, _weaponAttackValue);
             UpdateFinalAttackValue();
             _playerWeaponType = data.WeaponType;//WeaponType -> Animator change(애니메이터 추가 필요)
-            if (data.ItemEffects.Length != 0)
+            if (data.GetEffects().Length != 0)
             {
                 Debug.Log("have Effect");
             }
@@ -111,14 +113,14 @@ namespace Player
             }
         }
 
-        public void PlayerEquipEquipment(PlayerEquipmentData data)
+        public void PlayerEquipEquipment(PlayerEquipmentData data, GameObject prefab)
         {
-            
-            EquipmentData = data;//제거?
+            //EquipmentData = data;//제거?
             if (_equippedEquipment != null)
             {
                 Destroy(_equippedEquipment);
             }
+            
             if (data == null)
             {
                 _equipmentDefenseValue = 0;
@@ -127,7 +129,7 @@ namespace Player
             }
             else
             {
-                GameObject newEquipment = itemPrefabData.GetEquipmentPrefab(data);
+                GameObject newEquipment = prefab;
                 _equippedEquipment = Instantiate(newEquipment, playerHead.transform);
                 _equippedEquipment.GetComponent<Collider>().enabled = false;
                 _equippedEquipment.GetComponentInChildren<ParticleSystem>().Stop();
@@ -167,7 +169,10 @@ namespace Player
             }
             else
             {
-                OnGetItem?.Invoke(item);
+                ItemDataAssign itemDataAssign = item.GetComponent<ItemDataAssign>();
+                IItemData itemData = itemDataAssign.GetItemData();
+                GameObject itemPrefab = itemData.GetItemPrefab();
+                OnGetItem?.Invoke(itemData, itemPrefab);
                 if (item.layer == (int)ItemLayers.Chest)
                 {
                     ObjectPoolingManager.Instance.ReturnToPool(PoolKeys.Chest01, item);
@@ -226,17 +231,6 @@ namespace Player
             SetAttackEffect(isSkill);
         }
 
-        public void ActiveAttackBox(bool isActive)
-        {
-            //WeaponType...동적으로...
-            switch (_playerWeaponType)
-            {
-                case WeaponType.Sword:
-                    break;
-                
-            }
-        }
-
         private void SetAttackEffect(bool isSkill)
         {
             attackEffect.SetActive(!isSkill);
@@ -253,12 +247,19 @@ namespace Player
             _equipmentDefenseValue = 0f;
             //실제 들고있는 무기에... 무기교체 기능
             GameObject playerWeaponPrefab = playerJobData.DefaultWeapon;
-            PlayerWeapon playerWeapon = playerWeaponPrefab.GetComponent<PlayerWeapon>();
-            WeaponData = playerWeapon.WeaponData;
-            _weaponAttackValue = WeaponData.AttackValue;//default weapon attack value
-            _equippedWeapon = Instantiate(playerWeaponPrefab, playerRightHand.transform);
+            IItemData itemData = playerWeaponPrefab.GetComponent<ItemDataAssign>().GetItemData();
             
-            
+            if (itemData is PlayerWeaponData weaponData)
+            {
+                //WeaponData = weaponData;
+                _weaponAttackValue = weaponData.AttackValue;//default weapon attack value
+                _equippedWeapon = Instantiate(playerWeaponPrefab, playerRightHand.transform);
+                PlayerDefaultWeaponData = weaponData;
+            }
+            else
+            {
+                Debug.Log("Why?");
+            }
             //else...Ranged
            
             //PlayerJobData SO
@@ -268,11 +269,10 @@ namespace Player
                 { PlayerStatTypes.MaxHealth, playerJobData.MaxHealth },
                 { PlayerStatTypes.Energy, playerJobData.Energy },
                 { PlayerStatTypes.MaxEnergy, playerJobData.MaxEnergy },
-                { PlayerStatTypes.AttackValue, WeaponData.AttackValue},
+                { PlayerStatTypes.AttackValue, _weaponAttackValue},
                 { PlayerStatTypes.DefenseValue, 0f}
             };
             UpdateFinalAttackValue();//최종 공격력 갱신
-
             
         }
 
@@ -283,8 +283,6 @@ namespace Player
             {
                 StartCoroutine(RecoveryEnergy());//에너지 회복
             }
-            
-            
         }
         
         private void OnTriggerEnter(Collider other)
@@ -310,13 +308,11 @@ namespace Player
 
         private void OnTriggerStay(Collider other)
         {
-            //Distance로?(Vector...)
+            //Distance로?(Vector...) 한번에 획득하지 못할때가 있음 - 수정필요
             if (other.CompareTag("Item") && other.gameObject.layer != (int)ItemLayers.Money)
             {
                 if (other.gameObject.layer == (int)ItemLayers.Chest)
                 {
-                    
-                    
                     OnFloatKey?.Invoke(FloatText.Open, other.transform.position);
                     if (Input.GetKeyDown(KeyCode.F))
                     {
