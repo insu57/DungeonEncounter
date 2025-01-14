@@ -26,7 +26,7 @@ public class GetRenderTexture : MonoBehaviour
         texture.Apply();
         
        
-        return Sprite.Create(texture, new Rect(0, 0, renderTexture.width, renderTexture.height), Vector2.one * 0.5f);
+        return Sprite.Create(texture, new Rect(0, 0, renderTexture.width, renderTexture.height), Vector2.one);
     }
 
     private void SaveSprite(Sprite sprite, string path)

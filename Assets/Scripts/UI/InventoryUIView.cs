@@ -21,8 +21,14 @@ namespace UI
         [SerializeField] private Image equippedEquipmentImg;
         private Button _equippedEquipmentButton;
         [SerializeField] private Image itemQuick1Img;
+        [SerializeField] private TextMeshProUGUI itemQuick1Quantity;
+        [SerializeField] private Image itemQuick1PlayerInfoImage; //PlayerUI
+        [SerializeField] private TextMeshProUGUI itemQuick1PlayerInfoQuantity;
         private Button _itemQuick1Button;
         [SerializeField] private Image itemQuick2Img;
+        [SerializeField] private TextMeshProUGUI itemQuick2Quantity;
+        [SerializeField] private Image itemQuick2PlayerInfoImage;
+        [SerializeField] private TextMeshProUGUI itemQuick2PlayerInfoQuantity;
         private Button _itemQuick2Button;
         
         [Header("Inventory")]
@@ -51,9 +57,9 @@ namespace UI
         [SerializeField] private GameObject setQuickSlot;
         [SerializeField] private Button setQuick1Button;
         [SerializeField] private TextMeshProUGUI setQuick1ButtonText;
-        [SerializeField] private Image quick1InactiveImage;
+        //[SerializeField] private Image quick1InactiveImage;
         [SerializeField] private Button setQuick2Button;
-        [SerializeField] private Image quick2InactiveImage;
+        //[SerializeField] private Image quick2InactiveImage;
         [SerializeField] private TextMeshProUGUI setQuick2ButtonText;
         [SerializeField] private Button itemDropButton;
         [SerializeField] private Image dropButtonInactiveImage;
@@ -107,23 +113,41 @@ namespace UI
         {
             equippedEquipmentImg.gameObject.SetActive(false);
         }  
-        public void UpdateItemQuick1(Sprite sprite)
+        public void UpdateItemQuick1(Sprite sprite, int quantity)
         {
             UpdateSelectItemIcon(itemQuick1Img,sprite);
+            UpdateSelectItemIcon(itemQuick1PlayerInfoImage,sprite);
+            UpdateItemQuick1Quantity(quantity);
+        }
+
+        public void UpdateItemQuick1Quantity(int quantity)
+        {
+            itemQuick1Quantity.text = quantity.ToString();
+            itemQuick1PlayerInfoQuantity.text = quantity.ToString();
         }
 
         public void ClearItemQuick1()
         {
             itemQuick1Img.gameObject.SetActive(false);
+            itemQuick1PlayerInfoImage.gameObject.SetActive(false);
         }
-        public void UpdateItemQuick2(Sprite sprite)
+        public void UpdateItemQuick2(Sprite sprite, int quantity)
         {
             UpdateSelectItemIcon(itemQuick2Img,sprite);
+            UpdateSelectItemIcon(itemQuick2PlayerInfoImage,sprite);
+            UpdateItemQuick2Quantity(quantity);
+        }
+
+        public void UpdateItemQuick2Quantity(int quantity)
+        {
+            itemQuick2Quantity.text = quantity.ToString();
+            itemQuick2PlayerInfoQuantity.text = quantity.ToString();
         }
 
         public void ClearItemQuick2()
         {
             itemQuick2Img.gameObject.SetActive(false);
+            itemQuick2PlayerInfoImage.gameObject.SetActive(false);
         }
         private static void UpdateSelectItemIcon(Image image, Sprite sprite)
         {
@@ -185,7 +209,7 @@ namespace UI
             //인벤토리 슬롯 초기 생성 
         }
 
-        public void SelectedItem(InventoryManager.ItemDataWithID itemDataWithID)
+        public void SelectedItem(ItemDataWithID itemDataWithID)
         {
             IItemData itemData = itemDataWithID.ItemData;
             infoText.SetActive(true);

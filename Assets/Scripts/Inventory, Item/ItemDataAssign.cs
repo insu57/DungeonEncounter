@@ -6,7 +6,7 @@ using UnityEngine;
 
 public abstract class ItemDataAssign : MonoBehaviour
 {
-    [SerializeField] protected GameObject itemPrefab;
+    //[SerializeField] protected GameObject itemPrefab;
     //public GameObject ItemPrefab => itemPrefab;
     private ParticleSystem[] _particleSystems;
     public abstract IItemData GetItemData();

@@ -1,0 +1,2230 @@
+fileFormatVersion: 2
+guid: 2688c5b4df2c72c4798cbcaa1548f213
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 126
+        width: 6
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c8e781d6ce4ef4841838e074ff6eeedf
+      internalID: -72055678
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_1
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 131
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1918759beb25e634792f6107faece79a
+      internalID: -401215361
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_2
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 126
+        width: 9
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1ede08a82607303408cd11644eb34647
+      internalID: -590034429
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_3
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 126
+        width: 7
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b1d652cc95f57f942890aa684e4d047c
+      internalID: -796113352
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_4
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 126
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d56f4d01b55986b47826d898df5fdaa1
+      internalID: 1339338788
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_5
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 126
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c444bca739afcfa4699405ff9ea3ae3b
+      internalID: 436224632
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_6
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 132
+        width: 5
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 08575a8371264df4582f3bece09f6ec5
+      internalID: -728974376
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_7
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 126
+        width: 6
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6d17ee4a2ef79fb4090a4fbd4d7bd311
+      internalID: -1619481032
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_8
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 126
+        width: 6
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 84333a4c044ebf4408ac587da714a4c4
+      internalID: -833691694
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_9
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 126
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2c47beb03b7ea42478dc98dc998e4393
+      internalID: 1018542003
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_10
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 128
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9cf27f0472094b243904537ca35e2e47
+      internalID: -811650273
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_11
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 130
+        width: 8
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4af078e19ed6e4a4999c622bc0177994
+      internalID: -351649908
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_12
+      rect:
+        serializedVersion: 2
+        x: 140
+        y: 126
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 13fcccaee134e4742ad0de4d86ac86a8
+      internalID: 1662155145
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_13
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 126
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3f63803f6223b7346b170178c42c57e6
+      internalID: -1553609917
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_14
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 126
+        width: 5
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 801f47b6b938ebf4999a896405dab77e
+      internalID: -1437285722
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_15
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 126
+        width: 4
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 48277d5be03563d47a2765299412fd23
+      internalID: 2025693208
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_16
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 112
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 81e02fac989ce2f4a8d1d7394fb3cbd8
+      internalID: 1385060351
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_17
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 112
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e3a507c55ae5e834597323da7ea71525
+      internalID: 1712946925
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_18
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 112
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f46b8c619d87652429a5e0696e3f7b44
+      internalID: 772648678
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_19
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 112
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 31ea41b7655c1ee428f283a2fb4088af
+      internalID: 416305628
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_20
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 112
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e21911692ce701c468be0f57138cd045
+      internalID: -774494421
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_21
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 112
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 47e69f492d9f87b46a1727673cfddfaf
+      internalID: 1581347067
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_22
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 112
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 12c538fb7768f654c83a2d4aad61caa4
+      internalID: 552162140
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_23
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 112
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a751ea0589171744a9b087a507c10b2c
+      internalID: -250949720
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_24
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 112
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 90d24e05e7c1b0443b24cae96653a9ee
+      internalID: 732907882
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_25
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 112
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e72c7d0afe57c0747b05633be9dd877b
+      internalID: -868788924
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_26
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 113
+        width: 4
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7956f6ab70f05114786971b220d26926
+      internalID: -1547986179
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_27
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 112
+        width: 5
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5978bab42cfffdb4ca83997542df7801
+      internalID: -1862429317
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_28
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 112
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fbde6960e6582e748bc1abd14ae46c8d
+      internalID: 328179369
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_29
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 114
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 34216b59aa8a18849ae6a097cfa16fcc
+      internalID: -372152004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_30
+      rect:
+        serializedVersion: 2
+        x: 140
+        y: 112
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b1d914ad99601ca45b7f93a0b0b5d8bd
+      internalID: 718470516
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_31
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 112
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 45272cbed30d6bf44acebe6f628c7ac8
+      internalID: -101476181
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_32
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 98
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e8f22bcb31b5e684d9732b6241d405d6
+      internalID: -1820494376
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_33
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 98
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9fa6208ddea869b418a54259a5d48b36
+      internalID: 524675407
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_34
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 98
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3e89d161efa3e1749896e96bee43e8f1
+      internalID: 18542418
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_35
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 98
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 68d4ed5114bdf684dbb243b9c88acb8f
+      internalID: -1077252374
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_36
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 98
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4cf441c74307e5840abdaddbbd36a612
+      internalID: -164171973
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_37
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 98
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e995b5f52508411449c615ede278d80c
+      internalID: -1373192770
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_38
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 98
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5e2493136ba747b4bbc4484cd5b53d43
+      internalID: -604057843
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_39
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 98
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3c120ab6caf746c4c8c8919e0bfd271e
+      internalID: -2134319529
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_40
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 98
+        width: 6
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0d455d54c000b6e4b9384267e39adb17
+      internalID: 1499819445
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_41
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 98
+        width: 7
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ce039508eb2b9274ab9082c6c223d075
+      internalID: -1503532724
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_42
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 98
+        width: 7
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f26cd0d793077f04ea704d1def6e647c
+      internalID: 434428018
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_43
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 98
+        width: 7
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1032006b3df4ea943a573444e7ffadef
+      internalID: -1367499041
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_44
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 98
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ade6467d6c1547d408d28994c41f608e
+      internalID: -141715400
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_45
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 98
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5777c2db66598de418d493edc6e13bc7
+      internalID: 1573501006
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_46
+      rect:
+        serializedVersion: 2
+        x: 140
+        y: 98
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1527c35428b5510439b77da727912778
+      internalID: 1258887410
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_47
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 98
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fb0a1455ee446024583259197b2bf7da
+      internalID: -189937477
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_48
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 84
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c5bb8fc45bad7a74ea5c43e10811f097
+      internalID: -60655505
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_49
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 84
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 09047503aa0eb51448fcdf49948df1be
+      internalID: 8282359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_50
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 84
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 52058a00a2fa1764ca3bc829e5a22c69
+      internalID: 1505105753
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_51
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 84
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 01e65591eddbd55418f14ea41ce47759
+      internalID: 2045772426
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_52
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 84
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 80bd62d39495e224b96a9b8d8094cdcf
+      internalID: -884477898
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_53
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 84
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d92ab4d792a4a5e4c9bb6dae5170b97a
+      internalID: -736890359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_54
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 84
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 33eaf94064470e54196057c126730297
+      internalID: -495891970
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_55
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 84
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 03abdab6bafd99148a585b5f6264d001
+      internalID: -846467475
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_56
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 84
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 089945a089170854da5a34ce8c0c9567
+      internalID: 1349906905
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_57
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 84
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bb866070609329f43894658f54ddcd03
+      internalID: -681738965
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_58
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 70
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d926e7bace39b714f874184bd92643e4
+      internalID: 955258267
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_59
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 70
+        width: 7
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b52ff2f3aa01a094584a2beb47ce512f
+      internalID: 1614485456
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_60
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 70
+        width: 6
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 432c4c87efec3874b843e733ae64bfb8
+      internalID: -532180177
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_61
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 70
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3a012217db0c841489782c57372e2cf7
+      internalID: -594825263
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_62
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 70
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 95d92288a774b5c41a3ca200d10a16d3
+      internalID: 1218649655
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_63
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 70
+        width: 7
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 762c9534c9f891c44bc1b35452211c16
+      internalID: 1718402342
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_64
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 69
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5486e115e519a0642a517db1f7e8c59d
+      internalID: 893543362
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_65
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 70
+        width: 7
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f06bc45802003ec44a5f14da1ae7bf5a
+      internalID: -910051354
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_66
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 70
+        width: 4
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b62c708e6d49c814186b0949b65884bc
+      internalID: -1410851841
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_67
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 70
+        width: 6
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6b1da298d43ae254baf090fab777deec
+      internalID: 1571724471
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_68
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 70
+        width: 7
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 993b21fbc909f0e4681e960ba1fa2c7b
+      internalID: 1851267773
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_69
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 70
+        width: 5
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4532c16550bf0d04b925c85cd8b9c845
+      internalID: -334525741
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_70
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 70
+        width: 8
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 000b815d10000a841a6cccd65aa867a7
+      internalID: -925252199
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_71
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 70
+        width: 6
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 48ccc617615f6a841831c7618ef489ad
+      internalID: 1169838871
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_72
+      rect:
+        serializedVersion: 2
+        x: 140
+        y: 70
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 432561587090ebe4fb5c0afd79161ffc
+      internalID: -477480561
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_73
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 69
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6cfbaccbd34d04c4bb54155ee9186983
+      internalID: 973141794
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_74
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 55
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1947ca719699033409b736a199a3ca1a
+      internalID: -1411253059
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_75
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 56
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 91fc5d3158e676c44b4cce441bc493ce
+      internalID: 2021761237
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_76
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 56
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 490710891b07d254cabf98274948f06a
+      internalID: 120872941
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_77
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 56
+        width: 6
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0f27fe4505741944c9deda2002aa7901
+      internalID: -2806164
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_78
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 56
+        width: 8
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b299dabe7538f62408a201ce501afd6c
+      internalID: 515803709
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_79
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 56
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bf1b5d8837e3afa43a85d072dcb1705f
+      internalID: -525512130
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_80
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 56
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c447983af1c2bd4c9b2ecbd5a00a39c
+      internalID: 684635416
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_81
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 56
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bac04883412a4a941b5bb919d46484ea
+      internalID: 193536059
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_82
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 56
+        width: 8
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 94fd20e32af7795419f38bee4d8c70f5
+      internalID: 35829414
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_83
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 56
+        width: 8
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0a332d7bfff6f1e4ab3835d902255d9c
+      internalID: 1331709685
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_84
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 42
+        width: 19
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ca5e3410ea999ae45aa6fba9aeb61107
+      internalID: 1701221993
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_85
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 42
+        width: 16
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 97a25d3e773c5d14cb145d37eec24829
+      internalID: -219346704
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_86
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 42
+        width: 6
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 82377b31d3d5738458bc0851d036e016
+      internalID: -148506839
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_87
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 42
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc6bf388fa044ed47bdde3bdf6477b02
+      internalID: -1666087584
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_88
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 42
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 96877c480a8566b47bcae2b7b7ffb070
+      internalID: 1095738741
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_89
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 43
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2fb00b2d7780a4a44b4b0c51c4d32d2e
+      internalID: -1552426875
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_90
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 43
+        width: 19
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fe7fa6eb47b281b4fb72edffcff1467f
+      internalID: -739476680
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_91
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 43
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e68380baef523e344ba256b72a2b5504
+      internalID: 638088814
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_92
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 43
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 345210bc3bb1e53449969ce32b396848
+      internalID: -1970847454
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_93
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 42
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 89a37ff7d067aa44ba892e9e41de399e
+      internalID: 560928326
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: springwrite3_8x12_outline_thick_94
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 42
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 220cc652df785da42b64715a633cb99a
+      internalID: -1884885469
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      springwrite3_8x12_outline_thick_0: -72055678
+      springwrite3_8x12_outline_thick_1: -401215361
+      springwrite3_8x12_outline_thick_10: -811650273
+      springwrite3_8x12_outline_thick_11: -351649908
+      springwrite3_8x12_outline_thick_12: 1662155145
+      springwrite3_8x12_outline_thick_13: -1553609917
+      springwrite3_8x12_outline_thick_14: -1437285722
+      springwrite3_8x12_outline_thick_15: 2025693208
+      springwrite3_8x12_outline_thick_16: 1385060351
+      springwrite3_8x12_outline_thick_17: 1712946925
+      springwrite3_8x12_outline_thick_18: 772648678
+      springwrite3_8x12_outline_thick_19: 416305628
+      springwrite3_8x12_outline_thick_2: -590034429
+      springwrite3_8x12_outline_thick_20: -774494421
+      springwrite3_8x12_outline_thick_21: 1581347067
+      springwrite3_8x12_outline_thick_22: 552162140
+      springwrite3_8x12_outline_thick_23: -250949720
+      springwrite3_8x12_outline_thick_24: 732907882
+      springwrite3_8x12_outline_thick_25: -868788924
+      springwrite3_8x12_outline_thick_26: -1547986179
+      springwrite3_8x12_outline_thick_27: -1862429317
+      springwrite3_8x12_outline_thick_28: 328179369
+      springwrite3_8x12_outline_thick_29: -372152004
+      springwrite3_8x12_outline_thick_3: -796113352
+      springwrite3_8x12_outline_thick_30: 718470516
+      springwrite3_8x12_outline_thick_31: -101476181
+      springwrite3_8x12_outline_thick_32: -1820494376
+      springwrite3_8x12_outline_thick_33: 524675407
+      springwrite3_8x12_outline_thick_34: 18542418
+      springwrite3_8x12_outline_thick_35: -1077252374
+      springwrite3_8x12_outline_thick_36: -164171973
+      springwrite3_8x12_outline_thick_37: -1373192770
+      springwrite3_8x12_outline_thick_38: -604057843
+      springwrite3_8x12_outline_thick_39: -2134319529
+      springwrite3_8x12_outline_thick_4: 1339338788
+      springwrite3_8x12_outline_thick_40: 1499819445
+      springwrite3_8x12_outline_thick_41: -1503532724
+      springwrite3_8x12_outline_thick_42: 434428018
+      springwrite3_8x12_outline_thick_43: -1367499041
+      springwrite3_8x12_outline_thick_44: -141715400
+      springwrite3_8x12_outline_thick_45: 1573501006
+      springwrite3_8x12_outline_thick_46: 1258887410
+      springwrite3_8x12_outline_thick_47: -189937477
+      springwrite3_8x12_outline_thick_48: -60655505
+      springwrite3_8x12_outline_thick_49: 8282359
+      springwrite3_8x12_outline_thick_5: 436224632
+      springwrite3_8x12_outline_thick_50: 1505105753
+      springwrite3_8x12_outline_thick_51: 2045772426
+      springwrite3_8x12_outline_thick_52: -884477898
+      springwrite3_8x12_outline_thick_53: -736890359
+      springwrite3_8x12_outline_thick_54: -495891970
+      springwrite3_8x12_outline_thick_55: -846467475
+      springwrite3_8x12_outline_thick_56: 1349906905
+      springwrite3_8x12_outline_thick_57: -681738965
+      springwrite3_8x12_outline_thick_58: 955258267
+      springwrite3_8x12_outline_thick_59: 1614485456
+      springwrite3_8x12_outline_thick_6: -728974376
+      springwrite3_8x12_outline_thick_60: -532180177
+      springwrite3_8x12_outline_thick_61: -594825263
+      springwrite3_8x12_outline_thick_62: 1218649655
+      springwrite3_8x12_outline_thick_63: 1718402342
+      springwrite3_8x12_outline_thick_64: 893543362
+      springwrite3_8x12_outline_thick_65: -910051354
+      springwrite3_8x12_outline_thick_66: -1410851841
+      springwrite3_8x12_outline_thick_67: 1571724471
+      springwrite3_8x12_outline_thick_68: 1851267773
+      springwrite3_8x12_outline_thick_69: -334525741
+      springwrite3_8x12_outline_thick_7: -1619481032
+      springwrite3_8x12_outline_thick_70: -925252199
+      springwrite3_8x12_outline_thick_71: 1169838871
+      springwrite3_8x12_outline_thick_72: -477480561
+      springwrite3_8x12_outline_thick_73: 973141794
+      springwrite3_8x12_outline_thick_74: -1411253059
+      springwrite3_8x12_outline_thick_75: 2021761237
+      springwrite3_8x12_outline_thick_76: 120872941
+      springwrite3_8x12_outline_thick_77: -2806164
+      springwrite3_8x12_outline_thick_78: 515803709
+      springwrite3_8x12_outline_thick_79: -525512130
+      springwrite3_8x12_outline_thick_8: -833691694
+      springwrite3_8x12_outline_thick_80: 684635416
+      springwrite3_8x12_outline_thick_81: 193536059
+      springwrite3_8x12_outline_thick_82: 35829414
+      springwrite3_8x12_outline_thick_83: 1331709685
+      springwrite3_8x12_outline_thick_84: 1701221993
+      springwrite3_8x12_outline_thick_85: -219346704
+      springwrite3_8x12_outline_thick_86: -148506839
+      springwrite3_8x12_outline_thick_87: -1666087584
+      springwrite3_8x12_outline_thick_88: 1095738741
+      springwrite3_8x12_outline_thick_89: -1552426875
+      springwrite3_8x12_outline_thick_9: 1018542003
+      springwrite3_8x12_outline_thick_90: -739476680
+      springwrite3_8x12_outline_thick_91: 638088814
+      springwrite3_8x12_outline_thick_92: -1970847454
+      springwrite3_8x12_outline_thick_93: 560928326
+      springwrite3_8x12_outline_thick_94: -1884885469
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -45,7 +45,7 @@ namespace Player
         [SerializeField] private GameObject attackEffect;
         [SerializeField] private GameObject skillEffect;
         public event Action<int> OnGetMoney;
-        public event Action<IItemData,GameObject> OnGetItem;
+        public event Action<ItemDataWithID> OnGetItem;
         public event Action<int> OnUseItemQuickSlot;
         public event Action<FloatText, Vector3> OnFloatKey;
         public event Action OnExitFloatKey;
@@ -172,7 +172,12 @@ namespace Player
                 ItemDataAssign itemDataAssign = item.GetComponent<ItemDataAssign>();
                 IItemData itemData = itemDataAssign.GetItemData();
                 GameObject itemPrefab = itemData.GetItemPrefab();
-                OnGetItem?.Invoke(itemData, itemPrefab);
+                OnGetItem?.Invoke(new ItemDataWithID
+                {
+                    ItemData = itemData,
+                    ItemPrefab = itemPrefab,
+                    ItemType = itemData.ItemType,
+                });
                 if (item.layer == (int)ItemLayers.Chest)
                 {
                     ObjectPoolingManager.Instance.ReturnToPool(PoolKeys.Chest01, item);
