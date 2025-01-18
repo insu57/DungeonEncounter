@@ -68,7 +68,7 @@ public enum Rarity
 
 public enum PoolKeys
 {
-    Money, Chest01, Arrow01, HealthBar, FloatDamage, SkeletonNormal, SkeletonArcher
+    Money, Chest01, Arrow01, HealthBar, FloatDamage, SkeletonNormal, SkeletonArcher, NormalSlime
 }
 
 public enum FloatText

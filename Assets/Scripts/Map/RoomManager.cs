@@ -13,6 +13,8 @@ public class RoomManager : MonoBehaviour
     
     public bool IsCleared {get; private set;}
 
+    [SerializeField] private int enemyMaxNum;
+    [SerializeField] private int enemyMinNum;
     [SerializeField] private RoomType roomType;
     [SerializeField] private GameObject floor;
     private BoxCollider _floorBoxCollider;
@@ -33,6 +35,11 @@ public class RoomManager : MonoBehaviour
         //방 클리어 시
         IsCleared = true;
         BlockRoomDoors(false);
+    }
+
+    public int GetEnemyNumber()
+    {
+        return Random.Range(enemyMinNum, enemyMaxNum + 1);
     }
     
     private void Awake()

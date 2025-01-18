@@ -46,7 +46,8 @@ namespace Player
         [SerializeField] private GameObject swordAttackBox;
         [SerializeField] private GameObject attackEffect;
         [SerializeField] private GameObject skillEffect;
-        private List<GameObject> _itemInRange = new List<GameObject>();
+        [SerializeField] private GameObject dodgeEffect;
+        private readonly List<GameObject> _itemInRange = new List<GameObject>();
         public event Action<int> OnGetMoney;
         public event Action<ItemDataWithID> OnGetItem;
         public event Action<int> OnUseItemQuickSlot;
@@ -286,6 +287,11 @@ namespace Player
             skillEffect.SetActive(isSkill);
         }
 
+        public void ActiveDodgeEffect(bool isActive)
+        {
+            dodgeEffect.SetActive(isActive);
+        }
+        
         public override void Awake()
         {
             base.Awake();

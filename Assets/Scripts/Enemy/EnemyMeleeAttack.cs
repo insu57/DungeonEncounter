@@ -12,7 +12,7 @@ namespace Enemy
         private EnemyData _data;
         private float _attackStartTime;
         private float _attackEndTime;
-        private Collider _attackArea;
+        [SerializeField] private Collider attackArea;
         private TrailRenderer _trailRenderer;
         private Animator _animator;
         private float _damage;
@@ -23,7 +23,7 @@ namespace Enemy
         {
             _enemyControl = GetComponentInParent<EnemyControl>();
             _enemyManager = GetComponentInParent<EnemyManager>(); 
-            _attackArea = GetComponent<Collider>(); //공격 판정 Collider
+            attackArea = GetComponent<Collider>(); //공격 판정 Collider
             _trailRenderer = GetComponentInChildren<TrailRenderer>(); //공격 이펙트
             _animator = _enemyManager.GetComponent<Animator>();
             _data = _enemyManager.Data;
@@ -39,12 +39,12 @@ namespace Enemy
 
             if (_enemyControl.IsAttack && _attackStartTime <= animTime && animTime <= _attackEndTime)
             {
-                _attackArea.enabled = true;
+                attackArea.enabled = true;
                 _trailRenderer.enabled = true;
             }
             else
             {
-                _attackArea.enabled = false;
+                attackArea.enabled = false;
                 _trailRenderer.enabled = false;
             }
        

@@ -32,6 +32,7 @@ namespace Enemy
         //할당방식 변경필요?
         private WorldUIView _worldUIView;
         private EnemyWorldUIPresenter _uiPresenter;
+        private StageManager _stageManager;
         public event Action<float,float> OnHealthChanged;
         public event Action OnDeath;
         public float GetStat(EnemyStatTypes type)
@@ -54,6 +55,7 @@ namespace Enemy
         {
             EnemyHealthBar healthBar = _worldUIView.InitEnemyHealthBar(this);
             _uiPresenter = new EnemyWorldUIPresenter(this, healthBar);
+            _stageManager = FindObjectOfType<StageManager>();
             //EnemyWorldUI초기화
         }
         
@@ -63,19 +65,19 @@ namespace Enemy
             _enemyControl.IsMove = false;
             _enemyControl.IsDead = true;
             DropItem();//아이템 드랍
-            OnDeath?.Invoke();//사망이벤트
+            OnDeath?.Invoke();//사망이벤트 
             _enemyCollider.enabled = false;//충돌 비활성
             //사망 이펙트 추가
             deathSmokeParticle.Play();
             _uiPresenter.Dispose();//Presenter Dispose
-
+            OnDeath -= _stageManager.HandleEnemyDeath;//StageManager 이벤트 구독해제
+            
             StartCoroutine(EnemyReturnToPool(1f));
         }
 
         private IEnumerator EnemyReturnToPool(float waitTime)
         {
             yield return new WaitForSeconds(waitTime);
-            Debug.Log("Enemy Death");
             ObjectPoolingManager.Instance.ReturnToPool(data.EnemyKey, gameObject);
             StopAllCoroutines();
         }

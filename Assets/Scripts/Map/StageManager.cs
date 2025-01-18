@@ -26,7 +26,7 @@ public class StageManager : MonoBehaviour
     //private string 
     public readonly List<RoomManager> Rooms = new List<RoomManager>();
     private RoomManager _currentRoom;
-    private int _enemyNumber = 5;
+    private int _enemyNumber = 0;
     private int _enemyKillCount = 0;
     public void SpawnEnemy(RoomManager room)
     {
@@ -34,6 +34,8 @@ public class StageManager : MonoBehaviour
         //Spawn
         float halfW = room.RoomWidth * 0.5f;
         float halfH = room.RoomHeight * 0.5f;
+        _enemyNumber = room.GetEnemyNumber();
+        
         for (int i = 0; i < 5; i++)
         {
             Vector3 randomPos = new Vector3(Random.Range(-halfW, halfW), 0f,
@@ -46,7 +48,7 @@ public class StageManager : MonoBehaviour
         }
     }
 
-    private void HandleEnemyDeath()
+    public void HandleEnemyDeath()
     {
         _enemyKillCount++;
         if (_enemyKillCount >= _enemyNumber)

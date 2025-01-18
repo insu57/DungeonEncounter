@@ -144,10 +144,11 @@ namespace Player
             _moveVector = new Vector3(_hAxis, 0, _vAxis).normalized;
             
             _playerManager.ActiveSwordAttackBox(IsAttack, IsSkill);
+            _playerManager.ActiveDodgeEffect(IsDodge);
 
             if (Input.GetKeyDown(KeyCode.F))
             {
-                _playerManager.GetItemInRange();
+                _playerManager.GetItemInRange();//범위안 아이템 획득 처리
             }
             
             if (!IsAttack && !IsDodge) //Take Action...movement restriction 공격 등 행동 시 이동 제한 
@@ -166,7 +167,6 @@ namespace Player
 
                 if (Input.GetMouseButtonDown(0) && !_isAttackCool) //Mouse left click Attack 마우스 좌클릭 공격
                 {
-                    //StartCoroutine(AttackCool());
                     _moveVector = Vector3.zero; //공격 시 정지
                     IsAttack = true;
 
