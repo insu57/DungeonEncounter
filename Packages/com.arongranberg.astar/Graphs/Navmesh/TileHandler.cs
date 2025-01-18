@@ -316,6 +316,19 @@ namespace Pathfinding.Graphs.Navmesh {
 		/// <summary>See <see cref="SnapEdges"/></summary>
 		const int EdgeSnappingMaxDistance = 1;
 
+		/// <summary>
+		/// See <see cref="ConvertVerticesAndSnapToTileBoundaries"/>.
+		///
+		/// The navmesh cut vertices are snapped to tile borders, if they are within this distance to the edge.
+		/// This is used to avoid tiiiny slivers of triangles resulting from cuts that are just infringing on a tile.
+		/// The normal snapping (using <see cref="EdgeSnappingMaxDistance)"/> cannot be used for tile borders, because that would
+		/// make the tile borders not be straight anymore.
+		///
+		/// I don't think there's any technical upper limit to this value. It's a tradeoff between the size of the slivers,
+		/// and how accurately it matches the original geometry.
+		/// </summary>
+		public const int TileSnappingMaxDistance = 20;
+
 		internal struct TileCuts {
 			public int contourStartIndex;
 			public int contourEndIndex;
@@ -331,7 +344,7 @@ namespace Pathfinding.Graphs.Navmesh {
 			/// Vertices of all cut contours in all tiles
 			/// Stored in tile space for the tile they belong to.
 			/// </summary>
-			public UnsafeList<float2> contourVertices;
+			public UnsafeList<Point64Wrapper> contourVertices;
 			public UnsafeList<NavmeshCut.ContourBurst> contours;
 			public UnsafeList<ContourMeta> contoursExtra;
 			public UnsafeList<TileCuts> tileCuts;
@@ -346,9 +359,21 @@ namespace Pathfinding.Graphs.Navmesh {
 			}
 		}
 
+		// Burst doesn't seem to like referencing types from the Clipper2 dll, so we create
+		// a type here that is identical to the Point64 type in Clipper2
+		public struct Point64Wrapper {
+			public long x;
+			public long y;
+
+			public Point64Wrapper (long x, long y) {
+				this.x = x;
+				this.y = y;
+			}
+		}
+
 		internal static CutCollection CollectCuts (GridLookup<NavmeshClipper> cuts, List<Vector2Int> tileCoordinates, float characterRadius, TileLayout tileLayout, ref UnsafeSpan<UnsafeList<UnsafeSpan<Int3> > > tileVertices, ref UnsafeSpan<UnsafeList<UnsafeSpan<int> > > tileTriangles, ref UnsafeSpan<UnsafeList<UnsafeSpan<int> > > tileTags) {
 			Profiler.BeginSample("Collect navmesh cuts");
-			var contourVertices = new UnsafeList<float2>(0, Allocator.Persistent);
+			var contourVertices = new UnsafeList<float2>(0, Allocator.Temp);
 			var contours = new UnsafeList<NavmeshCut.ContourBurst>(0, Allocator.Persistent);
 			var contoursExtra = new UnsafeList<ContourMeta>(0, Allocator.Persistent);
 			bool cuttingRequired = false;
@@ -420,16 +445,51 @@ namespace Pathfinding.Graphs.Navmesh {
 				});
 			}
 
+			Profiler.BeginSample("Convert vertices");
+			var contourVerticesSpan = contourVertices.AsUnsafeSpan();
+			var tileSize = tileLayout.TileWorldSize;
+			ConvertVerticesAndSnapToTileBoundaries(ref contourVerticesSpan, out var contourVerticesP64, ref tileSize);
+			Profiler.EndSample();
+
 			Pathfinding.Pooling.ArrayPool<Int3>.Release(ref vbuffer);
 			Profiler.EndSample();
 
 			return new CutCollection {
-					   contourVertices = contourVertices,
+					   contourVertices = contourVerticesP64,
 					   contours = contours,
 					   contoursExtra = contoursExtra,
 					   tileCuts = tileCuts,
 					   cuttingRequired = cuttingRequired,
 			};
+		}
+
+		[BurstCompile]
+		static void ConvertVerticesAndSnapToTileBoundaries (ref UnsafeSpan<float2> contourVertices, out UnsafeList<Point64Wrapper> outputVertices, ref Vector2 tileSize) {
+			outputVertices = new UnsafeList<Point64Wrapper>(contourVertices.Length, Allocator.Persistent);
+			outputVertices.Length = contourVertices.Length;
+			var outputVerticesSpan = outputVertices.AsUnsafeSpan();
+
+			var tileSizeInt = new int2(Mathf.RoundToInt(tileSize.x * Int3.FloatPrecision), Mathf.RoundToInt(tileSize.y * Int3.FloatPrecision));
+
+			for (uint k = 0; k < contourVertices.Length; k++) {
+				Unity.Burst.CompilerServices.Hint.Assume(k < contourVertices.length);
+				// Convert to integer coordinates
+				var p = (int2)math.round(contourVertices[k] * Int3.FloatPrecision);
+
+				// Get the positive modulo of the point, relative to the tile bounds
+				var mod = p % tileSizeInt;
+				if (p.x < 0) mod.x += tileSizeInt.x;
+				if (p.y < 0) mod.y += tileSizeInt.y;
+
+				// Snap any vertices lying very close to the edge of a tile to the tile edge
+				var offset = math.select(0, -mod, mod <= TileSnappingMaxDistance);
+				offset += math.select(0, tileSizeInt - mod, mod >= tileSizeInt - TileSnappingMaxDistance);
+				p += offset;
+
+				// Convert to 64-bit integer coordinates
+				Unity.Burst.CompilerServices.Hint.Assume(k < outputVerticesSpan.length);
+				outputVerticesSpan[k] = new Point64Wrapper(p.x, p.y);
+			}
 		}
 
 #if UNITY_2022_3_OR_NEWER && MODULE_COLLECTIONS_2_2_0_OR_NEWER
@@ -440,7 +500,7 @@ namespace Pathfinding.Graphs.Navmesh {
 			Assert.AreEqual(tileVertices.Length, cutCollection.tileCuts.Length);
 
 			MarkerPrepare.Begin();
-			var contourVerticesP64 = ConvertTo64BitCoordinates(cutCollection.contourVertices);
+			var contourVerticesP64 = cutCollection.contourVertices;
 			var cutBounds = CalculateCutBounds(ref cutCollection, ref contourVerticesP64);
 			MarkerPrepare.End();
 
@@ -556,7 +616,7 @@ namespace Pathfinding.Graphs.Navmesh {
 							// Insert extra vertices on the edges of the triangle, if necessary
 							var contoursSpan = cutCollection.contours.AsUnsafeSpan().Slice(cuts.contourStartIndex, cuts.contourEndIndex - cuts.contourStartIndex);
 							MarkerEdgeSnapping.Begin();
-							SnapEdges(ref triBuffer, ref vertexCount, contoursSpan, ref interestingCuts, ref contourVerticesP64);
+							SnapEdges(ref triBuffer, ref vertexCount, contoursSpan, ref interestingCuts, contourVerticesP64.AsUnsafeSpan(), tileSize);
 							MarkerEdgeSnapping.End();
 
 							// First iteration: Cut the triangle using normal navmesh cuts
@@ -570,7 +630,7 @@ namespace Pathfinding.Graphs.Navmesh {
 								var triSpan = triBuffer.AsUnsafeReadOnlySpan().Slice(0, vertexCount);
 								var interestingCutsSpan = interestingCuts.AsUnsafeSpan();
 								var interestingCutsDualSpan = interestingDualCuts.AsUnsafeSpan();
-								var verticesSpan = contourVerticesP64.AsUnsafeReadOnlySpan();
+								var verticesSpan = contourVerticesP64.AsUnsafeSpan();
 								triangulationOutputVertices.Clear();
 								triangulationVertexCountPerPolygon.Clear();
 
@@ -801,7 +861,7 @@ namespace Pathfinding.Graphs.Navmesh {
 		/// navmesh cuts exactly touch the edges of the triangles.
 		/// The overhead seems to be roughly 1% of the total cutting time.
 		/// </summary>
-		static void SnapEdges (ref NativeArray<Point64Wrapper> triBuffer, ref int vertexCount, UnsafeSpan<NavmeshCut.ContourBurst> contours, ref NativeList<int> interestingCuts, ref NativeArray<Point64Wrapper> contourVerticesP64) {
+		static void SnapEdges (ref NativeArray<Point64Wrapper> triBuffer, ref int vertexCount, UnsafeSpan<NavmeshCut.ContourBurst> contours, ref NativeList<int> interestingCuts, UnsafeSpan<Point64Wrapper> contourVerticesP64, Vector2Int tileSize) {
 			for (int next = 0, prev = vertexCount - 1; next < vertexCount; prev = next, next++) {
 				var c1 = new int2((int)triBuffer[prev].x, (int)triBuffer[prev].y);
 				var c2 = new int2((int)triBuffer[next].x, (int)triBuffer[next].y);
@@ -821,6 +881,13 @@ namespace Pathfinding.Graphs.Navmesh {
 							var dot = (long)pdir.x * (long)dir.x + (long)pdir.y * (long)dir.y;
 							// Check if the point is strictly between the start and end points of the segment
 							if (dot > 0 && dot < lengthSq) {
+								// If the edge lies on a tile border, and the point is *not* on a tile border, then we should not insert a new vertex on it.
+								// As this could make the tile border no longer be a straight line.
+								// Note that ConvertVerticesAndSnapToTileBoundaries will typically move vertices to tile borders, so it is a common case that the vertices are exactly on tile borders.
+								if ((c1.x == 0 && c2.x == 0 && p.x != 0) || (c1.y == 0 && c2.y == 0 && p.y != 0) || (c1.x == tileSize.x && c2.x == tileSize.x && p.x != tileSize.x) || (c1.y == tileSize.y && c2.y == tileSize.y && p.y != tileSize.y)) {
+									continue;
+								}
+
 								// Insert
 								if (triBuffer.Length < vertexCount + 1) {
 									// In very rare cases, we may have to resize the buffer to fit all additional vertices
@@ -847,16 +914,7 @@ namespace Pathfinding.Graphs.Navmesh {
 			}
 		}
 
-		static NativeArray<Point64Wrapper> ConvertTo64BitCoordinates (UnsafeList<float2> vertices) {
-			var verticesP64 = new NativeArray<Point64Wrapper>(vertices.Length, Allocator.Temp);
-			for (int k = 0; k < vertices.Length; k++) {
-				var p = math.round(vertices[k] * Int3.FloatPrecision);
-				verticesP64[k] = new Point64Wrapper((long)p.x, (long)p.y);
-			}
-			return verticesP64;
-		}
-
-		static NativeArray<IntBounds> CalculateCutBounds (ref CutCollection cutCollection, ref NativeArray<Point64Wrapper> contourVerticesP64) {
+		static NativeArray<IntBounds> CalculateCutBounds (ref CutCollection cutCollection, ref UnsafeList<Point64Wrapper> contourVerticesP64) {
 			var cutBounds = new NativeArray<IntBounds>(cutCollection.contours.Length, Allocator.Temp);
 			for (int i = 0; i < cutCollection.contours.Length; i++) {
 				var contour = cutCollection.contours[i];
@@ -978,18 +1036,6 @@ namespace Pathfinding.Graphs.Navmesh {
 				// but Marshal.GetFunctionPointerForDelegate doesn't mention anything about pinning, so maybe its safe even without it.
 				DelegateGCRoot = del;
 				CutFunctionPtr.Data = Marshal.GetFunctionPointerForDelegate(del);
-			}
-		}
-
-		// Burst doesn't seem to like referencing types from the Clipper2 dll, so we create
-		// a type here that is identical to the Point64 type in Clipper2
-		public struct Point64Wrapper {
-			public long x;
-			public long y;
-
-			public Point64Wrapper (long x, long y) {
-				this.x = x;
-				this.y = y;
 			}
 		}
 

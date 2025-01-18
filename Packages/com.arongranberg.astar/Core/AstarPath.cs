@@ -30,7 +30,7 @@ using Thread = System.Threading.Thread;
 [HelpURL("https://arongranberg.com/astar/documentation/stable/astarpath.html")]
 public class AstarPath : VersionedMonoBehaviour {
 	/// <summary>The version number for the A* Pathfinding Project</summary>
-	public static readonly System.Version Version = new System.Version(5, 2, 5);
+	public static readonly System.Version Version = new System.Version(5, 3, 1);
 
 	/// <summary>Information about where the package was downloaded</summary>
 	public enum AstarDistribution { WebsiteDownload, AssetStore, PackageManager };
@@ -168,7 +168,7 @@ public class AstarPath : VersionedMonoBehaviour {
 	public float maxNearestNodeDistanceSqr => maxNearestNodeDistance*maxNearestNodeDistance;
 
 	/// <summary>
-	/// If true, all graphs will be scanned during Awake.
+	/// If true, all graphs will be scanned when the game starts, during OnEnable.
 	/// If you disable this, you will have to call <see cref="AstarPath.active.Scan"/> yourself to enable pathfinding.
 	/// Alternatively you could load a saved graph from a file.
 	///

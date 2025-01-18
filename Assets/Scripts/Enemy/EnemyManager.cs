@@ -111,19 +111,18 @@ namespace Enemy
             //Chest
             float chestChance = _dropTable.ChestChance;
             randomChance = Random.value;
-            if (randomChance >= chestChance) return;
+            if (randomChance >= chestChance) return; //상자 확률값 이상이면 소환x
             float weaponChance = _dropTable.WeaponChance;
             randomChance = Random.value;
-            if (randomChance < weaponChance)
+            if (randomChance < weaponChance) //무기 확률값보다 작으면 무기 아니면 장비
             {
-                int weaponTotalWeight = _dropTable.WeaponsTotalWeight;
-                int randomWeight = Random.Range(0, weaponTotalWeight);
+                int weaponTotalWeight = _dropTable.WeaponsTotalWeight; //가중치 총합
+                int randomWeight = Random.Range(0, weaponTotalWeight); //랜덤 가중치 0~Total
                 int cumulativeWeight = 0;
                 foreach (var drop in _dropTable.Weapons)
                 {
-                    cumulativeWeight += drop.dropWeight;
-                    if (cumulativeWeight <= randomWeight) continue;
-                    //GameObject chest = Instantiate(_dropTable.ChestPrefab, pos+Vector3.right, Quaternion.identity);
+                    cumulativeWeight += drop.dropWeight; //누적 가중치
+                    if (cumulativeWeight <= randomWeight) continue; //누적 가중치가 더 작으면 다음 아이템으로
                     GameObject chest = ObjectPoolingManager.Instance
                         .GetObjectFromPool(PoolKeys.Chest01, pos+Vector3.right, Quaternion.identity);
                     chest.GetComponent<Chest>().SetItem(drop.dropPrefab);
@@ -148,6 +147,7 @@ namespace Enemy
 
         private void OnEnable()
         {
+            //초기화.
             _enemyCollider.enabled = true;
             _enemyStats[EnemyStatTypes.Health] = GetStat(EnemyStatTypes.MaxHealth);
         }

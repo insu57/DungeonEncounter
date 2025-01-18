@@ -394,6 +394,8 @@ namespace Pathfinding.RVO {
 				outputStartIndex = outputIndex,
 				maxCount = maxNeighbourCount,
 				result = neighbours,
+				layerMask = agentData.collidesWith[agentIndex],
+				layers = agentData.layer,
 				resultDistances = neighbourDistances,
 			});
 
@@ -415,9 +417,8 @@ namespace Pathfinding.RVO {
 
 				// The agents cannot collide if they are on different y-levels.
 				// Also do not avoid the agent itself.
-				// Apply the layer masks for agents.
 				// Use binary OR to reduce branching.
-				if ((maxY < minY) | (otherIndex == agentIndex) | (((int)agentData.collidesWith[agentIndex] & (int)agentData.layer[otherIndex]) == 0)) {
+				if ((maxY < minY) | (otherIndex == agentIndex)) {
 					numNeighbours--;
 					neighbours[outputIndex + i] = neighbours[outputIndex + numNeighbours];
 					i--;

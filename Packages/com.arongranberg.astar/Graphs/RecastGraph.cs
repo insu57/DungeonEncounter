@@ -19,10 +19,11 @@ namespace Pathfinding {
 	///
 	/// [Open online documentation to see images]
 	///
-	/// The recast graph is based on Recast (http://code.google.com/p/recastnavigation/).
+	/// The recast graph is based on Recast (https://github.com/memononen/recastnavigation).
 	/// I have translated a good portion of it to C# to run it natively in Unity.
 	///
-	/// For a tutorial on how to configure a recast graph, take a look at create-recast (view in online documentation for working links).
+	/// See: get-started-recast (view in online documentation for working links)
+	/// See: graphTypes (view in online documentation for working links)
 	///
 	/// \section recastinspector Inspector
 	///
@@ -33,7 +34,7 @@ namespace Pathfinding {
 	/// \inspectorField{Center, forcedBoundsCenter}
 	/// \inspectorField{Size, forcedBoundsSize}
 	/// \inspectorField{Rotation, rotation}
-	/// \inspectorField{Snap bounds to scene, SnapForceBoundsToScene}
+	/// \inspectorField{Snap bounds to scene, SnapBoundsToScene}
 	///
 	/// <b>Input Filtering</b>
 	/// \inspectorField{Filter Objects By, collectionSettings.collectionMode}
@@ -105,6 +106,9 @@ namespace Pathfinding {
 		/// <summary>
 		/// Radius of the agent which will traverse the navmesh.
 		/// The navmesh will be eroded with this radius.
+		///
+		/// This value will be rounded up to the nearest multiple of <see cref="cellSize"/>.
+		///
 		/// [Open online documentation to see images]
 		/// </summary>
 		public float characterRadius = 0.5F;
@@ -137,7 +141,7 @@ namespace Pathfinding {
 		/// [Open online documentation to see images]
 		/// </summary>
 		[JsonMember]
-		public float cellSize = 0.5F;
+		public float cellSize = 0.25F;
 
 		/// <summary>
 		/// Character height.

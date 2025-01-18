@@ -27,6 +27,9 @@ namespace Pathfinding {
 	///
 	/// Grid graphs are excellent for when you already have a grid-based world. But they also work well for free-form worlds.
 	///
+	/// See: get-started-grid (view in online documentation for working links)
+	/// See: graphTypes (view in online documentation for working links)
+	///
 	/// \section gridgraph-features Features
 	/// - Throw any scene at it, and with minimal configurations you can get a good graph from it.
 	/// - Predictable pattern.

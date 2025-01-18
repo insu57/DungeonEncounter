@@ -13,6 +13,19 @@ namespace Pathfinding.RVO {
 	/// use that to move the object using a method it sees fit (for example using a CharacterController, using
 	/// transform.Translate or using a rigidbody).
 	///
+	/// \inspectorField{Radius, RVOController.radius}
+	/// \inspectorField{Height, RVOController.height}
+	/// \inspectorField{Center, RVOController.center}
+	/// \inspectorField{Agent Time Horizon, RVOController.agentTimeHorizon}
+	/// \inspectorField{Obstacle Time Horizon, RVOController.obstacleTimeHorizon}
+	/// \inspectorField{Max Neighbours, RVOController.maxNeighbours}
+	/// \inspectorField{Layer, RVOController.layer}
+	/// \inspectorField{Collides with, RVOController.collidesWith}
+	/// \inspectorField{Priority, RVOController.priority}
+	/// \inspectorField{Lock When Not Moving, RVOController.lockWhenNotMoving}
+	/// \inspectorField{Locked, RVOController.locked}
+	/// \inspectorField{Debug, RVOController.debug}
+	///
 	/// <code>
 	/// public void Update () {
 	///     // Just some point far away
@@ -31,7 +44,7 @@ namespace Pathfinding.RVO {
 	///
 	/// For documentation of many of the variables of this class: refer to the Pathfinding.RVO.IAgent interface.
 	///
-	/// Note: Requires a single RVOSimulator component in the scene
+	/// Note: Requires a single <see cref="RVOSimulator"/> component in the scene
 	///
 	/// See: Pathfinding.RVO.IAgent
 	/// See: RVOSimulator

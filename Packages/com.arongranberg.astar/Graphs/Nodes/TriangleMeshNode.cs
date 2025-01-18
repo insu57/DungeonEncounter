@@ -449,6 +449,26 @@ namespace Pathfinding {
 					}
 				}
 			}
+
+			if (edge == -1) {
+				// If we have entered this node via an off-mesh link, or if this was the first node in the path,
+				// then we must consider moving directly from #pos to the end point of the path.
+				// Otherwise we would just consider paths that first to the side of the triangle and then back to the end point of the path.
+				// Note: flag1 checks if this node is connected to the end node of the path.
+				if (pathHandler.pathNodes[NodeIndex].flag1) {
+					// Note: If we entered this node via an off-mesh link, then #pathNodeIndex may not belong to this node,
+					// but instead to the off-mesh link. This is fine. The path can still be reconstructed correctly later.
+					path.OpenCandidateConnectionsToEndNode(pos, pathNodeIndex, NodeIndex, gScore);
+				}
+
+				// Sometimes we may enter a node via e.g. an off-mesh link that doesn't have any other adjacent triangles.
+				// In this case we still want to visit at least one side of the triangle, to ensure that paths like the
+				// ConstantPath notice that the node has been visited.
+				// The code above would otherwise skip this node completely.
+				if (visitedEdges == 0) {
+					OpenSingleEdge(path, pathNodeIndex, this, 0, pos, gScore);
+				}
+			}
 		}
 
 		void OpenSingleEdge (Path path, uint pathNodeIndex, TriangleMeshNode other, int sharedEdgeOnOtherNode, Int3 pos, uint gScore) {

@@ -855,7 +855,7 @@ namespace andywiecko.BurstTriangulator.LowLevel.Unsafe {
 		/// <param name="allocator">The allocator to use. If called from a job, consider using <see cref="Allocator.Temp"/>.</param>
 		/// <param name="angleThreshold">Expressed in <em>radians</em>. Default: 5° = 0.0872664626 rad.</param>
 		/// <param name="constrainBoundary">Used to constrain boundary halfedges. Since the refinement algorithm (whether for constrained triangulation or not) requires constrained halfedges at the boundary, not setting this option may cause unexpected behavior, especially when the restoreBoundary option is disabled.</param>
-		public static void RefineMesh(this UnsafeTriangulator<fp2> @this, OutputData<fp2> output, Allocator allocator, fp? areaThreshold = null, fp? angleThreshold = null, fp? concentricShells = null, bool constrainBoundary = false) => new UnsafeTriangulator<fp, fp2, fp, TransformFp, FpUtils>().RefineMesh(output, allocator, 2 * (areaThreshold ?? 1), angleThreshold ?? fp.FromRaw(374806602) /*Raw value for (fp)0.0872664626*/, concentricShells ?? fp.FromRaw(4294967) /*Raw value for (fp)1 / 1000*/, constrainBoundary);
+		public static void RefineMesh(this UnsafeTriangulator<fp2> @this, OutputData<fp2> output, Allocator allocator, fp? areaThreshold = null, fp? angleThreshold = null, fp? concentricShells = null, bool constrainBoundary = false) => new UnsafeTriangulator<fp, fp2, fp, TransformFp, FpUtils>().RefineMesh(output, allocator, 2 * (areaThreshold ?? 1), angleThreshold ?? fp.FromRaw(374806602) /*Raw value for (fp)0.0872664626*/, constrainBoundary);
 #endif
 	}
 
@@ -1039,7 +1039,7 @@ namespace andywiecko.BurstTriangulator.LowLevel.Unsafe {
 			private NativeArray<T2>.ReadOnly holes;
 
 			public ValidateInputStep(InputData<T2> input, OutputData<T2> output, Args args) {
-				positions = output.Positions.AsReadOnly();
+				positions = output.Positions.AsArray().AsReadOnly();
 				status = output.Status;
 				this.args = args;
 				constraints = input.ConstraintEdges.AsReadOnly();
@@ -1215,7 +1215,7 @@ namespace andywiecko.BurstTriangulator.LowLevel.Unsafe {
 			public DelaunayTriangulationStep(OutputData<T2> output, Args args) {
 				status = output.Status;
 				// Note: At this point these are the input positions (possibly transformed by a preprocessor)
-				positions = output.Positions.AsReadOnly();
+				positions = output.Positions.AsArray().AsReadOnly();
 				triangles = output.Triangles;
 				halfedges = output.Halfedges;
 				constrainedHalfedges = output.ConstrainedHalfedges;
@@ -1573,7 +1573,7 @@ namespace andywiecko.BurstTriangulator.LowLevel.Unsafe {
 
 			public ConstrainEdgesStep(InputData<T2> input, OutputData<T2> output, Args args) {
 				status = output.Status;
-				positions = output.Positions.AsReadOnly();
+				positions = output.Positions.AsArray().AsReadOnly();
 				triangles = output.Triangles.AsArray();
 				inputConstraintEdges = input.ConstraintEdges.AsReadOnly();
 				inputConstraintEdgeTypes = input.ConstraintEdgeTypes.AsReadOnly();
@@ -2378,7 +2378,7 @@ namespace andywiecko.BurstTriangulator.LowLevel.Unsafe {
 					var(xi, xj, xk) = (outputPositions[i], outputPositions[j], outputPositions[k]);
 					var area2 = Area2(xi, xj, xk);
 					if (utils.greater(area2, maximumArea2)) { // TODO split permited
-						foreach (var he in edges.AsReadOnly()) {
+						foreach (var he in edges.AsArray().AsReadOnly()) {
 							heQueue.Add(he);
 						}
 					}
@@ -3466,7 +3466,7 @@ namespace andywiecko.BurstTriangulator.LowLevel.Unsafe {
 			// NOTE: use barycentric property.
 			return fpmath.cmax(-bar(a, b, c, p)) <= 0;
 		}
-		public readonly bool SupportRefinement() => true;
+		public readonly bool SupportsRefinement() => true;
 		public readonly fp X(fp2 a) => a.x;
 		public readonly fp Y(fp2 a) => a.y;
 		public readonly fp Zero() => 0;

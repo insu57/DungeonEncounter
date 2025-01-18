@@ -243,17 +243,10 @@ namespace Pathfinding.ECS.RVO {
 				var area = quadtree.QueryArea(transform.Position, r);
 				var density = area / (MaximumCirclePackingDensity * math.PI * r * r);
 
-
 				resolved.targetPoint = agentOutputData.targetPoint[index];
 				resolved.speed = agentOutputData.speed[index];
 				var rnd = 1.0f; // (agentIndex.Index % 1024) / 1024f;
 				resolved.turningRadiusMultiplier = math.max(1f, math.pow(density * 2.0f, 4.0f) * rnd);
-
-				// Pure copy
-				resolved.targetRotation = control.targetRotation;
-				resolved.targetRotationHint = control.targetRotationHint;
-				resolved.targetRotationOffset = control.targetRotationOffset;
-				resolved.rotationSpeed = control.rotationSpeed;
 			}
 		}
 	}

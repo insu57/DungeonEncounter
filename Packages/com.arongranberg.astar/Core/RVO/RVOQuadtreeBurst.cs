@@ -361,6 +361,8 @@ namespace Pathfinding.RVO {
 			public float3 position;
 			public float speed, timeHorizon, agentRadius;
 			public int outputStartIndex, maxCount;
+			public RVOLayer layerMask;
+			public NativeArray<RVOLayer> layers;
 			public NativeArray<int> result;
 			public NativeArray<float> resultDistances;
 		}
@@ -395,7 +397,7 @@ namespace Pathfinding.RVO {
 				for (int j = startIndex; j < endIndex; j++) {
 					var agent = agents[j];
 					float sqrDistance = math.lengthsq(p - agentPositions[agent]);
-					if (sqrDistance < radius*radius) {
+					if (sqrDistance < radius*radius && (query.layers[agent] & query.layerMask) != 0) {
 						// Close enough
 
 						// Insert the agent into the results list using insertion sort

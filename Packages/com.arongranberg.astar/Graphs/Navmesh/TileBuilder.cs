@@ -117,7 +117,7 @@ namespace Pathfinding.Graphs.Navmesh {
 			} else {
 				mask = -1;
 			}
-			var meshGatherer = new RecastMeshGatherer(scene, bounds, collectionSettings.terrainHeightmapDownsamplingFactor, collectionSettings.layerMask, collectionSettings.tagMask, perLayerModifications, tileLayout.cellSize / collectionSettings.colliderRasterizeDetail);
+			var meshGatherer = new RecastMeshGatherer(scene, bounds, collectionSettings.terrainHeightmapDownsamplingFactor, mask, collectionSettings.tagMask, perLayerModifications, tileLayout.cellSize / collectionSettings.colliderRasterizeDetail);
 
 			if (collectionSettings.rasterizeMeshes && dimensionMode == RecastGraph.DimensionMode.Dimension3D) {
 				Profiler.BeginSample("Find meshes");

@@ -11,11 +11,16 @@ public class FollowCamera : MonoBehaviour //Player Follow Camera(Quarter view) í
     [SerializeField]
     private Vector3 rotation;
     private Transform _target;
+    private Vector3 _targetPosition;
+    private PlayerManager _playerManager;
     private void Start()
     {
         offset = new Vector3(0, 4, -4);
         rotation = new Vector3(35, 0, 0);
-        _target = FindObjectOfType<PlayerManager>().transform;
+        
+        _playerManager = FindObjectOfType<PlayerManager>();
+        _target = _playerManager.transform;
+        
         transform.rotation = Quaternion.Euler(rotation);
     }
     

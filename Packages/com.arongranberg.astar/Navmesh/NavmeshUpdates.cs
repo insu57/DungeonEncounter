@@ -193,7 +193,7 @@ namespace Pathfinding.Graphs.Navmesh {
 				// it may intersect with the new tiles and we will need to recalculate them in that case.
 				var allCuts = clipperLookup.AllItems;
 				for (var cut = allCuts; cut != null; cut = cut.next) {
-					var newGraphSpaceBounds = cut.obj.GetBounds(tileLayout.transform, characterRadius);
+					var newGraphSpaceBounds = ExpandedBounds(cut.obj.GetBounds(tileLayout.transform, characterRadius));
 					var newTouchingTiles = tileLayout.GetTouchingTilesInGraphSpace(newGraphSpaceBounds);
 					if (cut.previousBounds != newTouchingTiles) {
 						clipperLookup.Dirty(cut.obj);
@@ -237,7 +237,7 @@ namespace Pathfinding.Graphs.Navmesh {
 				if (!obj.graphMask.Contains((int)graph.graphIndex)) return;
 
 				var characterRadius = graph.NavmeshCuttingCharacterRadius;
-				var graphSpaceBounds = obj.GetBounds(tileLayout.transform, characterRadius);
+				var graphSpaceBounds = ExpandedBounds(obj.GetBounds(tileLayout.transform, characterRadius));
 				var touchingTiles = tileLayout.GetTouchingTilesInGraphSpace(graphSpaceBounds);
 				clipperLookup.Add(obj, touchingTiles);
 			}
@@ -294,6 +294,14 @@ namespace Pathfinding.Graphs.Navmesh {
 				dirtyTileCoordinates.Clear();
 				dirtyTiles.Clear();
 			}
+		}
+
+		static Rect ExpandedBounds (Rect rect) {
+			rect.xMin -= TileHandler.TileSnappingMaxDistance * Int3.PrecisionFactor;
+			rect.yMin -= TileHandler.TileSnappingMaxDistance * Int3.PrecisionFactor;
+			rect.xMax += TileHandler.TileSnappingMaxDistance * Int3.PrecisionFactor;
+			rect.yMax += TileHandler.TileSnappingMaxDistance * Int3.PrecisionFactor;
+			return rect;
 		}
 
 		internal void OnEnable () {
@@ -440,7 +448,7 @@ namespace Pathfinding.Graphs.Navmesh {
 						// Make sure the tile where it was is updated
 						handler.MarkTilesDirty(cut.previousBounds);
 
-						var newGraphSpaceBounds = cut.obj.GetBounds(handler.tileLayout.transform, characterRadius);
+						var newGraphSpaceBounds = ExpandedBounds(cut.obj.GetBounds(handler.tileLayout.transform, characterRadius));
 						var newTouchingTiles = handler.tileLayout.GetTouchingTilesInGraphSpace(newGraphSpaceBounds);
 						handler.clipperLookup.Move(cut.obj, newTouchingTiles);
 						handler.MarkTilesDirty(newTouchingTiles);

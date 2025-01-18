@@ -227,8 +227,10 @@ namespace Pathfinding.ECS {
 		/// See: <see cref="MoveTowards"/>
 		/// </summary>
 		public bool enableBuiltInMovement {
-			get => !movementDisabled.ValueRW;
-			set => movementDisabled.ValueRW = !value;
+			get => movementDisabled.IsValid ? !movementDisabled.ValueRW : true;
+			set {
+				if (movementDisabled.IsValid) movementDisabled.ValueRW = !value;
+			}
 		}
 
 		public AgentOffMeshLinkTraversalContext (OffMeshLinks.OffMeshLinkConcrete link) {

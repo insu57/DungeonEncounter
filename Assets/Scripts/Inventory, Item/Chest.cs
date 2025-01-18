@@ -13,9 +13,8 @@ public class Chest : MonoBehaviour
     public void SetItem(GameObject item)
     {
         _dropItem = item;
-        Debug.Log(_dropItem.name);
     }
-    public void OpenChest()
+    public void OpenChest() //상자열기
     {
         if(_isOpen) return;
         Vector3 targetRotation = new Vector3(-90f, 0f, 0f);
@@ -28,7 +27,8 @@ public class Chest : MonoBehaviour
     private IEnumerator DisappearChest()
     {
         yield return new WaitForSeconds(1f);
-        Destroy(gameObject);
+        //Destroy(gameObject); 
+        ObjectPoolingManager.Instance.ReturnToPool(PoolKeys.Chest01, gameObject);
     }
     
     private void Awake()

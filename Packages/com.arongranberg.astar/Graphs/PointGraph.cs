@@ -8,7 +8,9 @@ namespace Pathfinding {
 	using Unity.Jobs;
 
 	/// <summary>
-	/// Basic point graph.
+	/// Graph consisting of a set of points.
+	///
+	/// [Open online documentation to see images]
 	///
 	/// The point graph is the most basic graph structure, it consists of a number of interconnected points in space called nodes or waypoints.
 	/// The point graph takes a Transform object as "root", this Transform will be searched for child objects, every child object will be treated as a node.
@@ -30,7 +32,8 @@ namespace Pathfinding {
 	///
 	/// Note: Does not support linecast because the nodes do not have a surface.
 	///
-	/// [Open online documentation to see images]
+	/// See: get-started-point (view in online documentation for working links)
+	/// See: graphTypes (view in online documentation for working links)
 	///
 	/// \section pointgraph-inspector Inspector
 	/// [Open online documentation to see images]
@@ -43,7 +46,7 @@ namespace Pathfinding {
 	/// \inspectorField{Raycast, raycast}
 	/// \inspectorField{Raycast → Use 2D Physics, use2DPhysics}
 	/// \inspectorField{Raycast → Thick Raycast, thickRaycast}
-	/// \inspectorField{Raycast → Thick Raycast -> Radius, thickRaycastRadius}
+	/// \inspectorField{Raycast → Thick Raycast → Radius, thickRaycastRadius}
 	/// \inspectorField{Raycast → Mask, mask}
 	/// \inspectorField{Optimize For Sparse Graph, optimizeForSparseGraph}
 	/// \inspectorField{Nearest Node Queries Find Closest, nearestNodeDistanceMode}
@@ -53,7 +56,11 @@ namespace Pathfinding {
 	[Pathfinding.Util.Preserve]
 	public class PointGraph : NavGraph
 		, IUpdatableGraph {
-		/// <summary>Childs of this transform are treated as nodes</summary>
+		/// <summary>
+		/// Children of this transform are treated as nodes.
+		///
+		/// If null, the <see cref="searchTag"/> will be used instead.
+		/// </summary>
 		[JsonMember]
 		public Transform root;
 
@@ -77,7 +84,11 @@ namespace Pathfinding {
 		[JsonMember]
 		public Vector3 limits;
 
-		/// <summary>Use raycasts to check connections</summary>
+		/// <summary>
+		/// Use raycasts to filter connections.
+		///
+		/// If a hit is detected between two nodes, the connection will not be created.
+		/// </summary>
 		[JsonMember]
 		public bool raycast = true;
 
@@ -85,19 +96,38 @@ namespace Pathfinding {
 		[JsonMember]
 		public bool use2DPhysics;
 
-		/// <summary>Use thick raycast</summary>
+		/// <summary>
+		/// Use thick raycast.
+		///
+		/// If enabled, the collision check shape will not be a line segment, but a capsule with a radius of <see cref="thickRaycastRadius"/>.
+		/// </summary>
 		[JsonMember]
 		public bool thickRaycast;
 
-		/// <summary>Thick raycast radius</summary>
+		/// <summary>
+		/// Thick raycast radius.
+		///
+		/// See: <see cref="thickRaycast"/>
+		/// </summary>
 		[JsonMember]
 		public float thickRaycastRadius = 1;
 
-		/// <summary>Recursively search for child nodes to the <see cref="root"/></summary>
+		/// <summary>
+		/// Recursively search for child nodes to the <see cref="root"/>.
+		///
+		/// If false, all direct children of <see cref="root"/> will be used as nodes.
+		/// If true, all children of <see cref="root"/> and their children (recursively) will be used as nodes.
+		/// </summary>
 		[JsonMember]
 		public bool recursive = true;
 
-		/// <summary>Layer mask to use for raycast</summary>
+		/// <summary>
+		/// Layer mask to use for raycasting.
+		///
+		/// All objects included in this layer mask will be treated as obstacles.
+		///
+		/// See: <see cref="raycast"/>
+		/// </summary>
 		[JsonMember]
 		public LayerMask mask;
 
@@ -117,8 +147,8 @@ namespace Pathfinding {
 		/// When you have this enabled, you will not be able to move nodes around using scripting unless you recalculate the lookup structure at the same time.
 		/// See: <see cref="RebuildNodeLookup"/>
 		///
-		/// If you enable this during runtime, you will need to call <see cref="RebuildNodeLookup"/> to make sure any existing nodes are added to the lookup structure.
-		/// If the graph doesn't have any nodes yet or if you are going to scan the graph afterwards then you do not need to do this.
+		/// If you enable this during runtime, you need to call <see cref="RebuildNodeLookup"/> to make this take effect.
+		/// If you are going to scan the graph afterwards then you do not need to do this.
 		/// </summary>
 		[JsonMember]
 		public bool optimizeForSparseGraph;
@@ -199,7 +229,11 @@ namespace Pathfinding {
 			if (nodes == null) return NNInfo.Empty;
 			var iposition = (Int3)position;
 
-			if (optimizeForSparseGraph) {
+			if ((lookupTree != null) != optimizeForSparseGraph) {
+				Debug.LogWarning("Lookup tree is not in the correct state. Have you changed PointGraph.optimizeForSparseGraph without calling RebuildNodeLookup?");
+			}
+
+			if (lookupTree != null) {
 				if (nearestNodeDistanceMode == NodeDistanceMode.Node) {
 					var minDistSqr = maxDistanceSqr;
 					var closestNode = lookupTree.GetNearest(iposition, constraint, ref minDistSqr);
@@ -315,6 +349,7 @@ namespace Pathfinding {
 				var newNodes = new PointNode[nodes != null ? System.Math.Max(nodes.Length+4, nodes.Length*2) : 4];
 				if (nodes != null) nodes.CopyTo(newNodes, 0);
 				nodes = newNodes;
+				RebuildNodeLookup();
 			}
 
 			node.position = position;
@@ -324,7 +359,7 @@ namespace Pathfinding {
 			nodes[nodeCount] = node;
 			nodeCount++;
 
-			if (optimizeForSparseGraph) lookupTree.Add(node);
+			if (lookupTree != null) lookupTree.Add(node);
 
 			return node;
 		}
@@ -406,7 +441,7 @@ namespace Pathfinding {
 		/// You may also call this after you have added many nodes using the
 		/// <see cref="AddNode"/> method. When adding nodes using the <see cref="AddNode"/> method they
 		/// will be added to the lookup structure. The lookup structure will
-		/// rebalance itself when it gets too unbalanced however if you are
+		/// rebalance itself when it gets too unbalanced. But if you are
 		/// sure you won't be adding any more nodes in the short term, you can
 		/// make sure it is perfectly balanced and thus squeeze out the last
 		/// bit of performance by calling this method. This can improve the
@@ -428,7 +463,7 @@ namespace Pathfinding {
 			}
 		}
 
-		/// <summary>Rebuilds a cache used when <see cref="nearestNodeDistanceMode"/> = <see cref="NodeDistanceMode"/>.ToConnection</summary>
+		/// <summary>Rebuilds a cache used when <see cref="nearestNodeDistanceMode"/> = <see cref="NodeDistanceMode"/>.Connection</summary>
 		public void RebuildConnectionDistanceLookup () {
 			if (nearestNodeDistanceMode == NodeDistanceMode.Connection) {
 				maximumConnectionLength = LongestConnectionLength(nodes, nodeCount);

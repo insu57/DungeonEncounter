@@ -11,6 +11,10 @@ namespace Pathfinding.ECS {
 	[RequireMatchingQueriesForUpdate]
 	public partial struct SyncDestinationTransformSystem : ISystem {
 		public void OnUpdate (ref SystemState systemState) {
+			// If there will be multiple simulation steps during this frame, only update the destination points on the first step.
+			// It cannot change between simulation steps anyway.
+			if (!AIMovementSystemGroup.TimeScaledRateManager.IsFirstSubstep) return;
+
 			foreach (var(point, destinationSetter) in SystemAPI.Query<RefRW<DestinationPoint>, AIDestinationSetter>()) {
 				if (destinationSetter.target != null) {
 					point.ValueRW = new DestinationPoint {

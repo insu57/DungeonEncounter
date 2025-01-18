@@ -55,15 +55,27 @@ namespace Pathfinding {
 		/// </summary>
 		public abstract float MaxTileConnectionEdgeDistance { get; }
 
-		/// <summary>Show an outline of the polygons in the Unity Editor</summary>
+		/// <summary>
+		/// Show an outline of the polygons in the Unity Editor.
+		///
+		/// [Open online documentation to see images]
+		/// </summary>
 		[JsonMember]
 		public bool showMeshOutline = true;
 
-		/// <summary>Show the connections between the polygons in the Unity Editor</summary>
+		/// <summary>
+		/// Show the connections between the polygons in the Unity Editor.
+		///
+		/// [Open online documentation to see images]
+		/// </summary>
 		[JsonMember]
 		public bool showNodeConnections;
 
-		/// <summary>Show the surface of the navmesh</summary>
+		/// <summary>
+		/// Show the surface of the navmesh.
+		///
+		/// [Open online documentation to see images]
+		/// </summary>
 		[JsonMember]
 		public bool showMeshSurface = true;
 
@@ -1535,10 +1547,21 @@ namespace Pathfinding {
 				int shapeEdgeA = (int)LinecastShapeEdgeLookup[sideOfLine];
 				// The edge consists of the vertex with index 'sharedEdgeA' and the next vertex after that (index '(sharedEdgeA+1)%3')
 
+				if (shapeEdgeA == 0xFF) {
+					// Line does not intersect node at all?
+					// This may theoretically happen if the origin was not properly snapped to the inside of the triangle, but is instead a tiny distance outside the node.
+					Debug.LogError("Line does not intersect node at all");
+					hit.node = node;
+					hit.point = hit.tangentOrigin = hit.origin;
+					return true;
+				}
+
 				var sideNodeExit = VectorMath.SideXZ(shapeEdgeA == 0 ? a0 : (shapeEdgeA == 1 ? a1 : a2), shapeEdgeA == 0 ? a1 : (shapeEdgeA == 1 ? a2 : a0), i3endInGraphSpace);
+
 				if (sideNodeExit != Side.Left) {
 					// Ray stops before it leaves the current node.
 					// The endpoint must be inside the current node.
+
 
 					hit.point = end;
 					hit.node = node;
@@ -1550,6 +1573,30 @@ namespace Pathfinding {
 						// That case may happen if a linecast is made to a point, but the point way a very large distance straight up into the air.
 						// The linecast may indeed reach the right point, but it's so far away up into the air that the GetNearest method will stop searching.
 						return false;
+					} else if (sideNodeExit == Side.Colinear) {
+						// This can happen in two case:
+						// 1. The node is degenerate and the ray is parallel to one of its sides.
+						// 2. i3endInGraphSpace is idential to one of the vertices of this node, but the target node is not this node.
+						//
+						// In case of (2). It could look like this:
+						//     ______
+						//    ^      /\
+						//   / \    /  \
+						//  / N \  / T  \
+						// /_____\/______\
+						//        E
+						//
+						// Where N is the node we are in right now, T is the node we want to move to,
+						// and E is the end is vertex at the end of the linecast.
+						//
+						// We have to walk around the vertex E to find the correct node.
+
+						if (a0 == i3endInGraphSpace || a1 == i3endInGraphSpace || a2 == i3endInGraphSpace) {
+							return !(FindNodeAroundVertex(node, endNode, i3endInGraphSpace, false) || FindNodeAroundVertex(node, endNode, i3endInGraphSpace, true));
+						} else {
+							// This case can happen in degenerate cases, I think.
+							// We just continue walking and see if we end up at the correct node.
+						}
 					} else {
 						// The closest node to the end point was not the node we ended up at.
 						// This can happen if a linecast is done between two floors of a building.
@@ -1560,61 +1607,88 @@ namespace Pathfinding {
 					}
 				}
 
-				if (shapeEdgeA == 0xFF) {
-					// Line does not intersect node at all?
-					// This may theoretically happen if the origin was not properly snapped to the inside of the triangle, but is instead a tiny distance outside the node.
-					Debug.LogError("Line does not intersect node at all");
-					hit.node = node;
-					hit.point = hit.tangentOrigin = hit.origin;
-					return true;
-				} else {
-					bool success = false;
-					var nodeConnections = node.connections;
 
-					// Check all node connetions to see which one is the next node along the ray's path
-					for (int i = 0; i < nodeConnections.Length; i++) {
-						if (nodeConnections[i].isEdgeShared && nodeConnections[i].isOutgoing && nodeConnections[i].shapeEdge == shapeEdgeA) {
-							// This might be the next node that we enter
+				bool success = false;
+				var nodeConnections = node.connections;
 
-							var neighbour = nodeConnections[i].node as TriangleMeshNode;
-							if (neighbour == null || !neighbour.Walkable || (filter != null && !filter(neighbour))) continue;
+				// Check all node connetions to see which one is the next node along the ray's path
+				for (int i = 0; i < nodeConnections.Length; i++) {
+					if (nodeConnections[i].isEdgeShared && nodeConnections[i].isOutgoing && nodeConnections[i].shapeEdge == shapeEdgeA) {
+						// This might be the next node that we enter
 
-							int shapeEdgeB = nodeConnections[i].adjacentShapeEdge;
+						var neighbour = nodeConnections[i].node as TriangleMeshNode;
+						if (neighbour == null || !neighbour.Walkable || (filter != null && !filter(neighbour))) continue;
 
-							var side1 = VectorMath.SideXZ(i3originInGraphSpace, i3endInGraphSpace, neighbour.GetVertexInGraphSpace(shapeEdgeB));
-							var side2 = VectorMath.SideXZ(i3originInGraphSpace, i3endInGraphSpace, neighbour.GetVertexInGraphSpace((shapeEdgeB+1) % 3));
+						int shapeEdgeB = nodeConnections[i].adjacentShapeEdge;
 
-							// Check if the line enters this edge
-							success = (side1 == Side.Right || side1 == Side.Colinear) && (side2 == Side.Left || side2 == Side.Colinear);
+						var side1 = VectorMath.SideXZ(i3originInGraphSpace, i3endInGraphSpace, neighbour.GetVertexInGraphSpace(shapeEdgeB));
+						var side2 = VectorMath.SideXZ(i3originInGraphSpace, i3endInGraphSpace, neighbour.GetVertexInGraphSpace((shapeEdgeB+1) % 3));
 
-							if (!success) continue;
+						// Check if the line enters this edge
+						success = (side1 == Side.Right || side1 == Side.Colinear) && (side2 == Side.Left || side2 == Side.Colinear);
 
-							// Ray has entered the neighbouring node.
-							// After the first node, it is possible to prove the loop invariant that shapeEdgeA will *never* end up as -1 (checked above)
-							// Since side = Colinear acts essentially as a wildcard. side1 and side2 can be the most restricted if they are side1=right, side2=left.
-							// Then when we get to the next node we know that the sideOfLine array is either [*, Right, Left], [Left, *, Right] or [Right, Left, *], where * is unknown.
-							// We are looking for the sequence [Left, Right] (possibly including Colinear as wildcard). We will always find this sequence regardless of the value of *.
-							node = neighbour;
-							break;
-						}
+						if (!success) continue;
+
+						// Ray has entered the neighbouring node.
+						// After the first node, it is possible to prove the loop invariant that shapeEdgeA will *never* end up as -1 (checked above)
+						// Since side = Colinear acts essentially as a wildcard. side1 and side2 can be the most restricted if they are side1=right, side2=left.
+						// Then when we get to the next node we know that the sideOfLine array is either [*, Right, Left], [Left, *, Right] or [Right, Left, *], where * is unknown.
+						// We are looking for the sequence [Left, Right] (possibly including Colinear as wildcard). We will always find this sequence regardless of the value of *.
+						node = neighbour;
+						break;
 					}
+				}
 
-					if (!success) {
-						// Node did not enter any neighbours
-						// It must have hit the border of the navmesh
-						var hitEdgeStartInGraphSpace = (Vector3)(shapeEdgeA == 0 ? a0 : (shapeEdgeA == 1 ? a1 : a2));
-						var hitEdgeEndInGraphSpace = (Vector3)(shapeEdgeA == 0 ? a1 : (shapeEdgeA == 1 ? a2 : a0));
-						var intersectionInGraphSpace = VectorMath.LineIntersectionPointXZ(hitEdgeStartInGraphSpace, hitEdgeEndInGraphSpace, (Vector3)i3originInGraphSpace, (Vector3)i3endInGraphSpace);
-						hit.point = graph.transform.Transform(intersectionInGraphSpace);
-						hit.node = node;
-						var hitEdgeStart = graph.transform.Transform(hitEdgeStartInGraphSpace);
-						var hitEdgeEnd = graph.transform.Transform(hitEdgeEndInGraphSpace);
-						hit.tangent = hitEdgeEnd - hitEdgeStart;
-						hit.tangentOrigin = hitEdgeStart;
-						return true;
+				if (!success) {
+					// Node did not enter any neighbours
+					// It must have hit the border of the navmesh
+					var hitEdgeStartInGraphSpace = (Vector3)(shapeEdgeA == 0 ? a0 : (shapeEdgeA == 1 ? a1 : a2));
+					var hitEdgeEndInGraphSpace = (Vector3)(shapeEdgeA == 0 ? a1 : (shapeEdgeA == 1 ? a2 : a0));
+					var intersectionInGraphSpace = VectorMath.LineIntersectionPointXZ(hitEdgeStartInGraphSpace, hitEdgeEndInGraphSpace, (Vector3)i3originInGraphSpace, (Vector3)i3endInGraphSpace);
+					hit.point = graph.transform.Transform(intersectionInGraphSpace);
+					hit.node = node;
+					var hitEdgeStart = graph.transform.Transform(hitEdgeStartInGraphSpace);
+					var hitEdgeEnd = graph.transform.Transform(hitEdgeEndInGraphSpace);
+					hit.tangent = hitEdgeEnd - hitEdgeStart;
+					hit.tangentOrigin = hitEdgeStart;
+					return true;
+				}
+			}
+		}
+
+		/// <summary>Start at node, then walk around the given vertex and see if targetNode is reachable by doing this.</summary>
+		/// <param name="node">The node to start from</param>
+		/// <param name="targetNode">The node to check if it is reachable</param>
+		/// <param name="vertexInGraphSpace">The vertex to walk around</param>
+		/// <param name="oppositeDirection">If true, walk in the opposite direction around the vertex
+		/// \return True if the target node is reachable</param>
+		static bool FindNodeAroundVertex (TriangleMeshNode node, TriangleMeshNode targetNode, Int3 vertexInGraphSpace, bool oppositeDirection) {
+			var startNode = node;
+			bool moved = true;
+			while (moved) {
+				moved = false;
+				for (int i = 0; i < 3 && !moved; i++) {
+					var v = node.GetVertexInGraphSpace(i);
+					if (v == vertexInGraphSpace) {
+						var shapeEdge = oppositeDirection ? (i - 1 + 3) % 3 : i;
+						for (int j = 0; j < node.connections.Length; j++) {
+							var conn = node.connections[j];
+							if (conn.isEdgeShared && conn.edgesAreIdentical && conn.shapeEdge == shapeEdge) {
+								node = conn.node as TriangleMeshNode;
+								moved = true;
+								if (node == targetNode) return true;
+
+								// Avoid infinite loops
+								if (node == startNode) return false;
+								break;
+							}
+						}
 					}
 				}
 			}
+
+			// This means that either the vertex is not on this node, or there's no adjacent node that also shares this vertex, assuming we walk in the right direction around the vertex
+			return false;
 		}
 
 		public override void OnDrawGizmos (DrawingData gizmos, bool drawNodes, RedrawScope redrawScope) {

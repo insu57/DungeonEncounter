@@ -19,7 +19,7 @@ MonoBehaviour:
   itemData:
   - effectStat: 0
     effectCalculate: 0
-    effectAmount: 50
+    effectValue: 50
     effectDescription: "\uC989\uC2DC \uCCB4\uB825 50\uD68C\uBCF5"
     effectDuration: 0
     isTickBased: 0

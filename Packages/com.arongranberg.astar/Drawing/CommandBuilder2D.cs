@@ -380,7 +380,7 @@ namespace Pathfinding.Drawing {
 		/// See: <see cref="Draw.SolidBox"/>
 		/// </summary>
 		public void SolidRectangle (Rect rect) {
-			draw.SolidPlane(new float3(rect.center.x, rect.center.y, 0.0f), xy ? XY_TO_XZ_ROTATION : XZ_TO_XZ_ROTATION, new float2(rect.width, rect.height));
+			draw.SolidPlane(xy ? new float3(rect.center.x, rect.center.y, 0.0f) : new float3(rect.center.x, 0, rect.center.y), xy ? XY_TO_XZ_ROTATION : XZ_TO_XZ_ROTATION, new float2(rect.width, rect.height));
 		}
 
 		/// <summary>

@@ -59,7 +59,12 @@ namespace UI
         {
             defenseText.text = $"{defenseValue}";
         }
-        
+
+        private void Awake()
+        {
+            resumeButton.onClick.AddListener(TogglePause);
+        }
+
         private void Update()
         {
             //PauseMenu 일시정지

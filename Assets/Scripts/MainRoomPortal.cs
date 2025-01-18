@@ -25,6 +25,7 @@ public class MainRoomPortal : MonoBehaviour
             {
                 LoadingManager.LoadScene(LoadingManager.Stage1Scene);
                 floatEnterStage.SetActive(false);
+                _player.transform.position = new Vector3(0, 0, 0);
             }
         }
     }

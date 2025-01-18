@@ -9,7 +9,9 @@ namespace Pathfinding.ECS {
 	using Pathfinding;
 	using Pathfinding.ECS.RVO;
 	using Pathfinding.RVO;
+	using Unity.Burst.Intrinsics;
 	using Unity.Collections;
+	using Unity.Mathematics;
 
 	[UpdateInGroup(typeof(AIMovementSystemGroup))]
 	[UpdateBefore(typeof(FollowerControlSystem))]
@@ -64,8 +66,15 @@ namespace Pathfinding.ECS {
 
 			var commandBuffer = new EntityCommandBuffer(systemState.WorldUpdateAllocator);
 
-			SyncLocalAvoidanceComponents(ref systemState, commandBuffer);
-			SchedulePaths(ref systemState);
+			if (AIMovementSystemGroup.TimeScaledRateManager.IsFirstSubstep) {
+				// We don't care about syncing these more often than once per frame,
+				// as the source cannot typically change between simulations steps anyway
+				SyncLocalAvoidanceComponents(ref systemState, commandBuffer);
+
+				// While the agent can technically discover that the path is stale during a simulation step,
+				// only scheduling paths during the first substep is typically good enough.
+				SchedulePaths(ref systemState);
+			}
 			StartOffMeshLinkTraversal(ref systemState, commandBuffer);
 
 			commandBuffer.Playback(systemState.EntityManager);
@@ -108,6 +117,24 @@ namespace Pathfinding.ECS {
 			Profiler.EndSample();
 		}
 
+		[WithAbsent(typeof(ManagedAgentOffMeshLinkTraversal))] // Do not recalculate the path of agents that are currently traversing an off-mesh link.
+		partial struct JobCheckStaleness : IJobEntity, IJobEntityChunkBeginEnd {
+			public NativeBitArray isPathStale;
+			int index;
+
+			public void Execute (ManagedState state) {
+				isPathStale.Set(index++, state.pathTracer.isStale);
+			}
+
+			public bool OnChunkBegin (in ArchetypeChunk chunk, int unfilteredChunkIndex, bool useEnabledMask, in v128 chunkEnabledMask) {
+				if (index + chunk.Count > isPathStale.Length) isPathStale.Resize(math.ceilpow2(index + chunk.Count), NativeArrayOptions.ClearMemory);
+				return true;
+			}
+
+			public void OnChunkEnd (in ArchetypeChunk chunk, int unfilteredChunkIndex, bool useEnabledMask, in v128 chunkEnabledMask, bool chunkWasExecuted) {}
+		}
+
+
 		[BurstCompile]
 		[WithAbsent(typeof(ManagedAgentOffMeshLinkTraversal))] // Do not recalculate the path of agents that are currently traversing an off-mesh link.
 		partial struct JobShouldRecalculatePaths : IJobEntity {
@@ -116,10 +143,8 @@ namespace Pathfinding.ECS {
 			int index;
 
 			public void Execute (ref ECS.AutoRepathPolicy autoRepathPolicy, in LocalTransform transform, in AgentCylinderShape shape, in DestinationPoint destination) {
-				if (index >= shouldRecalculatePath.Length) {
-					shouldRecalculatePath.Resize(shouldRecalculatePath.Length * 2, NativeArrayOptions.ClearMemory);
-				}
-				shouldRecalculatePath.Set(index++, autoRepathPolicy.ShouldRecalculatePath(transform.Position, shape.radius, destination.destination, time));
+				var isPathStale = shouldRecalculatePath.IsSet(index);
+				shouldRecalculatePath.Set(index++, autoRepathPolicy.ShouldRecalculatePath(transform.Position, shape.radius, destination.destination, time, isPathStale));
 			}
 		}
 
@@ -134,20 +159,21 @@ namespace Pathfinding.ECS {
 			}
 
 			public static void MaybeRecalculatePath (ManagedState state, ref ECS.AutoRepathPolicy autoRepathPolicy, ref LocalTransform transform, ref DestinationPoint destination, ref AgentMovementPlane movementPlane, float time, bool wantsToRecalculatePath) {
-				if ((state.pathTracer.isStale || wantsToRecalculatePath) && state.pendingPath == null) {
-					if (autoRepathPolicy.mode != Pathfinding.AutoRepathPolicy.Mode.Never && float.IsFinite(destination.destination.x)) {
-						var path = ABPath.Construct(transform.Position, destination.destination, null);
-						path.UseSettings(state.pathfindingSettings);
-						path.nnConstraint.distanceMetric = DistanceMetric.ClosestAsSeenFromAboveSoft(movementPlane.value.up);
-						ManagedState.SetPath(path, state, in movementPlane, ref destination);
-						autoRepathPolicy.DidRecalculatePath(destination.destination, time);
-					}
+				if (wantsToRecalculatePath && state.pendingPath == null) {
+					var path = ABPath.Construct(transform.Position, destination.destination, null);
+					path.UseSettings(state.pathfindingSettings);
+					path.nnConstraint.distanceMetric = DistanceMetric.ClosestAsSeenFromAboveSoft(movementPlane.value.up);
+					ManagedState.SetPath(path, state, in movementPlane, ref destination);
+					autoRepathPolicy.OnScheduledPathRecalculation(destination.destination, time);
 				}
 			}
 		}
 
 		void SchedulePaths (ref SystemState systemState) {
 			Profiler.BeginSample("Schedule search");
+			var bits = new NativeBitArray(512, Allocator.TempJob);
+			systemState.CompleteDependency();
+
 			// Block the pathfinding threads from starting new path calculations while this loop is running.
 			// This is done to reduce lock contention and significantly improve performance.
 			// If we did not do this, all pathfinding threads would immediately wake up when a path was pushed to the queue.
@@ -155,9 +181,12 @@ namespace Pathfinding.ECS {
 			// If we are scheduling a lot of paths, this causes significant contention, and can make this loop take 100 times
 			// longer to complete, compared to if we block the pathfinding threads.
 			// TODO: Switch to a lock-free queue to avoid this issue altogether.
-			var bits = new NativeBitArray(512, Allocator.TempJob);
-			systemState.CompleteDependency();
 			var pathfindingLock = AstarPath.active.PausePathfindingSoon();
+
+			// Propagate staleness
+			new JobCheckStaleness {
+				isPathStale = bits,
+			}.Run();
 			// Calculate which agents want to recalculate their path (using burst)
 			new JobShouldRecalculatePaths {
 				time = (float)SystemAPI.Time.ElapsedTime,

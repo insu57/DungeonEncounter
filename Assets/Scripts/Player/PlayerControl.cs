@@ -144,6 +144,11 @@ namespace Player
             _moveVector = new Vector3(_hAxis, 0, _vAxis).normalized;
             
             _playerManager.ActiveSwordAttackBox(IsAttack, IsSkill);
+
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                _playerManager.GetItemInRange();
+            }
             
             if (!IsAttack && !IsDodge) //Take Action...movement restriction 공격 등 행동 시 이동 제한 
             {

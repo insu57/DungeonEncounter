@@ -453,19 +453,16 @@ namespace Pathfinding {
 				target.pathID = pathID;
 				target.parentIndex = parentPathNode;
 				var candidateH = (uint)heuristicObjective.Calculate(targetNodePosition, pars.targetNodeIndex);
-				var candidateF = candidateG + candidateH;
-				heap.Add(pathNodes, targetPathNode, candidateG, candidateF);
+				heap.Add(pathNodes, targetPathNode, candidateG, candidateH);
 			} else {
 				// Note: Before this method is called, a check is done for the case target.pathID==pathID && heapIndex == NotInHeap,
 				// so we know target.heapIndex != NotInHeap here.
 
 				// We have seen this node before and it is in the heap.
 				// Now we check if this path to the target node is better than the previous one.
-
-				var targetG = heap.GetG(target.heapIndex);
 				// The previous F score of the node
 				var targetF = heap.GetF(target.heapIndex);
-				var targetH = targetF - targetG;
+				var targetH = heap.GetH(target.heapIndex);
 				uint candidateH;
 
 				if (target.fractionAlongEdge != fractionAlongEdge) {
@@ -483,7 +480,7 @@ namespace Pathfinding {
 					// This connection is better than the previous one.
 					target.fractionAlongEdge = fractionAlongEdge;
 					target.parentIndex = parentPathNode;
-					heap.Add(pathNodes, targetPathNode, candidateG, candidateF);
+					heap.Add(pathNodes, targetPathNode, candidateG, candidateH);
 				} else {
 					// This connection is not better than the previous one.
 					// We can safely discard this connection.
@@ -1069,8 +1066,7 @@ namespace Pathfinding {
 				}
 
 				// Select the node with the lowest F score and remove it from the open list
-				var currentPathNodeIndex = pathHandler.heap.Remove(pathHandler.pathNodes, out uint currentNodeG, out uint currentNodeF);
-				var currentNodeH = currentNodeF - currentNodeG;
+				var currentPathNodeIndex = pathHandler.heap.Remove(pathHandler.pathNodes, out uint currentNodeG, out uint currentNodeH);
 
 				if (currentPathNodeIndex >= temporaryNodeStartIndex) {
 					// This is a special node

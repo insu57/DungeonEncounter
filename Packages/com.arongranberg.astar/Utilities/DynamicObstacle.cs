@@ -10,7 +10,7 @@ namespace Pathfinding {
 	/// then it will call <see cref="AstarPath.UpdateGraphs"/> to update the graph around it.
 	///
 	/// Make sure that any children colliders do not extend beyond the bounds of the collider attached to the
-	/// GameObject that the DynamicObstacle component is attached to since this script only updates the graph
+	/// GameObject that the DynamicObstacle component is attached to, since this script only updates the graph
 	/// around the bounds of the collider on the same GameObject.
 	///
 	/// An update will be triggered whenever the bounding box of the attached collider has changed (moved/expanded/etc.) by at least <see cref="updateError"/> world units or if

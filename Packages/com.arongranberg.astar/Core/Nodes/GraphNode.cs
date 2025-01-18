@@ -491,6 +491,7 @@ namespace Pathfinding {
 		/// <param name="cost">Cost of the connection. A cost of 1000 corresponds approximately to the cost of moving one world unit. See \reflink{Int3.Precision}.</param>
 		/// <param name="directionality">Determines if both lhs->rhs and rhs->lhs connections will be created, or if only a connection from lhs->rhs should be created.</param>
 		public static void Connect (GraphNode lhs, GraphNode rhs, uint cost, OffMeshLinks.Directionality directionality = OffMeshLinks.Directionality.TwoWay) {
+			if (lhs.Destroyed || rhs.Destroyed) throw new System.ArgumentException("Cannot connect destroyed nodes");
 			lhs.AddPartialConnection(rhs, cost, true, directionality == OffMeshLinks.Directionality.TwoWay);
 			rhs.AddPartialConnection(lhs, cost, directionality == OffMeshLinks.Directionality.TwoWay, true);
 		}

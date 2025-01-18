@@ -2,6 +2,9 @@
 /// \page changelog Changelog
 /// \order{-10}
 ///
+/// - 1.7.7
+///     - Fixed <see cref="Draw.xz.SolidRectangle"/> would render the rectangle in the XY plane, instead of the XZ plane.
+///
 /// - 1.7.6 (2024-10-14)
 ///     - Fixed a compatibility issue with the high definition render pipeline, accidentally introduced in 1.7.5.
 ///     - Fixed gizmos were not rendered when opening prefab assets in isolation mode and the high definition render pipeline was used.

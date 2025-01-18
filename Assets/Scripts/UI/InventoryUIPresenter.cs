@@ -1,6 +1,7 @@
 using Player;
 using Scriptable_Objects;
 using UI;
+using UnityEditor.Localization.Plugins.XLIFF.V12;
 using UnityEngine;
 
 public class InventoryUIPresenter
@@ -58,60 +59,52 @@ public class InventoryUIPresenter
     
     private void HandleShowCurrentWeapon() //현재 무기 데이터 표시
     {
-        var item = _inventoryManager.EquippedWeaponData;
-        if (item.ItemData != null)
-        {
-            _inventoryUIView.SelectedItem(item);
-            _inventoryUIView.SetEquipBtnInteractable(false);//무기는 무조건 하나 장착해야함.(장착해제x)
-            _inventoryUIView.SetDropBtnInteractable(false);//장착한 아이템은 드랍 불가
+        var itemDataWithID = _inventoryManager.CurrentWeaponData;
+        if (itemDataWithID.ItemData == null) return;
+        _inventoryUIView.SelectedItem(itemDataWithID);
+        _inventoryUIView.SetEquipBtnInteractable(false);//무기는 무조건 하나 장착해야함.(장착해제x)
+        _inventoryUIView.SetDropBtnInteractable(false);//장착한 아이템은 드랍 불가
 
-            _inventoryManager.SelectedItem = item;
-        }
+        _inventoryManager.SetSelectedItem(itemDataWithID);
     }
     
     private void HandleShowCurrentEquipment()
     {
-        var item = _inventoryManager.EquippedWeaponData;
-        if (item.ItemData != null)
-        {
-            _inventoryUIView.SelectedItem(item);
-            _inventoryUIView.ToggleItemEquipBtn(true);//장착버튼 토글.
-            _inventoryUIView.SetDropBtnInteractable(false);//장착한 아이템은 드랍 불가
+        var itemDataWithID = _inventoryManager.CurrentWeaponData;
+        if (itemDataWithID.ItemData == null) return;
+        _inventoryUIView.SelectedItem(itemDataWithID);
+        _inventoryUIView.ToggleItemEquipBtn(true);//장착버튼 토글.
+        _inventoryUIView.SetDropBtnInteractable(false);//장착한 아이템은 드랍 불가
             
-            _inventoryManager.SelectedItem = item;
-        }
-        
+        _inventoryManager.SetSelectedItem(itemDataWithID);
+
     }
     private void HandleShowCurrentQuick1()
     {
-        var item = _inventoryManager.ItemQuickSlot1Data;
-        if (item.ItemData != null)
-        {
-            _inventoryUIView.SelectedItem(item);
-            _inventoryUIView.ToggleQuick1Btn(true);
-            _inventoryUIView.ToggleQuick2Btn(_inventoryManager.ItemQuickSlot2Data != null 
-                                             && item.ItemData == _inventoryManager.ItemQuickSlot2Data.ItemData);
-            //다른 퀵슬롯에 장착된 상태인지 확인
-            _inventoryUIView.SetDropBtnInteractable(false);//장착한 아이템은 드랍불가
+        var itemDataWithID = _inventoryManager.ItemQuickSlot1Data;
+        if (itemDataWithID.ItemData == null) return;
+        _inventoryUIView.SelectedItem(itemDataWithID);
+        _inventoryUIView.ToggleQuick1Btn(true);
+        _inventoryUIView.ToggleQuick2Btn(_inventoryManager.ItemQuickSlot2Data != null 
+                                         && itemDataWithID.ItemData == _inventoryManager.ItemQuickSlot2Data.ItemData);
+        //다른 퀵슬롯에 장착된 상태인지 확인
+        _inventoryUIView.SetDropBtnInteractable(false);//장착한 아이템은 드랍불가
             
-            _inventoryManager.SelectedItem = item;
-        }
-        
+        _inventoryManager.SetSelectedItem(itemDataWithID);
+
     }
 
     private void HandleShowCurrentQuick2()
     {
-        var item = _inventoryManager.ItemQuickSlot2Data;
-        if (item.ItemData != null)
-        {
-            _inventoryUIView.SelectedItem(item);
-            _inventoryUIView.ToggleQuick1Btn(_inventoryManager.ItemQuickSlot1Data != null 
-                                             && item.ItemData == _inventoryManager.ItemQuickSlot1Data.ItemData);
-            _inventoryUIView.ToggleQuick2Btn(true);
-            _inventoryUIView.SetDropBtnInteractable(false);    
+        var itemDataWithID = _inventoryManager.ItemQuickSlot2Data;
+        if (itemDataWithID.ItemData == null) return;
+        _inventoryUIView.SelectedItem(itemDataWithID);
+        _inventoryUIView.ToggleQuick1Btn(_inventoryManager.ItemQuickSlot1Data != null 
+                                         && itemDataWithID.ItemData == _inventoryManager.ItemQuickSlot1Data.ItemData);
+        _inventoryUIView.ToggleQuick2Btn(true);
+        _inventoryUIView.SetDropBtnInteractable(false);    
             
-            _inventoryManager.SelectedItem = item;
-        }
+        _inventoryManager.SetSelectedItem(itemDataWithID);
     }
 
     private void HandleSelectInventorySlot(ItemTypes type, int index) //선택한 인벤토리 슬롯 아이템 데이터 표시
@@ -121,10 +114,10 @@ public class InventoryUIPresenter
             case ItemTypes.Weapon:
                 if (index < _inventoryManager.weaponInventoryCount)
                 {
-                    ItemDataWithID item = _inventoryManager.WeaponDataList[index];//선택한 아이템 데이터
-                    bool isEquipped = item.ItemID == _inventoryManager.EquippedWeaponData.ItemID;//장착한 아이템과 인덱스 비교
-                    _inventoryUIView.SelectedItem(item);//데이터 표시
-                    if (item.ItemData is PlayerWeaponData weaponData)
+                    var itemDataWithID = _inventoryManager.WeaponDataList[index];//선택한 아이템 데이터
+                    bool isEquipped = itemDataWithID.ItemID == _inventoryManager.CurrentWeaponData.ItemID;//장착한 아이템과 인덱스 비교
+                    _inventoryUIView.SelectedItem(itemDataWithID);//데이터 표시
+                    if (itemDataWithID.ItemData is PlayerWeaponData weaponData)
                     {
                         if (weaponData.IsDefaultWeapon || isEquipped) //장착한 무기나 기본 무기는 드랍불가
                         {
@@ -137,7 +130,7 @@ public class InventoryUIPresenter
                         _inventoryUIView.ToggleItemEquipBtn(isEquipped);
                         _inventoryUIView.SetEquipBtnInteractable(!isEquipped);//장착한 무기는 장착버튼 비활성
                     
-                        _inventoryManager.SelectedItem = item;
+                        _inventoryManager.SetSelectedItem(itemDataWithID);
                     }
                     
                 }
@@ -145,31 +138,39 @@ public class InventoryUIPresenter
             case ItemTypes.Equipment:
                 if (index < _inventoryManager.equipmentInventoryCount)
                 {
-                    ItemDataWithID item = _inventoryManager.EquipmentDataList[index];
-                    bool isEquipped = item.ItemID == _inventoryManager.EquippedEquipmentData.ItemID; 
-                    _inventoryUIView.SelectedItem(item);//데이터 표시
+                    var itemDataWithID = _inventoryManager.EquipmentDataList[index];
+                    bool isEquipped;
+                    if (_inventoryManager.CurrentEquipmentData == null)
+                    {
+                        isEquipped = false;
+                    }
+                    else
+                    {
+                        isEquipped = itemDataWithID.ItemID == _inventoryManager.CurrentEquipmentData.ItemID; 
+                    }
+                    _inventoryUIView.SelectedItem(itemDataWithID);//데이터 표시
                     _inventoryUIView.ToggleItemEquipBtn(isEquipped);
                     _inventoryUIView.SetDropBtnInteractable(!isEquipped);
                     
-                    _inventoryManager.SelectedItem = item;
+                    _inventoryManager.SetSelectedItem(itemDataWithID);
                 }
                 break;
             case ItemTypes.Consumable:
                 if (index < _inventoryManager.consumableInventoryCount)//소모템은 인덱스없음(중복가능해서 현재는 없음)
                 {
-                    ItemDataWithID item = _inventoryManager.ConsumableDataList[index];
-                    _inventoryUIView.SelectedItem(item);
+                    var itemDataWithID = _inventoryManager.ConsumableDataList[index];
+                    _inventoryUIView.SelectedItem(itemDataWithID);
                     //퀵슬롯 설정
                     bool isQuick1 = _inventoryManager.ItemQuickSlot1Data != null &&//null확인(빈 상태인지)
-                                    item.ItemData == _inventoryManager.ItemQuickSlot1Data.ItemData;//퀵슬롯 장착 확인
+                                    itemDataWithID.ItemData == _inventoryManager.ItemQuickSlot1Data.ItemData;//퀵슬롯 장착 확인
                     bool isQuick2 = _inventoryManager.ItemQuickSlot2Data != null &&
-                                    item.ItemData == _inventoryManager.ItemQuickSlot2Data.ItemData;
+                                    itemDataWithID.ItemData == _inventoryManager.ItemQuickSlot2Data.ItemData;
                     
                     _inventoryUIView.ToggleQuick1Btn(isQuick1);
                     _inventoryUIView.ToggleQuick2Btn(isQuick2);
                     _inventoryUIView.SetDropBtnInteractable(!(isQuick1||isQuick2)); //수량따라 작동하게 수정필요
                     
-                    _inventoryManager.SelectedItem = item;
+                    _inventoryManager.SetSelectedItem(itemDataWithID);
                 }
                 break;
             default:
@@ -301,8 +302,9 @@ public class InventoryUIPresenter
             }
             case PlayerEquipmentData equipmentData:
             {
-                if (_inventoryManager.SelectedItem.ItemID 
-                    == _inventoryManager.EquippedEquipmentData.ItemID)//장착된 아이템인지 확인
+                var currentEquipment = _inventoryManager.CurrentEquipmentData;
+                if (currentEquipment != null && _inventoryManager.SelectedItem.ItemID 
+                    == currentEquipment.ItemID)//장착된 아이템인지 확인
                 {
                     _inventoryManager.SetEquipment(null); //장착 장비 초기화
                     _playerManager.PlayerEquipEquipment(null, null);
@@ -388,11 +390,11 @@ public class InventoryUIPresenter
     
     private void HandleOnDropButton()//드랍버튼
     {
-        ItemTypes itemType = _inventoryManager.SelectedItem.ItemType;
-        ItemDataWithID itemDataWithID = _inventoryManager.SelectedItem;
+        //ItemTypes itemType = _inventoryManager.SelectedItem.ItemType;
+        var itemDataWithID = _inventoryManager.SelectedItem;
         
         _inventoryManager.RemoveItemData(itemDataWithID);//리스트에서 제거
-        GameObject dropItem = itemDataWithID.ItemPrefab;
+        var dropItem = itemDataWithID.ItemPrefab;
         Debug.Log(dropItem.name);
         _playerManager.DropItem(dropItem);
         switch (itemDataWithID.ItemData)
@@ -411,7 +413,7 @@ public class InventoryUIPresenter
                 if (quantity <= 1)//수량이 1이하였으면
                 {
                     _inventoryUIView.ClearItemInfo();
-                    _inventoryManager.SelectedItem = null;
+                    _inventoryManager.SetSelectedItem(null);
                 }
                 else
                 {
@@ -463,7 +465,7 @@ public class InventoryUIPresenter
                     _playerManager.UseConsumableItem(consumableItemData2);
                     _inventoryManager.RemoveItemData(quick2);
                     _inventoryUIView.UpdateItemQuick2Quantity(quantity-1);
-                    if (quantity < 2)
+                    if (quantity <= 1)
                     {
                         _inventoryManager.SetQuickSlot2(null);
                         _inventoryUIView.ClearItemQuick2();

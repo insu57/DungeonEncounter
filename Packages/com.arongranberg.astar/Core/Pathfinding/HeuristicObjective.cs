@@ -20,6 +20,8 @@ namespace Pathfinding {
 		readonly uint euclideanEmbeddingPivots;
 		readonly uint targetNodeIndex;
 
+		public bool hasHeuristic => heuristic != Heuristic.None;
+
 		public HeuristicObjective (int3 point, Heuristic heuristic, float heuristicScale) {
 			this.mn = this.mx = point;
 			this.heuristic = heuristic;

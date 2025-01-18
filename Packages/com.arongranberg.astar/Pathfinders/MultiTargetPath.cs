@@ -228,6 +228,7 @@ namespace Pathfinding {
 
 		protected void RebuildOpenList () {
 			BinaryHeap heap = pathHandler.heap;
+			if (heap.tieBreaking != BinaryHeap.TieBreaking.HScore) return;
 
 			for (int i = 0; i < heap.numberOfItems; i++) {
 				var pathNodeIndex = heap.GetPathNodeIndex(i);

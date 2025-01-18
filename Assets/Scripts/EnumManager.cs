@@ -8,7 +8,7 @@ public class ItemEffect
 {
     public PlayerStatTypes effectStat;
     public CalculateType effectCalculate;
-    public float effectAmount;
+    public float effectValue;
     public string effectDescription;
     public float effectDuration;
     public bool isTickBased;

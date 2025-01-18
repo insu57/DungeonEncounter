@@ -21,9 +21,10 @@ public class InventoryManager : MonoBehaviour
     private int _equipmentID = 1;
     
     private int _moneyAmount;
-    public ItemDataWithID SelectedItem;
-    public ItemDataWithID EquippedWeaponData { private set; get; }
-    public ItemDataWithID EquippedEquipmentData { private set; get; }
+    
+    public ItemDataWithID SelectedItem{private set; get; }
+    public ItemDataWithID CurrentWeaponData { private set; get; }
+    public ItemDataWithID CurrentEquipmentData { private set; get; }
     public ItemDataWithID ItemQuickSlot1Data { private set; get; }
     public ItemDataWithID ItemQuickSlot2Data { private set; get; }
     
@@ -46,26 +47,34 @@ public class InventoryManager : MonoBehaviour
     
     //inventory
 
+    public void SetSelectedItem(ItemDataWithID itemDataWithID)
+    {
+        SelectedItem = itemDataWithID;
+    }
+    
     public void SetWeapon(ItemDataWithID itemDataWithID)//장착 무기 갱신(데이터, ID)
     {
-        EquippedWeaponData = itemDataWithID;
+        CurrentWeaponData = itemDataWithID;
     }
 
     public void SetEquipment(ItemDataWithID itemDataWithID)
     {
-        EquippedEquipmentData = itemDataWithID;
+        CurrentEquipmentData = itemDataWithID;
     }
 
     public void SetQuickSlot1(ItemDataWithID itemDataWithID)
     {
-        var consumableItemData = ConsumableDataList.FirstOrDefault(x => x.ItemData == itemDataWithID.ItemData);
+        var consumableItemData = itemDataWithID != null ? 
+            ConsumableDataList.FirstOrDefault(x => x.ItemData == itemDataWithID.ItemData) : null;
+        
         ItemQuickSlot1Data = consumableItemData;
     }
 
     public void SetQuickSlot2(ItemDataWithID itemDataWithID)
     {
-        var consumableItemData = ConsumableDataList.FirstOrDefault(x => x.ItemData == itemDataWithID.ItemData);
-        ItemQuickSlot2Data = itemDataWithID;
+        var consumableItemData = itemDataWithID != null ?
+            ConsumableDataList.FirstOrDefault(x => x.ItemData == itemDataWithID.ItemData) : null;
+        ItemQuickSlot2Data = consumableItemData;
     }
 
     public void AddItemData(ItemDataWithID itemDataWithID)
@@ -76,7 +85,7 @@ public class InventoryManager : MonoBehaviour
             case PlayerWeaponData:
                 itemDataWithID.ItemID = _weaponID++;
                 WeaponDataList.Add(itemDataWithID);//ID로 구분
-                weaponInventoryCount = WeaponDataList.Count; //무기 개수 갱신
+                weaponInventoryCount = WeaponDataList.Count; //무기 개수 갱신 //null?
                 WeaponDataList.Sort((a, b)//이름 오름차순 정렬
                     => string.Compare(a.ItemData.GetName(), b.ItemData.GetName(), StringComparison.Ordinal));
                 break;

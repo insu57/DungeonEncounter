@@ -60,7 +60,7 @@ AstarPath.pathReturnQueue	astarpath.html#pathReturnQueue	Holds all completed pat
 AstarPath.prioritizeGraphs	astarpath.html#prioritizeGraphs	Prioritize graphs. \n\nGraphs will be prioritized based on their order in the inspector. The first graph which has a node closer than prioritizeGraphsLimit will be chosen instead of searching all graphs.\n\n[more in online documentation]
 AstarPath.prioritizeGraphsLimit	astarpath.html#prioritizeGraphsLimit	Distance limit for prioritizeGraphs. \n\n[more in online documentation]
 AstarPath.redrawScope	astarpath.html#redrawScope	
-AstarPath.scanOnStartup	astarpath.html#scanOnStartup	If true, all graphs will be scanned during Awake. \n\nIf you disable this, you will have to call AstarPath.active.Scan yourself to enable pathfinding. Alternatively you could load a saved graph from a file.\n\nIf a startup cache has been generated (see Saving and Loading Graphs), it always takes priority, and the graphs will be loaded from the cache instead of scanned.\n\nThis can be useful to disable if you want to scan your graphs asynchronously, or if you have a procedural world which has not been created yet at the start of the game.\n\n[more in online documentation]
+AstarPath.scanOnStartup	astarpath.html#scanOnStartup	If true, all graphs will be scanned when the game starts, during OnEnable. \n\nIf you disable this, you will have to call AstarPath.active.Scan yourself to enable pathfinding. Alternatively you could load a saved graph from a file.\n\nIf a startup cache has been generated (see Saving and Loading Graphs), it always takes priority, and the graphs will be loaded from the cache instead of scanned.\n\nThis can be useful to disable if you want to scan your graphs asynchronously, or if you have a procedural world which has not been created yet at the start of the game.\n\n[more in online documentation]
 AstarPath.showGraphs	astarpath.html#showGraphs	Shows or hides graph inspectors. \n\nUsed internally by the editor
 AstarPath.showNavGraphs	astarpath.html#showNavGraphs	Visualize graphs in the scene view (editor only). \n\n <b>[image in online documentation]</b>
 AstarPath.showSearchTree	astarpath.html#showSearchTree	If enabled, nodes will draw a line to their 'parent'. \n\nThis will show the search tree for the latest path.\n\n[more in online documentation]
@@ -437,14 +437,16 @@ Pathfinding.BaseAIEditor.lastSeenCustomGravity	baseaieditor.html#lastSeenCustomG
 Pathfinding.BinaryHeap.D	binaryheap.html#D	Number of children of each node in the tree. \n\nDifferent values have been tested and 4 has been empirically found to perform the best. \n\n[more in online documentation]
 Pathfinding.BinaryHeap.GrowthFactor	binaryheap.html#GrowthFactor	The tree will grow by at least this factor every time it is expanded.
 Pathfinding.BinaryHeap.HeapNode.F	heapnode.html#F	
-Pathfinding.BinaryHeap.HeapNode.G	heapnode.html#G	
+Pathfinding.BinaryHeap.HeapNode.TieBreaker	heapnode.html#TieBreaker	
 Pathfinding.BinaryHeap.HeapNode.pathNodeIndex	heapnode.html#pathNodeIndex	
 Pathfinding.BinaryHeap.HeapNode.sortKey	heapnode.html#sortKey	Bitpacked F and G scores.
 Pathfinding.BinaryHeap.NotInHeap	binaryheap.html#NotInHeap	
-Pathfinding.BinaryHeap.SortGScores	binaryheap.html#SortGScores	Sort nodes by G score if there is a tie when comparing the F score. \n\nDisabling this will improve pathfinding performance with around 2.5% but may break ties between paths that have the same length in a less desirable manner (only relevant for grid graphs).
+Pathfinding.BinaryHeap.TieBreaking	binaryheap.html#TieBreaking	
 Pathfinding.BinaryHeap.heap	binaryheap.html#heap	Internal backing array for the heap.
+Pathfinding.BinaryHeap.insertionOrder	binaryheap.html#insertionOrder	
 Pathfinding.BinaryHeap.isEmpty	binaryheap.html#isEmpty	True if the heap does not contain any elements.
 Pathfinding.BinaryHeap.numberOfItems	binaryheap.html#numberOfItems	Number of items in the tree.
+Pathfinding.BinaryHeap.tieBreaking	binaryheap.html#tieBreaking	Ties between elements that have the same F score can be broken by the H score or by insertion order.
 Pathfinding.BlockManager.BlockMode	blockmanager.html#BlockMode	
 Pathfinding.BlockManager.TraversalProvider.blockManager	traversalprovider.html#blockManager	Holds information about which nodes are occupied.
 Pathfinding.BlockManager.TraversalProvider.filterDiagonalGridConnections	traversalprovider.html#filterDiagonalGridConnections	Filter diagonal connections using GridGraph.cutCorners for effects applied by this ITraversalProvider. \n\nThis includes tags and other effects that this ITraversalProvider controls.\n\nThis only has an effect if GridGraph.cutCorners is set to false and your grid has GridGraph.neighbours set to Eight.\n\nTake this example, the grid is completely walkable, but an ITraversalProvider is used to make the nodes marked with '#' as unwalkable. The agent 'S' is in the middle.\n\n<b>[code in online documentation]</b>\n\nIf <b>filterDiagonalGridConnections</b> is false the agent will be free to use the diagonal connections to move away from that spot. However, if <b>filterDiagonalGridConnections</b> is true (the default) then the diagonal connections will be disabled and the agent will be stuck.\n\nTypically, there are a few common use cases:\n- If your ITraversalProvider makes walls and obstacles and you want it to behave identically to obstacles included in the original grid graph scan, then this should be true.\n\n- If your ITraversalProvider is used for agent to agent avoidance and you want them to be able to move around each other more freely, then this should be false.\n\n\n\n[more in online documentation]
@@ -645,17 +647,21 @@ Pathfinding.ECS.AIMoveSystem.entityQueryWithGravity	aimovesystem.html#entityQuer
 Pathfinding.ECS.AIMoveSystem.jobRepairPathScheduler	aimovesystem.html#jobRepairPathScheduler	
 Pathfinding.ECS.AIMovementSystemGroup.TimeScaledRateManager.CheapSimulationOnly	timescaledratemanager.html#CheapSimulationOnly	True if it was determined that zero substeps should be simulated. \n\nIn this case all systems will get an opportunity to run a single update, but they should avoid systems that don't have to run every single frame.
 Pathfinding.ECS.AIMovementSystemGroup.TimeScaledRateManager.CheapStepDeltaTime	timescaledratemanager.html#CheapStepDeltaTime	
+Pathfinding.ECS.AIMovementSystemGroup.TimeScaledRateManager.IsFirstSubstep	timescaledratemanager.html#IsFirstSubstep	True when this is the first substep of the current simulation.
 Pathfinding.ECS.AIMovementSystemGroup.TimeScaledRateManager.IsLastSubstep	timescaledratemanager.html#IsLastSubstep	True when this is the last substep of the current simulation.
+Pathfinding.ECS.AIMovementSystemGroup.TimeScaledRateManager.NumUpdatesThisFrame	timescaledratemanager.html#NumUpdatesThisFrame	
 Pathfinding.ECS.AIMovementSystemGroup.TimeScaledRateManager.Timestep	timescaledratemanager.html#Timestep	
 Pathfinding.ECS.AIMovementSystemGroup.TimeScaledRateManager.cheapSimulationOnly	timescaledratemanager.html#cheapSimulationOnly	
 Pathfinding.ECS.AIMovementSystemGroup.TimeScaledRateManager.cheapTimeData	timescaledratemanager.html#cheapTimeData	
 Pathfinding.ECS.AIMovementSystemGroup.TimeScaledRateManager.cheapTimeDataQueue	timescaledratemanager.html#cheapTimeDataQueue	
 Pathfinding.ECS.AIMovementSystemGroup.TimeScaledRateManager.inGroup	timescaledratemanager.html#inGroup	
+Pathfinding.ECS.AIMovementSystemGroup.TimeScaledRateManager.isFirstSubstep	timescaledratemanager.html#isFirstSubstep	
 Pathfinding.ECS.AIMovementSystemGroup.TimeScaledRateManager.isLastSubstep	timescaledratemanager.html#isLastSubstep	
 Pathfinding.ECS.AIMovementSystemGroup.TimeScaledRateManager.lastCheapSimulation	timescaledratemanager.html#lastCheapSimulation	
 Pathfinding.ECS.AIMovementSystemGroup.TimeScaledRateManager.lastFullSimulation	timescaledratemanager.html#lastFullSimulation	
 Pathfinding.ECS.AIMovementSystemGroup.TimeScaledRateManager.maximumDt	timescaledratemanager.html#maximumDt	
 Pathfinding.ECS.AIMovementSystemGroup.TimeScaledRateManager.numUpdatesThisFrame	timescaledratemanager.html#numUpdatesThisFrame	
+Pathfinding.ECS.AIMovementSystemGroup.TimeScaledRateManager.ownProcessingTimePerIteration	timescaledratemanager.html#ownProcessingTimePerIteration	
 Pathfinding.ECS.AIMovementSystemGroup.TimeScaledRateManager.stepDt	timescaledratemanager.html#stepDt	
 Pathfinding.ECS.AIMovementSystemGroup.TimeScaledRateManager.timeDataQueue	timescaledratemanager.html#timeDataQueue	
 Pathfinding.ECS.AIMovementSystemGroup.TimeScaledRateManager.updateIndex	timescaledratemanager.html#updateIndex	
@@ -694,6 +700,7 @@ Pathfinding.ECS.AutoRepathPolicy.Sensitivity	autorepathpolicy.html#Sensitivity	H
 Pathfinding.ECS.AutoRepathPolicy.lastDestination	autorepathpolicy.html#lastDestination	
 Pathfinding.ECS.AutoRepathPolicy.lastRepathTime	autorepathpolicy.html#lastRepathTime	
 Pathfinding.ECS.AutoRepathPolicy.mode	autorepathpolicy.html#mode	Policy to use when recalculating paths. \n\n[more in online documentation]
+Pathfinding.ECS.AutoRepathPolicy.pathFailures	autorepathpolicy.html#pathFailures	
 Pathfinding.ECS.AutoRepathPolicy.period	autorepathpolicy.html#period	Number of seconds between each automatic path recalculation for Mode.EveryNSeconds, and the maximum interval for Mode.Dynamic.
 Pathfinding.ECS.ComponentRef.ptr	componentref.html#ptr	
 Pathfinding.ECS.ComponentRef.value	componentref.html#value	
@@ -723,14 +730,21 @@ Pathfinding.ECS.JobControl.MarkerConvertObstacles	jobcontrol.html#MarkerConvertO
 Pathfinding.ECS.JobControl.draw	jobcontrol.html#draw	
 Pathfinding.ECS.JobControl.dt	jobcontrol.html#dt	
 Pathfinding.ECS.JobControl.edgesScratch	jobcontrol.html#edgesScratch	
+Pathfinding.ECS.JobControl.indicesScratch	jobcontrol.html#indicesScratch	
 Pathfinding.ECS.JobControl.navmeshEdgeData	jobcontrol.html#navmeshEdgeData	
 Pathfinding.ECS.JobDrawFollowerGizmos.AgentCylinderShapeHandleRO	jobdrawfollowergizmos.html#AgentCylinderShapeHandleRO	
 Pathfinding.ECS.JobDrawFollowerGizmos.AgentMovementPlaneHandleRO	jobdrawfollowergizmos.html#AgentMovementPlaneHandleRO	
+Pathfinding.ECS.JobDrawFollowerGizmos.InternalRotation	jobdrawfollowergizmos.html#InternalRotation	
 Pathfinding.ECS.JobDrawFollowerGizmos.LocalTransformTypeHandleRO	jobdrawfollowergizmos.html#LocalTransformTypeHandleRO	
 Pathfinding.ECS.JobDrawFollowerGizmos.ManagedStateHandleRW	jobdrawfollowergizmos.html#ManagedStateHandleRW	
 Pathfinding.ECS.JobDrawFollowerGizmos.MovementSettingsHandleRO	jobdrawfollowergizmos.html#MovementSettingsHandleRO	
 Pathfinding.ECS.JobDrawFollowerGizmos.MovementStateHandleRO	jobdrawfollowergizmos.html#MovementStateHandleRO	
+Pathfinding.ECS.JobDrawFollowerGizmos.Path	jobdrawfollowergizmos.html#Path	
 Pathfinding.ECS.JobDrawFollowerGizmos.ResolvedMovementHandleRO	jobdrawfollowergizmos.html#ResolvedMovementHandleRO	
+Pathfinding.ECS.JobDrawFollowerGizmos.TargetInternalRotation	jobdrawfollowergizmos.html#TargetInternalRotation	
+Pathfinding.ECS.JobDrawFollowerGizmos.TargetInternalRotationHint	jobdrawfollowergizmos.html#TargetInternalRotationHint	
+Pathfinding.ECS.JobDrawFollowerGizmos.UnsmoothedRotation	jobdrawfollowergizmos.html#UnsmoothedRotation	
+Pathfinding.ECS.JobDrawFollowerGizmos.VisualRotationColor	jobdrawfollowergizmos.html#VisualRotationColor	
 Pathfinding.ECS.JobDrawFollowerGizmos.draw	jobdrawfollowergizmos.html#draw	
 Pathfinding.ECS.JobDrawFollowerGizmos.entityManagerHandle	jobdrawfollowergizmos.html#entityManagerHandle	
 Pathfinding.ECS.JobDrawFollowerGizmos.scratchBuffer1	jobdrawfollowergizmos.html#scratchBuffer1	
@@ -751,6 +765,7 @@ Pathfinding.ECS.JobRepairPath.MarkerRepair	jobrepairpath.html#MarkerRepair
 Pathfinding.ECS.JobRepairPath.MarkerUpdateReachedEndInfo	jobrepairpath.html#MarkerUpdateReachedEndInfo	
 Pathfinding.ECS.JobRepairPath.Scheduler.AgentCylinderShapeTypeHandleRO	scheduler.html#AgentCylinderShapeTypeHandleRO	
 Pathfinding.ECS.JobRepairPath.Scheduler.AgentMovementPlaneTypeHandleRO	scheduler.html#AgentMovementPlaneTypeHandleRO	
+Pathfinding.ECS.JobRepairPath.Scheduler.AutoRepathPolicyRW	scheduler.html#AutoRepathPolicyRW	
 Pathfinding.ECS.JobRepairPath.Scheduler.DestinationPointTypeHandleRO	scheduler.html#DestinationPointTypeHandleRO	
 Pathfinding.ECS.JobRepairPath.Scheduler.LocalTransformTypeHandleRO	scheduler.html#LocalTransformTypeHandleRO	
 Pathfinding.ECS.JobRepairPath.Scheduler.ManagedStateTypeHandleRW	scheduler.html#ManagedStateTypeHandleRW	
@@ -887,6 +902,8 @@ Pathfinding.ECS.RVO.RVOSystem.lastSimulator	rvosystem.html#lastSimulator	Keeps t
 Pathfinding.ECS.RVO.RVOSystem.shouldBeAddedToSimulation	rvosystem.html#shouldBeAddedToSimulation	
 Pathfinding.ECS.RVO.RVOSystem.shouldBeRemovedFromSimulation	rvosystem.html#shouldBeRemovedFromSimulation	
 Pathfinding.ECS.RVO.RVOSystem.withAgentIndex	rvosystem.html#withAgentIndex	
+Pathfinding.ECS.RepairPathSystem.JobCheckStaleness.index	jobcheckstaleness.html#index	
+Pathfinding.ECS.RepairPathSystem.JobCheckStaleness.isPathStale	jobcheckstaleness.html#isPathStale	
 Pathfinding.ECS.RepairPathSystem.JobRecalculatePaths.index	jobrecalculatepaths.html#index	
 Pathfinding.ECS.RepairPathSystem.JobRecalculatePaths.shouldRecalculatePath	jobrecalculatepaths.html#shouldRecalculatePath	
 Pathfinding.ECS.RepairPathSystem.JobRecalculatePaths.time	jobrecalculatepaths.html#time	
@@ -1457,6 +1474,7 @@ Pathfinding.FollowerEntity.updatePosition	followerentity.html#updatePosition	Det
 Pathfinding.FollowerEntity.updateRotation	followerentity.html#updateRotation	Determines if the character's rotation should be coupled to the Transform's rotation. \n\nIf false then all movement calculations will happen as usual, but the GameObject that this component is attached to will not rotate. Instead, only the rotation property and the internal entity's rotation will change.\n\nThis is particularly useful for 2D games where you want the Transform to stay in the same orientation, and instead swap out the displayed sprite to indicate the direction the character is facing.\n\nYou can enable PIDMovement.DebugFlags.Rotation in debugFlags to draw a gizmos arrow in the scene view to indicate the agent's internal rotation.\n\n[more in online documentation]
 Pathfinding.FollowerEntity.velocity	followerentity.html#velocity	Actual velocity that the agent is moving with. \n\nIn world units per second.\n\nThis is useful for, for example, selecting which animations to play, and at what speeds.\n\n[more in online documentation]
 Pathfinding.FollowerEntityEditor.debug	followerentityeditor.html#debug	
+Pathfinding.FollowerEntityEditor.legend	followerentityeditor.html#legend	
 Pathfinding.FollowerEntityEditor.tagPenaltiesOpen	followerentityeditor.html#tagPenaltiesOpen	
 Pathfinding.Funnel.FunnelPortalIndexMask	funnel.html#FunnelPortalIndexMask	
 Pathfinding.Funnel.FunnelPortals.left	funnelportals.html#left	
@@ -2121,6 +2139,7 @@ Pathfinding.Graphs.Navmesh.TileHandler.Point64Wrapper.x	point64wrapper.html#x
 Pathfinding.Graphs.Navmesh.TileHandler.Point64Wrapper.y	point64wrapper.html#y	
 Pathfinding.Graphs.Navmesh.TileHandler.TileCuts.contourEndIndex	tilecuts.html#contourEndIndex	
 Pathfinding.Graphs.Navmesh.TileHandler.TileCuts.contourStartIndex	tilecuts.html#contourStartIndex	
+Pathfinding.Graphs.Navmesh.TileHandler.TileSnappingMaxDistance	tilehandler.html#TileSnappingMaxDistance	See ConvertVerticesAndSnapToTileBoundaries. \n\nThe navmesh cut vertices are snapped to tile borders, if they are within this distance to the edge. This is used to avoid tiiiny slivers of triangles resulting from cuts that are just infringing on a tile. The normal snapping (using EdgeSnappingMaxDistance) cannot be used for tile borders, because that would make the tile borders not be straight anymore.\n\nI don't think there's any technical upper limit to this value. It's a tradeoff between the size of the slivers, and how accurately it matches the original geometry.
 Pathfinding.Graphs.Navmesh.TileHandlerCache.cachedClippers	tilehandlercache.html#cachedClippers	
 Pathfinding.Graphs.Navmesh.TileLayout.CellHeight	tilelayout.html#CellHeight	Voxel y coordinates will be stored as ushorts which have 65536 values. \n\nLeave a margin to make sure things do not overflow
 Pathfinding.Graphs.Navmesh.TileLayout.TileWorldSize	tilelayout.html#TileWorldSize	
@@ -2450,6 +2469,7 @@ Pathfinding.GridStringPulling.marker7	gridstringpulling.html#marker7
 Pathfinding.Heuristic	pathfinding.html#Heuristic	How to estimate the cost of moving to the destination during pathfinding. \n\nThe heuristic is the estimated cost from the current node to the target. The different heuristics have roughly the same performance except not using any heuristic at all ( Heuristic.None) which is usually significantly slower.\n\nIn the image below you can see a comparison of the different heuristic options for an 8-connected grid and for a 4-connected grid. Note that all paths within the green area will all have the same length. The only difference between the heuristics is which of those paths of the same length that will be chosen. Note that while the Diagonal Manhattan and Manhattan options seem to behave very differently on an 8-connected grid they only do it in this case because of very small rounding errors. Usually they behave almost identically on 8-connected grids.\n\n <b>[image in online documentation]</b>\n\nGenerally for a 4-connected grid graph the Manhattan option should be used as it is the true distance on a 4-connected grid. For an 8-connected grid graph the Diagonal Manhattan option is the mathematically most correct option, however the Euclidean option is often preferred, especially if you are simplifying the path afterwards using modifiers.\n\nFor any graph that is not grid based the Euclidean option is the best one to use.\n\n[more in online documentation]
 Pathfinding.HeuristicObjective.euclideanEmbeddingCosts	heuristicobjective.html#euclideanEmbeddingCosts	
 Pathfinding.HeuristicObjective.euclideanEmbeddingPivots	heuristicobjective.html#euclideanEmbeddingPivots	
+Pathfinding.HeuristicObjective.hasHeuristic	heuristicobjective.html#hasHeuristic	
 Pathfinding.HeuristicObjective.heuristic	heuristicobjective.html#heuristic	
 Pathfinding.HeuristicObjective.heuristicScale	heuristicobjective.html#heuristicScale	
 Pathfinding.HeuristicObjective.mn	heuristicobjective.html#mn	
@@ -2790,9 +2810,9 @@ Pathfinding.NavmeshBase.isScanned	navmeshbase.html#isScanned	True if the graph h
 Pathfinding.NavmeshBase.navmeshUpdateData	navmeshbase.html#navmeshUpdateData	Handles navmesh cutting. \n\n[more in online documentation]
 Pathfinding.NavmeshBase.nearestSearchOnlyXZ	navmeshbase.html#nearestSearchOnlyXZ	Perform nearest node searches in XZ space only. \n\nRecomended for single-layered environments. Faster but can be inaccurate esp. in multilayered contexts. You should not use this if the graph is rotated since then the XZ plane no longer corresponds to the ground plane.\n\nThis can be important on sloped surfaces. See the image below in which the closest point for each blue point is queried for:  <b>[image in online documentation]</b>\n\nYou can also control this using a field on an NNConstraint object.\n\n[more in online documentation]
 Pathfinding.NavmeshBase.nodeRecyclingHashBuffer	navmeshbase.html#nodeRecyclingHashBuffer	Temporary buffer used in PrepareNodeRecycling.
-Pathfinding.NavmeshBase.showMeshOutline	navmeshbase.html#showMeshOutline	Show an outline of the polygons in the Unity Editor.
-Pathfinding.NavmeshBase.showMeshSurface	navmeshbase.html#showMeshSurface	Show the surface of the navmesh.
-Pathfinding.NavmeshBase.showNodeConnections	navmeshbase.html#showNodeConnections	Show the connections between the polygons in the Unity Editor.
+Pathfinding.NavmeshBase.showMeshOutline	navmeshbase.html#showMeshOutline	Show an outline of the polygons in the Unity Editor. \n\n <b>[image in online documentation]</b>
+Pathfinding.NavmeshBase.showMeshSurface	navmeshbase.html#showMeshSurface	Show the surface of the navmesh. \n\n <b>[image in online documentation]</b>
+Pathfinding.NavmeshBase.showNodeConnections	navmeshbase.html#showNodeConnections	Show the connections between the polygons in the Unity Editor. \n\n <b>[image in online documentation]</b>
 Pathfinding.NavmeshBase.tileXCount	navmeshbase.html#tileXCount	Number of tiles along the X-axis.
 Pathfinding.NavmeshBase.tileZCount	navmeshbase.html#tileZCount	Number of tiles along the Z-axis.
 Pathfinding.NavmeshBase.tiles	navmeshbase.html#tiles	All tiles. \n\n[more in online documentation]
@@ -3191,19 +3211,19 @@ Pathfinding.PointGraph.PointGraphUpdatePromise.graphUpdates	pointgraphupdateprom
 Pathfinding.PointGraph.isScanned	pointgraph.html#isScanned	True if the graph has been scanned and contains nodes. \n\nGraphs are typically scanned when the game starts, but they can also be scanned manually.\n\nIf a graph has not been scanned, it does not contain any nodes and it not possible to use it for pathfinding.\n\n[more in online documentation]
 Pathfinding.PointGraph.limits	pointgraph.html#limits	Max distance along the axis for a connection to be valid. \n\n0 = infinity
 Pathfinding.PointGraph.lookupTree	pointgraph.html#lookupTree	
-Pathfinding.PointGraph.mask	pointgraph.html#mask	Layer mask to use for raycast.
+Pathfinding.PointGraph.mask	pointgraph.html#mask	Layer mask to use for raycasting. \n\nAll objects included in this layer mask will be treated as obstacles.\n\n[more in online documentation]
 Pathfinding.PointGraph.maxDistance	pointgraph.html#maxDistance	Max distance for a connection to be valid. \n\nThe value 0 (zero) will be read as infinity and thus all nodes not restricted by other constraints will be added as connections.\n\nA negative value will disable any neighbours to be added. It will completely stop the connection processing to be done, so it can save you processing power if you don't these connections.
 Pathfinding.PointGraph.maximumConnectionLength	pointgraph.html#maximumConnectionLength	Longest known connection. \n\nIn squared Int3 units.\n\n[more in online documentation]
 Pathfinding.PointGraph.nearestNodeDistanceMode	pointgraph.html#nearestNodeDistanceMode	Distance query mode. \n\n <b>[image in online documentation]</b>\n\nIn the image above there are a few red nodes. Assume the agent is the orange circle. Using the Node mode the closest point on the graph that would be found would be the node at the bottom center which may not be what you want. Using the Connection mode it will find the closest point on the connection between the two nodes in the top half of the image.\n\nWhen using the Connection option you may also want to use the Connection option for the Seeker's Start End Modifier snapping options. This is not strictly necessary, but it most cases it is what you want.\n\n[more in online documentation]\nIf you enable this during runtime, you will need to call RebuildConnectionDistanceLookup to make sure some cache data is properly recalculated. If the graph doesn't have any nodes yet or if you are going to scan the graph afterwards then you do not need to do this.
 Pathfinding.PointGraph.nodeCount	pointgraph.html#nodeCount	Number of nodes in this graph.
 Pathfinding.PointGraph.nodes	pointgraph.html#nodes	All nodes in this graph. \n\nNote that only the first nodeCount will be non-null.\n\nYou can also use the GetNodes method to get all nodes.\n\nThe order of the nodes is unspecified, and may change when nodes are added or removed.
-Pathfinding.PointGraph.optimizeForSparseGraph	pointgraph.html#optimizeForSparseGraph	Optimizes the graph for sparse graphs. \n\nThis can reduce calculation times for both scanning and for normal path requests by huge amounts. It reduces the number of node-node checks that need to be done during scan, and can also optimize getting the nearest node from the graph (such as when querying for a path).\n\nTry enabling and disabling this option, check the scan times logged when you scan the graph to see if your graph is suited for this optimization or if it makes it slower.\n\nThe gain of using this optimization increases with larger graphs, the default scan algorithm is brute force and requires O(n^2) checks, this optimization along with a graph suited for it, requires only O(n) checks during scan (assuming the connection distance limits are reasonable).\n\n[more in online documentation]\n\n\nIf you enable this during runtime, you will need to call RebuildNodeLookup to make sure any existing nodes are added to the lookup structure. If the graph doesn't have any nodes yet or if you are going to scan the graph afterwards then you do not need to do this.
-Pathfinding.PointGraph.raycast	pointgraph.html#raycast	Use raycasts to check connections.
-Pathfinding.PointGraph.recursive	pointgraph.html#recursive	Recursively search for child nodes to the root.
-Pathfinding.PointGraph.root	pointgraph.html#root	Childs of this transform are treated as nodes.
+Pathfinding.PointGraph.optimizeForSparseGraph	pointgraph.html#optimizeForSparseGraph	Optimizes the graph for sparse graphs. \n\nThis can reduce calculation times for both scanning and for normal path requests by huge amounts. It reduces the number of node-node checks that need to be done during scan, and can also optimize getting the nearest node from the graph (such as when querying for a path).\n\nTry enabling and disabling this option, check the scan times logged when you scan the graph to see if your graph is suited for this optimization or if it makes it slower.\n\nThe gain of using this optimization increases with larger graphs, the default scan algorithm is brute force and requires O(n^2) checks, this optimization along with a graph suited for it, requires only O(n) checks during scan (assuming the connection distance limits are reasonable).\n\n[more in online documentation]\n\n\nIf you enable this during runtime, you need to call RebuildNodeLookup to make this take effect. If you are going to scan the graph afterwards then you do not need to do this.
+Pathfinding.PointGraph.raycast	pointgraph.html#raycast	Use raycasts to filter connections. \n\nIf a hit is detected between two nodes, the connection will not be created.
+Pathfinding.PointGraph.recursive	pointgraph.html#recursive	Recursively search for child nodes to the root. \n\nIf false, all direct children of root will be used as nodes. If true, all children of root and their children (recursively) will be used as nodes.
+Pathfinding.PointGraph.root	pointgraph.html#root	Children of this transform are treated as nodes. \n\nIf null, the searchTag will be used instead.
 Pathfinding.PointGraph.searchTag	pointgraph.html#searchTag	If no root is set, all nodes with the tag is used as nodes.
-Pathfinding.PointGraph.thickRaycast	pointgraph.html#thickRaycast	Use thick raycast.
-Pathfinding.PointGraph.thickRaycastRadius	pointgraph.html#thickRaycastRadius	Thick raycast radius.
+Pathfinding.PointGraph.thickRaycast	pointgraph.html#thickRaycast	Use thick raycast. \n\nIf enabled, the collision check shape will not be a line segment, but a capsule with a radius of thickRaycastRadius.
+Pathfinding.PointGraph.thickRaycastRadius	pointgraph.html#thickRaycastRadius	Thick raycast radius. \n\n[more in online documentation]
 Pathfinding.PointGraph.use2DPhysics	pointgraph.html#use2DPhysics	Use the 2D Physics API.
 Pathfinding.PointGraphEditor.nearestNodeDistanceModeLabels	pointgrapheditor.html#nearestNodeDistanceModeLabels	
 Pathfinding.PointKDTree.LeafArraySize	pointkdtree.html#LeafArraySize	
@@ -3446,6 +3466,8 @@ Pathfinding.RVO.RVOQuadtreeBurst.LeafSize	rvoquadtreeburst.html#LeafSize
 Pathfinding.RVO.RVOQuadtreeBurst.MaxAgents	rvoquadtreeburst.html#MaxAgents	
 Pathfinding.RVO.RVOQuadtreeBurst.MaxDepth	rvoquadtreeburst.html#MaxDepth	
 Pathfinding.RVO.RVOQuadtreeBurst.QuadtreeQuery.agentRadius	quadtreequery.html#agentRadius	
+Pathfinding.RVO.RVOQuadtreeBurst.QuadtreeQuery.layerMask	quadtreequery.html#layerMask	
+Pathfinding.RVO.RVOQuadtreeBurst.QuadtreeQuery.layers	quadtreequery.html#layers	
 Pathfinding.RVO.RVOQuadtreeBurst.QuadtreeQuery.maxCount	quadtreequery.html#maxCount	
 Pathfinding.RVO.RVOQuadtreeBurst.QuadtreeQuery.outputStartIndex	quadtreequery.html#outputStartIndex	
 Pathfinding.RVO.RVOQuadtreeBurst.QuadtreeQuery.position	quadtreequery.html#position	
@@ -3660,7 +3682,7 @@ Pathfinding.RecastGraph.TileWorldSizeZ	recastgraph.html#TileWorldSizeZ	Size of a
 Pathfinding.RecastGraph.backgroundTraversability	recastgraph.html#backgroundTraversability	Whether the base of the graph should default to being walkable or unwalkable. \n\nThis is only used in 2D mode. In 3D mode, this setting has no effect.\n\nFor 2D games, it can be very useful to set the background to be walkable by default, and then constrain walkability using colliders.\n\nIf you don't want to use a walkable background, you can instead create colliders and attach a RecastNavmeshModifier with Surface Type set to Walkable Surface. These will then create walkable regions.\n\n[more in online documentation]
 Pathfinding.RecastGraph.bounds	recastgraph.html#bounds	World bounding box for the graph. \n\nThis always contains the whole graph.\n\n[more in online documentation]\n <b>[image in online documentation]</b>
 Pathfinding.RecastGraph.cellSize	recastgraph.html#cellSize	Voxel sample size (x,z). \n\nWhen generating a recast graph what happens is that the world is voxelized. You can think of this as constructing an approximation of the world out of lots of boxes. If you have played Minecraft it looks very similar (but with smaller boxes).  <b>[image in online documentation]</b>\n\nLower values will yield higher quality navmeshes, however the graph will be slower to scan.\n\n <b>[image in online documentation]</b>
-Pathfinding.RecastGraph.characterRadius	recastgraph.html#characterRadius	Radius of the agent which will traverse the navmesh. \n\nThe navmesh will be eroded with this radius.  <b>[image in online documentation]</b>
+Pathfinding.RecastGraph.characterRadius	recastgraph.html#characterRadius	Radius of the agent which will traverse the navmesh. \n\nThe navmesh will be eroded with this radius.\n\nThis value will be rounded up to the nearest multiple of cellSize.\n\n <b>[image in online documentation]</b>
 Pathfinding.RecastGraph.collectionSettings	recastgraph.html#collectionSettings	Determines which objects are used to build the graph, when it is scanned. \n\nAlso contains some settings for how to convert objects into meshes. Spherical colliders, for example, need to be converted into a triangular mesh before they can be used in the graph.\n\n[more in online documentation]
 Pathfinding.RecastGraph.colliderRasterizeDetail	recastgraph.html#colliderRasterizeDetail	Controls detail on rasterization of sphere and capsule colliders. \n\nThe colliders will be approximated with polygons so that the max distance to the theoretical surface is less than 1/(this number of voxels).\n\nA higher value does not necessarily increase quality of the mesh, but a lower value will often speed it up.\n\nYou should try to keep this value as low as possible without affecting the mesh quality since that will yield the fastest scan times.\n\nThe default value is 1, which corresponds to a maximum error of 1 voxel. In most cases, increasing this to a value higher than 2 (corresponding to a maximum error of 0.5 voxels) is not useful.\n\n[more in online documentation]\n\n\n\n[more in online documentation]
 Pathfinding.RecastGraph.contourMaxError	recastgraph.html#contourMaxError	Max distance from simplified edge to real edge. \n\nThis value is measured in voxels. So with the default value of 2 it means that the final navmesh contour may be at most 2 voxels (i.e 2 times cellSize) away from the border that was calculated when voxelizing the world. A higher value will yield a more simplified and cleaner navmesh while a lower value may capture more details. However a too low value will cause the individual voxels to be visible (see image below).\n\n <b>[image in online documentation]</b>\n\n[more in online documentation]

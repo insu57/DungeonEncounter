@@ -27,6 +27,11 @@ namespace Pathfinding {
 	///
 	/// This script is a movement script. It takes care of moving an agent along a path, updating the path, and so on.
 	///
+	/// \section followerentity-contents Contents
+	/// \toc
+	///
+	/// \section followerentity-intro Introduction
+	///
 	/// The intended way to use this script is to use these two components:
 	/// - <see cref="FollowerEntity"/>
 	/// - <see cref="AIDestinationSetter"/> (optional, you can instead set the <see cref="destination"/> property manually)
@@ -34,9 +39,15 @@ namespace Pathfinding {
 	/// Of note is that this component shouldn't be used with a <see cref="Seeker"/> component.
 	/// It has its own settings for pathfinding instead, which are stored in the <see cref="pathfindingSettings"/> field.
 	///
+	/// When used with local avoidance, it also has its own settings for local avoidance which are stored in the <see cref="rvoSettings"/> field,
+	/// instead of using a separate <see cref="RVOController"/> component.
+	///
+	/// Other than that, you can use it just like the other movement scripts in this package.
+	///
 	/// \section followerentity-features Features
 	///
 	/// - Uses Unity's ECS (Entity Component System) to move the agent. This means it is highly-performant and is able to utilize multiple threads.
+	///   You do not need to know anything about ECS to be able to use it.
 	/// - Supports local avoidance (see local-avoidance) (view in online documentation for working links).
 	/// - Supports movement in both 2D and 3D games.
 	/// - Supports movement on spherical on non-planar worlds (see spherical) (view in online documentation for working links).
@@ -147,7 +158,7 @@ namespace Pathfinding {
 	/// This is <b>not</b> a baked component. That is, this script will continue to work even in standalone games. It is designed to be easily used
 	/// without having to care too much about the underlying ECS implementation.
 	///
-	/// <b>Differences compared to AIPath and RichAI</b>
+	/// \section followerentity-differences Differences compared to AIPath and RichAI
 	///
 	/// This movement script has been written to remedy several inconsistency issues with other movement scrips, to provide very smooth movement,
 	/// and "just work" for most games.
@@ -164,6 +175,26 @@ namespace Pathfinding {
 	///
 	/// \section followerentity-bestpractices Best practices for good performance
 	///
+	/// Here are some tips for how to improve performance when using this script.
+	/// As always, make sure to profile your game first, to see what is actually causing performance problems.
+	///
+	/// <b>Disable unused features</b>
+	/// This script has some optional parts. Local avoidance, for example. Local avoidance is used to make sure that agents do not overlap with each other.
+	/// However, if you do not need it, you can disable it to improve performance.
+	///
+	/// <b>Don't change the destination unnecessarily</b>
+	/// Repairing the path each frame can be a significant part of the movement calculation time. The FollowerEntity will perform better
+	/// if the <see cref="destination"/> is static, or moves seldom. For example, updating the destination every 10 frames will be faster than updating it every frame,
+	/// but to the player, both will look basically the same.
+	///
+	/// Note: Repairing the path is different from recalculating it from scratch. The agent will recalculate the path from scratch relatively seldom,
+	/// but it will repair it every frame, if necessary, to account for small changes in the agent's position and destination.
+	///
+	/// <b>Disable debug rendering</b>
+	/// Debug rendering has some performance costs in the Unity Editor. Disable all <see cref="debugFlags"/> and <see cref="rvoSettings.debug"/> to improve performance.
+	/// However, in standalone builds, these are automatically disabled and have no cost.
+	///
+	/// <b>Be aware of property access costs</b>
 	/// Using ECS components has some downsides. Accessing properties on this script is significantly slower compared to accessing properties on other movement scripts.
 	/// This is because on each property access, the script has to make sure no jobs are running concurrently, which is a relatively expensive operation.
 	/// Slow is a relative term, though. This only starts to matter if you have lots of agents, maybe a hundred or so. So don't be scared of using it.
@@ -175,8 +206,11 @@ namespace Pathfinding {
 	/// For example, if you want to make the agent follow a particular entity, you could create a new DestinationEntity component which just holds an entity reference,
 	/// and then create a system that every frame copies that entity's position to the <see cref="DestinationPoint.destination"/> field (a component that this entity will always have).
 	///
-	/// This script has some optional parts. Local avoidance, for example. Local avoidance is used to make sure that agents do not overlap each other.
-	/// However, if you do not need it, you can disable it to improve performance.
+	/// \section followerentity-timescale Time scaling
+	/// This component will automatically run multiple simulation steps per frame if the time scale is greater than 1.
+	/// This is done to ensure that the movement remains stable even at high time scales.
+	/// One case when this happens is when fast-forwarding games, which is common in some types of city builders and other types of simulation games.
+	/// This will impact performance at high time scales, but it is necessary to ensure that the movement remains stable.
 	/// </summary>
 	[AddComponentMenu("Pathfinding/AI/Follower Entity (2D,3D)")]
 	[UniqueComponent(tag = "ai")]
@@ -204,6 +238,7 @@ namespace Pathfinding {
 			rotationSmoothing = 0f,
 			groundMask = -1,
 			isStopped = false,
+			debugFlags = PIDMovement.DebugFlags.Path,
 		};
 
 		[SerializeField]
@@ -546,6 +581,7 @@ namespace Pathfinding {
 					movementPlaneAccessRO.Update(entityManager);
 					localTransformAccessRW.Update(entityManager);
 					readyToTraverseOffMeshLinkRW.Update(entityManager);
+					autoRepathPolicyRW.Update(entityManager);
 
 					ref var localTransform = ref localTransformAccessRW[storage];
 					localTransform.Position = value;
@@ -562,6 +598,7 @@ namespace Pathfinding {
 							ref var shape = ref agentCylinderShapeAccessRO[storage];
 							ref var movementSettings = ref movementSettingsAccessRO[storage];
 							ref var destinationPoint = ref destinationPointAccessRO[storage];
+							ref var autoRepath = ref autoRepathPolicyRW[storage];
 							var readyToTraverseOffMeshLink = storage.Chunk.GetEnabledMask(ref readyToTraverseOffMeshLinkRW.handle).GetEnabledRefRW<ReadyToTraverseOffMeshLink>(storage.IndexInChunk);
 							if (!nextCornersScratch.IsCreated) nextCornersScratch = new NativeList<float3>(4, Allocator.Persistent);
 							JobRepairPath.Execute(
@@ -569,6 +606,7 @@ namespace Pathfinding {
 								ref movementState,
 								ref shape,
 								ref movementPlane,
+								ref autoRepath,
 								ref destinationPoint,
 								readyToTraverseOffMeshLink,
 								managedState,
@@ -1144,6 +1182,7 @@ namespace Pathfinding {
 			agentCylinderShapeAccessRO.Update(entityManager);
 			movementSettingsAccessRO.Update(entityManager);
 			localTransformAccessRO.Update(entityManager);
+			autoRepathPolicyRW.Update(entityManager);
 			destinationPointAccessRW.Update(entityManager);
 			movementPlaneAccessRO.Update(entityManager);
 			readyToTraverseOffMeshLinkRW.Update(entityManager);
@@ -1167,6 +1206,7 @@ namespace Pathfinding {
 					ref var shape = ref agentCylinderShapeAccessRO[storage];
 					ref var movementSettings = ref movementSettingsAccessRO[storage];
 					ref var localTransform = ref localTransformAccessRO[storage];
+					ref var autoRepath = ref autoRepathPolicyRW[storage];
 					ref var destinationPoint = ref destinationPointAccessRW[storage];
 					var readyToTraverseOffMeshLink = storage.Chunk.GetEnabledMask(ref readyToTraverseOffMeshLinkRW.handle).GetEnabledRefRW<ReadyToTraverseOffMeshLink>(storage.IndexInChunk);
 					if (!nextCornersScratch.IsCreated) nextCornersScratch = new NativeList<float3>(4, Allocator.Persistent);
@@ -1175,6 +1215,7 @@ namespace Pathfinding {
 						ref movementState,
 						ref shape,
 						ref movementPlane,
+						ref autoRepath,
 						ref destinationPoint,
 						readyToTraverseOffMeshLink,
 						managedState,
@@ -1807,7 +1848,7 @@ namespace Pathfinding {
 			if (updateDestinationFromPath && path is ABPath abPath) {
 				// If the user supplies a new ABPath manually, they probably want the agent to move to that point.
 				// So by default we update the destination to match the path.
-				if (abPath.endPointKnownBeforeCalculation) {
+				if (abPath.endPointKnownBeforeCalculation || abPath.IsDone()) {
 					destination = new DestinationPoint { destination = abPath.originalEndPoint, facingDirection = default };
 				} else {
 					// If the destination is not known, we set it to positive infinity.
@@ -1819,8 +1860,9 @@ namespace Pathfinding {
 			// The FollowerEntity works best with a ClosestAsSeenFromAboveSoft distance metric
 			path.nnConstraint.distanceMetric = DistanceMetric.ClosestAsSeenFromAboveSoft(movementPlane.value.up);
 
+			autoRepathPolicy.OnScheduledPathRecalculation(destination.destination, (float)World.DefaultGameObjectInjectionWorld.Time.ElapsedTime);
+			if (path.IsDone()) autoRepathPolicy.OnPathCalculated(path.error);
 			ManagedState.SetPath(path, managedState, in movementPlane, ref destination);
-			autoRepathPolicy.DidRecalculatePath(destination.destination, (float)World.DefaultGameObjectInjectionWorld.Time.ElapsedTime);
 
 			if (path.IsDone()) {
 				agentCylinderShapeAccessRO.Update(entityManager);
@@ -1842,6 +1884,7 @@ namespace Pathfinding {
 						ref movementState,
 						ref shape,
 						ref movementPlane,
+						ref autoRepathPolicy,
 						ref destination,
 						readyToTraverseOffMeshLink,
 						managedState,

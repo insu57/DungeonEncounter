@@ -52,6 +52,12 @@ namespace Enemy
 
         private void OnEnable()
         {
+            //초기화
+            IsAttack = false;
+            IsMove = false;
+            WasDamaged = false;
+            IsDead = false;
+            InAttackDelay = false;
             ChangeState(EnemyStates.Idle);
         }
 

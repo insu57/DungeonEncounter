@@ -47,7 +47,9 @@ namespace Pathfinding.ECS {
 			// Disable the agent's normal movement logic while traversing the off-mesh link
 			// This can be re-enabled by the state machine if it wants to, but it needs to do it every tick.
 			// It is enabled automatically by the AgentOffMeshLinkTraversal.MoveTowards method.
-			movementDisabled.ValueRW = true;
+			// The reference could be invalid when called from the project dawn navigation package
+			if (movementDisabled.IsValid) movementDisabled.ValueRW = true;
+
 			try {
 				finished = !managedLinkInfo.coroutine.MoveNext();
 			} catch (AgentOffMeshLinkTraversalContext.AbortOffMeshLinkTraversal) {

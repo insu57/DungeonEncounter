@@ -19,8 +19,8 @@ MonoBehaviour:
   itemData:
   - effectStat: 0
     effectCalculate: 0
-    effectAmount: 80
-    effectDescription: "\uC989\uC2DC"
+    effectValue: 80
+    effectDescription: "\uC989\uC2DC \uCCB4\uB825 80\uD68C\uBCF5"
     effectDuration: 0
     isTickBased: 0
     tickSecond: 0

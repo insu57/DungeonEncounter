@@ -19,58 +19,64 @@ namespace Player
 
     public class PlayerManager : Singleton<PlayerManager>
     {
-        [SerializeField]private PlayerJobData playerJobData;
+        [SerializeField] private PlayerJobData playerJobData;
         private PlayerControl _playerControl;
-        [SerializeField]private GameObject playerRightHand;
-        [SerializeField]private GameObject playerHead;
+        [SerializeField] private GameObject playerRightHand;
+        [SerializeField] private GameObject playerHead;
         private EnemyMeleeAttack _enemyMeleeAttack;
+
         private EnemyProjectile _enemyProjectile;
+
         //[SerializeField] private ItemPrefabData itemPrefabData;
         //public PlayerWeaponData WeaponData { get; private set; }
         //public PlayerEquipmentData EquipmentData { get; private set; }
-        private Dictionary<PlayerStatTypes, float> _playerStats; 
-        public event Action<PlayerStatTypes,float> OnStatChanged;
-        
-        public PlayerWeaponData PlayerDefaultWeaponData {get; private set;}
+        private Dictionary<PlayerStatTypes, float> _playerStats;
+        public event Action<PlayerStatTypes, float> OnStatChanged;
+
+        public PlayerWeaponData PlayerDefaultWeaponData { get; private set; }
         private GameObject _equippedWeapon;
         private float _weaponAttackValue;
         private WeaponType _playerWeaponType;
         private GameObject _equippedEquipment;
         private float _equipmentDefenseValue;
-        private List<ItemEffect> _currentItemEffects;//다른 형태?(아이템별 효과 구분)
+        private List<ItemEffect> _currentItemEffects; //다른 형태?(아이템별 효과 구분)
         private bool _isRecoverEnergy = false;
         private float _finalAttackValue;
         [SerializeField] private GameObject hitEffect;
         [SerializeField] private GameObject swordAttackBox;
         [SerializeField] private GameObject attackEffect;
         [SerializeField] private GameObject skillEffect;
+        private List<GameObject> _itemInRange = new List<GameObject>();
         public event Action<int> OnGetMoney;
         public event Action<ItemDataWithID> OnGetItem;
         public event Action<int> OnUseItemQuickSlot;
         public event Action<FloatText, Vector3> OnFloatKey;
         public event Action OnExitFloatKey;
-        
+
         private Camera _mainCamera;
-        private void UpdateFinalAttackValue()//각종 효과 구현 진행 필요.
-        {
-            _finalAttackValue = _weaponAttackValue;
-            //+itemEffect...
-        }
 
         public float GetFinalAttackValue()
         {
             _finalAttackValue = _weaponAttackValue;
-            if (_playerControl.IsSkill)//skill damage x1.5 (...구조 개선 수정 필요)
+            if (_playerControl.IsSkill) //skill damage x1.5 (...구조 개선 수정 필요)
                 _finalAttackValue *= 1.5f;
             return _finalAttackValue;
         }
 
-        public void UseSkill()//스킬사용 에너지 소모
+        private void TakeDamage(float damage)
+        {
+            var currentHealth = GetStat(PlayerStatTypes.Health);
+            var defenseValue = GetStat(PlayerStatTypes.DefenseValue);
+            currentHealth -= damage * (100f - defenseValue) / 100f;
+            SetStat(PlayerStatTypes.Health, currentHealth);
+        }
+
+        public void UseSkill() //스킬사용 에너지 소모
         {
             SetStat(PlayerStatTypes.Energy, GetStat(PlayerStatTypes.Energy) - 100f);
         }
-        
-        private IEnumerator RecoveryEnergy()//에너지회복
+
+        private IEnumerator RecoveryEnergy() //에너지회복
         {
             _isRecoverEnergy = true;
             yield return new WaitForSeconds(1f);
@@ -79,30 +85,32 @@ namespace Player
             {
                 SetStat(PlayerStatTypes.Energy, GetStat(PlayerStatTypes.MaxEnergy));
             }
+
             _isRecoverEnergy = false;
         }
 
         public void PlayerEquipWeapon(PlayerWeaponData data, GameObject prefab)
         {
             //WeaponData = data;//제거?
-           
+
             Destroy(_equippedWeapon);
             GameObject newWeapon = prefab;
             _equippedWeapon = Instantiate(newWeapon, playerRightHand.transform);
-            if (!data.IsDefaultWeapon)//기본무기가 아니면
+            if (!data.IsDefaultWeapon) //기본무기가 아니면
             {
                 _equippedWeapon.GetComponent<BoxCollider>().enabled = false; //드랍 아이템 체크용 BoxCollider 비활성
-                _equippedWeapon.GetComponentInChildren<ParticleSystem>().Stop();//자식객체 ParticleSystem 이펙트 정지
+                _equippedWeapon.GetComponentInChildren<ParticleSystem>().Stop(); //자식객체 ParticleSystem 이펙트 정지
             }
-            
-            if (data.AttackType == AttackType.Melee)//근접무기일시
+
+            if (data.AttackType == AttackType.Melee) //근접무기일시
             {
                 //_equippedWeapon.AddComponent<PlayerMeleeAttack>();
             }
+
             _weaponAttackValue = data.AttackValue;
             SetStat(PlayerStatTypes.AttackValue, _weaponAttackValue);
-            UpdateFinalAttackValue();
-            _playerWeaponType = data.WeaponType;//WeaponType -> Animator change(애니메이터 추가 필요)
+            //UpdateFinalAttackValue();
+            _playerWeaponType = data.WeaponType; //WeaponType -> Animator change(애니메이터 추가 필요)
             if (data.GetEffects().Length != 0)
             {
                 Debug.Log("have Effect");
@@ -120,7 +128,7 @@ namespace Player
             {
                 Destroy(_equippedEquipment);
             }
-            
+
             if (data == null)
             {
                 _equipmentDefenseValue = 0;
@@ -144,9 +152,9 @@ namespace Player
                     Debug.Log("no Effect");
                 }
             }
-            
+
         }
-        
+
         private void SetStat(PlayerStatTypes statType, float value)
         {
             if (_playerStats.ContainsKey(statType) && Mathf.Approximately(_playerStats[statType], value)) return;
@@ -178,23 +186,36 @@ namespace Player
                     ItemPrefab = itemPrefab,
                     ItemType = itemData.ItemType,
                 });
-                if (item.layer == (int)ItemLayers.Chest)
-                {
-                    ObjectPoolingManager.Instance.ReturnToPool(PoolKeys.Chest01, item);
-                }
-                else
-                {
-                    Destroy(item);
-                }
+                Destroy(item);
             }
         }
 
         public void DropItem(GameObject item)
         {
-            Instantiate(item,transform.position + Vector3.back,Quaternion.identity);
+            Instantiate(item, transform.position + Vector3.back, Quaternion.identity);
         }
-        
-        public void UseItemQuickSlot(int slotNumber)
+
+        public void GetItemInRange()
+        {
+            if(_itemInRange.Count == 0) return;
+
+            for (var i = 0; i < _itemInRange.Count; i++)
+            {
+                if (_itemInRange[i].layer == (int)ItemLayers.Chest)
+                {
+                    _itemInRange[i].GetComponent<Chest>().OpenChest();
+                }
+                else
+                {
+                    GetItem(_itemInRange[i]); 
+                }
+                _itemInRange.RemoveAt(i);
+            }
+            
+            OnExitFloatKey?.Invoke();
+        }
+
+    public void UseItemQuickSlot(int slotNumber)
         {
             OnUseItemQuickSlot?.Invoke(slotNumber);
         }
@@ -205,15 +226,40 @@ namespace Player
             {
                 if (itemEffect.effectType == EffectType.Instant)
                 {
-                    float effectAmount = itemEffect.effectAmount;
-                    float currentValue = GetStat(itemEffect.effectStat);
+                    var effectValue = itemEffect.effectValue;
+                    var currentValue = GetStat(itemEffect.effectStat);
+                    var maxValue = itemEffect.effectStat switch //최댓값
+                    {
+                        PlayerStatTypes.Health => GetStat(PlayerStatTypes.MaxHealth),
+                        PlayerStatTypes.Energy => GetStat(PlayerStatTypes.MaxEnergy),
+                        _ => currentValue
+                    };
                     switch (itemEffect.effectCalculate)
                     {
                         case CalculateType.Plus:
-                            currentValue += effectAmount;
+                            switch (itemEffect.effectStat)
+                            {
+                                case PlayerStatTypes.Health:
+                                case PlayerStatTypes.Energy:
+                                    currentValue = Mathf.Clamp(currentValue + effectValue,0,maxValue);
+                                    break;//최댓값 넘지 못하게
+                                default:
+                                    currentValue += effectValue;
+                                    break;
+                            }
+                            
                             break;
                         case CalculateType.Multiply:
-                            currentValue *= effectAmount;
+                            switch (itemEffect.effectStat)
+                            {
+                                case PlayerStatTypes.Health:
+                                case PlayerStatTypes.Energy:
+                                    currentValue = Mathf.Clamp(currentValue*effectValue,0,maxValue);
+                                    break;
+                                default:
+                                    currentValue *= effectValue;
+                                    break;
+                            }
                             break;
                         default:
                             break;
@@ -225,8 +271,6 @@ namespace Player
                     //another effectType...
                     //Debug.Log("");
                 }
-                
-                
             }
         }
 
@@ -236,7 +280,7 @@ namespace Player
             SetAttackEffect(isSkill);
         }
 
-        private void SetAttackEffect(bool isSkill)
+        private void SetAttackEffect(bool isSkill)//공격 이펙트
         {
             attackEffect.SetActive(!isSkill);
             skillEffect.SetActive(isSkill);
@@ -277,7 +321,6 @@ namespace Player
                 { PlayerStatTypes.AttackValue, _weaponAttackValue},
                 { PlayerStatTypes.DefenseValue, 0f}
             };
-            UpdateFinalAttackValue();//최종 공격력 갱신
             
         }
 
@@ -295,50 +338,38 @@ namespace Player
             if ((other.CompareTag("EnemyMeleeAttack") || other.CompareTag("EnemyRangedAttack")) 
                 && _playerControl.IsDamaged == false && _playerControl.IsDodge == false)
             {
-                float health = GetStat(PlayerStatTypes.Health);
-                float damage = other.CompareTag("EnemyMeleeAttack") ?
-                    other.GetComponent<EnemyMeleeAttack>().Damage : other.GetComponentInParent<EnemyProjectile>().Damage;
-                health -= damage;
-                SetStat(PlayerStatTypes.Health, health);
+                var health = GetStat(PlayerStatTypes.Health);
+                var damage = other.CompareTag("EnemyMeleeAttack") ?
+                    other.GetComponent<EnemyMeleeAttack>().Damage 
+                    : other.GetComponentInParent<EnemyProjectile>().Damage;
+                //health -= damage;
+                TakeDamage(damage);
+                //SetStat(PlayerStatTypes.Health, health);
                 Debug.Log("Player Health: "+health);
                 StartCoroutine(Damaged(1f)); //피격 후 무적시간...1초
             }
 
-            if (other.gameObject.layer == (int)ItemLayers.Money)
+            if (other.CompareTag("Item"))
             {
-                GetItem(other.gameObject);
+                if (other.gameObject.layer == (int)ItemLayers.Money)
+                {
+                    GetItem(other.gameObject);
+                }
+                else if( other.gameObject.layer is (int)ItemLayers.Weapon or (int)ItemLayers.Equipment 
+                        or (int)ItemLayers.Consumable)
+                {
+                    OnFloatKey?.Invoke(FloatText.Get, other.transform.position);
+                    _itemInRange.Add(other.gameObject);
+                    Debug.Log("itemInRange Count: "+_itemInRange.Count);
+                }
+                else if(other.gameObject.layer == (int)ItemLayers.Chest)
+                {
+                    OnFloatKey?.Invoke(FloatText.Open, other.transform.position+ new Vector3(0.3f,0,0));
+                    _itemInRange.Add(other.gameObject);
+                    Debug.Log("itemInRange Count: "+_itemInRange.Count);
+                }
             }
             
-        }
-
-        private void OnTriggerStay(Collider other)
-        {
-            //Distance로?(Vector...) 한번에 획득하지 못할때가 있음 - 수정필요
-            if (other.CompareTag("Item") && other.gameObject.layer != (int)ItemLayers.Money)
-            {
-                if (other.gameObject.layer == (int)ItemLayers.Chest)
-                {
-                    OnFloatKey?.Invoke(FloatText.Open, other.transform.position);
-                    if (Input.GetKeyDown(KeyCode.F))
-                    {
-                        other.gameObject.GetComponent<Chest>().OpenChest(); 
-                        OnExitFloatKey?.Invoke();
-                    }
-                       
-                }
-                else
-                {
-                    //Debug.Log(other.transform.position);
-                    OnFloatKey?.Invoke(FloatText.Get, other.transform.position);
-                    if (Input.GetKeyDown(KeyCode.F))
-                    {
-                        GetItem(other.gameObject);
-                        OnExitFloatKey?.Invoke();
-                    }
-                       
-                   
-                }
-            }
         }
 
         private void OnTriggerExit(Collider other)
@@ -347,7 +378,9 @@ namespace Player
             {
                 if (other.gameObject.layer != (int)ItemLayers.Money)
                 {
+                    _itemInRange.Remove(other.gameObject);
                     OnExitFloatKey?.Invoke();
+                    Debug.Log("itemInRange Count: "+_itemInRange.Count);
                 }
             }
         }

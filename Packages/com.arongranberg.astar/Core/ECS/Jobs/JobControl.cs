@@ -24,6 +24,9 @@ namespace Pathfinding.ECS {
 		[NativeDisableContainerSafetyRestriction]
 		public NativeList<float2> edgesScratch;
 
+		[NativeDisableContainerSafetyRestriction]
+		public NativeList<int> indicesScratch;
+
 		private static readonly ProfilerMarker MarkerConvertObstacles = new ProfilerMarker("ConvertObstacles");
 
 		public static float3 ClampToNavmesh (float3 position, float3 closestOnNavmesh, in AgentCylinderShape shape, in AgentMovementPlane movementPlane) {
@@ -37,6 +40,7 @@ namespace Pathfinding.ECS {
 
 		public bool OnChunkBegin (in ArchetypeChunk chunk, int unfilteredChunkIndex, bool useEnabledMask, in v128 chunkEnabledMask) {
 			if (!edgesScratch.IsCreated) edgesScratch = new NativeList<float2>(64, Allocator.Temp);
+			if (!indicesScratch.IsCreated) indicesScratch = new NativeList<int>(64, Allocator.Temp);
 			return true;
 		}
 
@@ -47,6 +51,8 @@ namespace Pathfinding.ECS {
 			var position = ClampToNavmesh(transform.Position, state.closestOnNavmesh, in shape, in movementPlane);
 
 			edgesScratch.Clear();
+			indicesScratch.Clear();
+
 			var scale = math.abs(transform.Scale);
 			var settingsTemp = settings.follower;
 			// Scale the settings by the agent's scale
@@ -56,7 +62,7 @@ namespace Pathfinding.ECS {
 			if (state.isOnValidNode) {
 				MarkerConvertObstacles.Begin();
 				var localBounds = PIDMovement.InterestingEdgeBounds(ref settingsTemp, position, state.nextCorner, shape.height, movementPlane.value);
-				navmeshEdgeData.GetEdgesInRange(state.hierarchicalNodeIndex, localBounds, edgesScratch, movementPlane.value);
+				navmeshEdgeData.GetEdgesInRange(state.hierarchicalNodeIndex, localBounds, edgesScratch, indicesScratch, movementPlane.value);
 				MarkerConvertObstacles.End();
 			}
 
@@ -97,11 +103,8 @@ namespace Pathfinding.ECS {
 						maxSpeed = settings.follower.speed,
 						overrideLocalAvoidance = false,
 						hierarchicalNodeIndex = state.hierarchicalNodeIndex,
-						// TODO: Maybe this should be current rotation instead?
-						// https://forum.arongranberg.com/t/there-is-a-rotation-issue-with-followerentity-when-setting-isstopped/16987
-						// Or should we take the target rotation, and slowly rotate it towards the current rotation?
-						targetRotation = resolvedMovement.targetRotation,
-						targetRotationHint = resolvedMovement.targetRotation,
+						targetRotation = rotation,
+						targetRotationHint = rotation,
 						rotationSpeed = settings.follower.maxRotationSpeed,
 						targetRotationOffset = state.rotationOffset, // May be modified by other systems
 					};

@@ -1,3 +1,37 @@
+## 5.3.1 (2025-01-13)
+- Fixed a regression in 5.3.0 causing navmesh cutting to be much slower than it should be.
+- Fixed triangle nodes on recast/navmesh graphs with no adjacent triangles would not be able to be traversed via off-mesh links.
+- Fixed triangle nodes on recast/navmesh graphs with no adjacent triangles would not be detected by the \reflink{ConstantPath} path type.
+- Fixed some missing videos in the \ref get-started-recast tutorial.
+
+## 5.3.0 (2025-01-09)
+- Added a new get started video:
+		\youtube{PZXX4xGzCCA}
+- Rewrote the \ref getstarted to make it easier to follow, and more up-to-date.
+- Added a new tutorial: \ref get-started-grid.
+- Added a new tutorial: \ref get-started-point.
+- Added a new tutorial: \ref get-started-recast.
+- Added a lightbox to all images in the documentation.
+- Various other documentation improvements.
+- Fixed enabling \reflink{FollowerEntity.isStopped} would make the agent resist being rotated by other means.
+- Fixed \reflink{FollowerEntity} could vibrate a lot when being dragged outside the navmesh.
+- The \reflink{FollowerEntity} control loop now always runs at least once per frame, instead of skipping some frames if the fps was very high.
+- Fixed a bug causing paths calculating using the Manhattan or None heuristics on grid graphs to look much worse than they should (regression in 5.0).
+		The paths were still optimal, but they were not as straight as they should have been.
+- Fixed compilation errors when the "com.danielmansson.mathematics.fixedpoint" package was installed in the same project.
+- Fixed some edge cases where navmesh cuts on recast graphs could break connections between adjacent tiles.
+- The \reflink{FollowerEntity} component now defaults to drawing its path in the scene view. This can be disabled in the inspector, or by changing \reflink{FollowerEntity.debugFlags}.
+- Fixed the \reflink{RuleTexture} on grid graphs would not necessarily realize if its texture reference had changed.
+- The \reflink{RecastGraph} now defaults to a voxel size of 0.25, instead of 0.5.
+		The default character radius was reduced a few versions ago, but the voxel size was not updated to match (it's recommended to keep the voxel size to at most half the character radius).
+- Fixed the layer mask for the recast graph would be used even if the graph was set to filter by tags, not by layers.
+- Fixed navmesh cuts could, in very degenerate cases, throw an exception due to an incorrect comparator.
+- Fixed some edge cases where linecasts on recast/navmesh graphs could return that an obstacle existed if the end point of the linecast was exactly on the border between two nodes.
+- Fixed an edge case when adding nodes to a point graph that could result in an exception being thrown.
+- Local avoidance agents in layers that an agent does not try to avoid, no longer count towards the "Max Neighbours" limit.
+- The FollowerEntity is will now use exponential back off if its path calculations continue to fail. Previously it would try to recalculate its path as quickly as possible in this case,
+	   but now it will recalculate its path more slowly to improve performance.
+
 ## 5.2.5 (2024-11-20)
 - Breaking changes
 		- If you have built your own ECS baker for the FollowerEntity. You must now also add the \reflink{PhysicsSceneRef} component to the entity.

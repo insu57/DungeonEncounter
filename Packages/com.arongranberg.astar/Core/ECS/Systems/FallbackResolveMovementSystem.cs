@@ -17,16 +17,24 @@ namespace Pathfinding.ECS {
 	public partial struct FallbackResolveMovementSystem : ISystem {
 		public void OnUpdate (ref SystemState systemState) {
 			new CopyJob {}.Schedule();
+			new CopyRotationJob {}.Schedule();
 		}
 
 		[BurstCompile]
 		[WithAll(typeof(SimulateMovement))]
-		[WithOptions(EntityQueryOptions.FilterWriteGroup)]
+		[WithOptions(EntityQueryOptions.FilterWriteGroup)] // May be overriden by the RVO system
 		public partial struct CopyJob : IJobEntity {
 			public void Execute (in MovementControl control, ref ResolvedMovement resolved) {
 				resolved.targetPoint = control.targetPoint;
 				resolved.speed = control.speed;
 				resolved.turningRadiusMultiplier = 1.0f;
+			}
+		}
+
+		[BurstCompile]
+		[WithAll(typeof(SimulateMovement))]
+		public partial struct CopyRotationJob : IJobEntity {
+			public void Execute (in MovementControl control, ref ResolvedMovement resolved) {
 				resolved.targetRotation = control.targetRotation;
 				resolved.targetRotationHint = control.targetRotationHint;
 				resolved.targetRotationOffset = control.targetRotationOffset;

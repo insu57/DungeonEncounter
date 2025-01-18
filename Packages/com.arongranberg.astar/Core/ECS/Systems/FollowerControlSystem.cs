@@ -74,9 +74,8 @@ namespace Pathfinding.ECS {
 		}
 
 		public void OnUpdate (ref SystemState systemState) {
-			// The full movement calculations do not necessarily need to be done every frame if the fps is high
-			if (AstarPath.active != null && !AIMovementSystemGroup.TimeScaledRateManager.CheapSimulationOnly) {
-				ProcessControlLoop(ref systemState, SystemAPI.Time.DeltaTime);
+			if (AstarPath.active != null) {
+				ProcessControlLoop(ref systemState, AIMovementSystemGroup.TimeScaledRateManager.CheapStepDeltaTime);
 			}
 		}
 

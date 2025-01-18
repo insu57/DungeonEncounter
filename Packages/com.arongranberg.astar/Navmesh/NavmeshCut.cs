@@ -904,10 +904,22 @@ namespace Pathfinding {
 				var b = rhs - origin;
 				var cross = a.x*b.y - a.y*b.x;
 
-				if (cross == 0) {
+				if (Unity.Burst.CompilerServices.Hint.Unlikely(cross == 0)) {
 					var la = math.lengthsq(a);
 					var lb = math.lengthsq(b);
-					return la < lb ? 1 : (lb < la ? -1 : 0);
+
+					if (la < lb) return 1;
+					else if (la > lb) return -1;
+
+					// At this point, either lhs == rhs, or lhs == -rhs
+					// Sort first by x, then by y
+					if (a.x < b.x) return 1;
+					else if (a.x > b.x) return -1;
+
+					if (a.y < b.y) return 1;
+					else if (a.y > b.y) return -1;
+
+					return 0;
 				} else {
 					return cross < 0 ? 1 : -1;
 				}
