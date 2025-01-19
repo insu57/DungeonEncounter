@@ -23,7 +23,7 @@ namespace Enemy
         {
             _enemyControl = GetComponentInParent<EnemyControl>();
             _enemyManager = GetComponentInParent<EnemyManager>(); 
-            attackArea = GetComponent<Collider>(); //공격 판정 Collider
+            //attackArea = GetComponent<Collider>(); //공격 판정 Collider
             _trailRenderer = GetComponentInChildren<TrailRenderer>(); //공격 이펙트
             _animator = _enemyManager.GetComponent<Animator>();
             _data = _enemyManager.Data;
@@ -45,6 +45,7 @@ namespace Enemy
             else
             {
                 attackArea.enabled = false;
+                _trailRenderer.Clear();
                 _trailRenderer.enabled = false;
             }
        

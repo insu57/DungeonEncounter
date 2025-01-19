@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848a54609b52296418c5fcb432d81838, type: 3}
+  m_Name: Slime01DropTable
+  m_EditorClassIdentifier: 
+  moneyRangeStart: 10
+  moneyRangeEnd: 80
+  consumableItems:
+  - dropPrefab: {fileID: 7183969217170220544, guid: 6f0fc7668c627c2479a0be5f772a0d60, type: 3}
+    dropWeight: 80
+  - dropPrefab: {fileID: 6877928846283078665, guid: 633cb1ebbec254849aa77967842467fd, type: 3}
+    dropWeight: 20
+  consumableTotalWeight: 100
+  weapons:
+  - dropPrefab: {fileID: 3213851043470871558, guid: dcf19aef1c8a2e04c9dde8894033af61, type: 3}
+    dropWeight: 80
+  - dropPrefab: {fileID: 4302747001184217955, guid: fd877ee7373dfa1439bf397ada3d27e8, type: 3}
+    dropWeight: 20
+  weaponsTotalWeight: 100
+  equipments:
+  - dropPrefab: {fileID: 4688187244948865697, guid: 12b913e8b4c00544eac9315b732121ab, type: 3}
+    dropWeight: 80
+  - dropPrefab: {fileID: 1162732315936075981, guid: 3c9b093113bb39746b68bbb2979baf5e, type: 3}
+    dropWeight: 20
+  equipmentTotalWeight: 100
+  consumableChance: 0.3
+  chestChance: 0.15
+  weaponChance: 0.5
+  equipmentChance: 0.5

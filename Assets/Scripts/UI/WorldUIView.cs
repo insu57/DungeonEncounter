@@ -38,11 +38,15 @@ namespace UI
         {
             floatingKeyPrefab.SetActive(false);
         }
-        
-        private void Awake()
+
+        private void OnEnable()
         {
             _mainCamera = Camera.main;
             canvasFloat.worldCamera = _mainCamera;
+        }
+
+        private void Awake()
+        {
             _floatingKeyText = floatingKeyPrefab.GetComponentInChildren<TextMeshPro>();
         }
 

@@ -34,17 +34,38 @@ public class StageManager : MonoBehaviour
         //Spawn
         float halfW = room.RoomWidth * 0.5f;
         float halfH = room.RoomHeight * 0.5f;
+        Vector3 center = new Vector3(room.RoomCenter.x,0,room.RoomCenter.z);
         _enemyNumber = room.GetEnemyNumber();
+        int areaMask = 1 << room.RoomIndex+3;
         
-        for (int i = 0; i < 5; i++)
+        Debug.Log("AreaMask: "+areaMask+" RoomIndex: "+room.RoomIndex+" RoomCenter: "+center);
+
+        float distance = 0f;
+        float playerMinRadius = 4f;
+        int retryMaxCount = 100;
+        int retryCount = 0;
+        for (int i = 0; i < _enemyNumber; i++)
         {
-            Vector3 randomPos = new Vector3(Random.Range(-halfW, halfW), 0f,
-                Random.Range(-halfH, halfH)) + room.RoomCenter;//무작위 위치
+            Vector3 randomPos;
+            do
+            {
+                randomPos = new Vector3(Random.Range(-halfW, halfW), 0f,
+                    Random.Range(-halfH, halfH)) + room.RoomCenter; //무작위 위치
+                distance = Vector3.Distance(randomPos, _player.transform.position);
+                retryCount++;
+            } while (distance <= playerMinRadius && retryCount <= retryMaxCount);
             PoolKeys keys = _enemyKeys[Random.Range(0, _enemyKeys.Length)];
-            GameObject enemy = ObjectPoolingManager.Instance.GetObjectFromPool(keys, randomPos, Quaternion.identity);
-            EnemyManager enemyManager = enemy.GetComponent<EnemyManager>();
-            enemyManager.InitEnemySpawn();
-            enemyManager.OnDeath += HandleEnemyDeath;
+            
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(randomPos, out hit, 2f, areaMask))
+            {
+                Debug.Log("RandomPos_hit_pos: " + hit.mask); //????
+                GameObject enemy = ObjectPoolingManager.Instance
+                    .GetObjectFromPool(keys, hit.position, Quaternion.identity);
+                EnemyManager enemyManager = enemy.GetComponent<EnemyManager>();
+                enemyManager.InitEnemySpawn();
+                enemyManager.OnDeath += HandleEnemyDeath;
+            }
         }
     }
 
@@ -99,22 +120,5 @@ public class StageManager : MonoBehaviour
         _player = FindObjectOfType<PlayerManager>();
         PlayerRoomIdx = 0; //초기 Room00
     }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            //Clear This Room.
-            Rooms.Find(x => x.RoomIndex == GetRoomIndex(_player.transform)).RoomCleared();
-        }
-
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            bool isCleared = Rooms.Find(x => x.RoomIndex == GetRoomIndex(_player.transform))?.IsCleared ?? false;
-            Debug.Log("IsCleared?: "+ isCleared);
-            
-        }
-    }
-
     
 }

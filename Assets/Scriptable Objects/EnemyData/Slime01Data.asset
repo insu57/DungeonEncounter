@@ -21,8 +21,8 @@ MonoBehaviour:
   projectilePrefab: {fileID: 0}
   projectileKey: 0
   projectileSpeed: 0
-  attackFullFrame: 0
-  attackStartFrame: 0
-  attackEndFrame: 0
-  dropTable: {fileID: 0}
+  attackFullFrame: 18
+  attackStartFrame: 4
+  attackEndFrame: 10
+  dropTable: {fileID: 11400000, guid: 15f61eff122e2c94aacfd010548614c8, type: 2}
   enemyKey: 7

@@ -13,31 +13,35 @@ MonoBehaviour:
   m_Name: Stage1Data
   m_EditorClassIdentifier: 
   stageName: Stage1
-  roomNumber: 8
-  enemyKeys: 0500000006000000
+  roomNumber: 9
+  enemyKeys: 050000000600000007000000
   bossKeys: 
   poolingObjects:
   - poolKey: 0
     prefab: {fileID: 9051860450588113054, guid: 4b9e9b78378f846459138cedfe5a51f1, type: 3}
-    defaultCapacity: 20
-    maxSize: 100
+    defaultCapacity: 10
+    maxSize: 50
   - poolKey: 1
     prefab: {fileID: 8547558045587734986, guid: 34ca5d5f1125faf46a8c60b7f34a2ae1, type: 3}
-    defaultCapacity: 20
-    maxSize: 100
+    defaultCapacity: 10
+    maxSize: 25
   - poolKey: 2
     prefab: {fileID: 5422603927206643936, guid: 7763080958edc594f92566e5b5fa1c85, type: 3}
-    defaultCapacity: 20
-    maxSize: 100
+    defaultCapacity: 10
+    maxSize: 50
   - poolKey: 3
     prefab: {fileID: 2344367398292239192, guid: 0d016ae4dc251744ab08a60d7c5a6822, type: 3}
-    defaultCapacity: 20
-    maxSize: 100
+    defaultCapacity: 10
+    maxSize: 50
   - poolKey: 5
     prefab: {fileID: 3362123586102918478, guid: 1cf146b6be4e627449a210e6576598fd, type: 3}
     defaultCapacity: 5
-    maxSize: 20
+    maxSize: 10
   - poolKey: 6
     prefab: {fileID: 3362123586102918478, guid: 88accb75044e5fa4ca6714c76970d718, type: 3}
     defaultCapacity: 5
-    maxSize: 20
+    maxSize: 10
+  - poolKey: 7
+    prefab: {fileID: 3228783404506991743, guid: 7ef10e6a4f63d264b800c70cc4409550, type: 3}
+    defaultCapacity: 5
+    maxSize: 10

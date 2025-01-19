@@ -24,10 +24,10 @@ namespace Enemy
         private EnemyControl _enemyControl;
         public EnemyData Data => data;
         private Dictionary<EnemyStatTypes, float> _enemyStats;
-        private Collider _enemyCollider;
+        //private Collider _enemyCollider;
         public float Height { get; private set; }
-        
         private FlashOnHit _flashOnHit;
+        [SerializeField] private Collider enemyCollider;
         [SerializeField] private ParticleSystem deathSmokeParticle;
         //할당방식 변경필요?
         private WorldUIView _worldUIView;
@@ -56,6 +56,7 @@ namespace Enemy
             EnemyHealthBar healthBar = _worldUIView.InitEnemyHealthBar(this);
             _uiPresenter = new EnemyWorldUIPresenter(this, healthBar);
             _stageManager = FindObjectOfType<StageManager>();
+            
             //EnemyWorldUI초기화
         }
         
@@ -66,7 +67,7 @@ namespace Enemy
             _enemyControl.IsDead = true;
             DropItem();//아이템 드랍
             OnDeath?.Invoke();//사망이벤트 
-            _enemyCollider.enabled = false;//충돌 비활성
+            enemyCollider.enabled = false;//충돌 비활성
             //사망 이펙트 추가
             deathSmokeParticle.Play();
             _uiPresenter.Dispose();//Presenter Dispose
@@ -87,12 +88,14 @@ namespace Enemy
         {
             //Money min~max Consumable Chest
             //드랍테이블 등 데이터 입력 방식 변경 필요
+            
             Vector3 pos = transform.position;
             //Money
             int moneyAmount = Random.Range(_dropTable.MoneyRangeStart, _dropTable.MoneyRangeEnd+1);
             GameObject money = ObjectPoolingManager.Instance
                 .GetObjectFromPool(PoolKeys.Money, pos+Vector3.back, Quaternion.identity);
             money.GetComponent<Money>().SetMoneyAmount(moneyAmount);
+            
             //Consumable
             float consumableChance = _dropTable.ConsumableChance;
             float randomChance = Random.value;
@@ -140,7 +143,8 @@ namespace Enemy
                 {
                     cumulativeWeight += drop.dropWeight;
                     if (cumulativeWeight <= randomWeight) continue;
-                    GameObject chest = Instantiate(_dropTable.ChestPrefab, pos+Vector3.right, Quaternion.identity);
+                    GameObject chest = ObjectPoolingManager.Instance
+                        .GetObjectFromPool(PoolKeys.Chest01, pos+Vector3.right, Quaternion.identity);
                     chest.GetComponent<Chest>().SetItem(drop.dropPrefab);
                     break;
                 }
@@ -150,7 +154,7 @@ namespace Enemy
         private void OnEnable()
         {
             //초기화.
-            _enemyCollider.enabled = true;
+            enemyCollider.enabled = true;
             _enemyStats[EnemyStatTypes.Health] = GetStat(EnemyStatTypes.MaxHealth);
         }
 
@@ -161,8 +165,8 @@ namespace Enemy
             _dropTable = data.DropTable;
             _type = data.Type;
 
-            _enemyCollider = GetComponent<Collider>();
-            Height = _enemyCollider.bounds.size.y;
+            //enemyCollider = GetComponent<Collider>();
+            Height = enemyCollider.bounds.size.y;
             _enemyStats = new Dictionary<EnemyStatTypes, float>
             {
                 { EnemyStatTypes.Health , data.MaxHealth},
@@ -191,8 +195,6 @@ namespace Enemy
                 {
                     EnemyDeath();
                 }
-                
-               
             }
         }
 

@@ -583,7 +583,7 @@ Transform:
   m_GameObject: {fileID: 3362123586102918478}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.3318617, y: 0, z: -8.759434}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -629,6 +629,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: d25a62887f03a644681322e73a9a3edd, type: 2}
+  enemyCollider: {fileID: 3792868093249844025}
   deathSmokeParticle: {fileID: 2549892602309541501}
 --- !u!114 &4699697673437144348
 MonoBehaviour:
