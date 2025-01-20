@@ -51,12 +51,13 @@ namespace Enemy
             return _playerManager.transform.position;
         }
 
-        public void InitEnemySpawn()
+        public void InitEnemySpawn(Vector3 spawnPos)
         {
             EnemyHealthBar healthBar = _worldUIView.InitEnemyHealthBar(this);
             _uiPresenter = new EnemyWorldUIPresenter(this, healthBar);
             _stageManager = FindObjectOfType<StageManager>();
-            
+
+            transform.position = spawnPos;
             //EnemyWorldUI초기화
         }
         
@@ -81,6 +82,7 @@ namespace Enemy
             yield return new WaitForSeconds(waitTime);
             ObjectPoolingManager.Instance.ReturnToPool(data.EnemyKey, gameObject);
             StopAllCoroutines();
+            //transform.position = Vector3.zero;
         }
         
         
@@ -156,6 +158,7 @@ namespace Enemy
             //초기화.
             enemyCollider.enabled = true;
             _enemyStats[EnemyStatTypes.Health] = GetStat(EnemyStatTypes.MaxHealth);
+            Debug.Log("Enemy On Enable...Name: "+gameObject.name+" Position: "+transform.position);
         }
 
         private void Awake()

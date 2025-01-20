@@ -119,7 +119,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6682310036121341190, guid: 4d6d9e778059f6049956e9fa773a2712, type: 3}
       propertyPath: m_BoundingSphereOverride.w
-      value: -18870256
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6682310036121341190, guid: 4d6d9e778059f6049956e9fa773a2712, type: 3}
       propertyPath: m_BoundingSphereOverride.x
@@ -127,11 +127,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6682310036121341190, guid: 4d6d9e778059f6049956e9fa773a2712, type: 3}
       propertyPath: m_BoundingSphereOverride.y
-      value: 6.3250305e+28
+      value: 1e-45
       objectReference: {fileID: 0}
     - target: {fileID: 6682310036121341190, guid: 4d6d9e778059f6049956e9fa773a2712, type: 3}
       propertyPath: m_BoundingSphereOverride.z
-      value: 1.01524616e+12
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6808563238383676052, guid: 4d6d9e778059f6049956e9fa773a2712, type: 3}
       propertyPath: InitialModule.startColor.maxColor.b
@@ -281,6 +281,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 287880569001498729, guid: 728a183cab313f144840f14a965c548c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1584784882228748073, guid: 728a183cab313f144840f14a965c548c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1584784882228748073, guid: 728a183cab313f144840f14a965c548c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1584784882228748073, guid: 728a183cab313f144840f14a965c548c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7398582306683335699, guid: 728a183cab313f144840f14a965c548c, type: 3}

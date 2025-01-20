@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class FlashOnHit : MonoBehaviour
 {
-    [SerializeField] private Material originalMaterialColor;
+    //[SerializeField] private Material originalMaterialColor;
     [SerializeField] private Renderer[] renderers;
     private List<Material> _materials = new List<Material>();
     
@@ -21,7 +21,8 @@ public class FlashOnHit : MonoBehaviour
         {
             _materials.Add(rend.material);
         }
-        _originalColor = originalMaterialColor.color;
+
+        _originalColor = _materials[0].color;
     }
 
     private void OnEnable()

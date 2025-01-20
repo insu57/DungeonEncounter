@@ -24,13 +24,25 @@ public class Chest : MonoBehaviour
         StartCoroutine(DisappearChest());
     }
 
+    private void CloseChest()
+    {
+        _isOpen = false;
+        Vector3 targetRotation = new Vector3(0f, 0f, 0f);
+        chestTop.transform.localRotation = Quaternion.Euler(targetRotation);
+    }
+
     private IEnumerator DisappearChest()
     {
         yield return new WaitForSeconds(1f);
         //Destroy(gameObject); 
         ObjectPoolingManager.Instance.ReturnToPool(PoolKeys.Chest01, gameObject);
     }
-    
+
+    private void OnEnable()
+    {
+        CloseChest();
+    }
+
     private void Awake()
     {
         _isOpen = false;

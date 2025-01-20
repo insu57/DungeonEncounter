@@ -727,6 +727,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27cd7f5454861af48a8c10193bfb4143, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  originalMaterialColor: {fileID: 0}
+  renderers:
+  - {fileID: 7683800361529700892}
+  - {fileID: 8528464935472299378}
+  - {fileID: 5933341039387944610}
+  - {fileID: 1589938296345282315}
 --- !u!1 &3443318350203340248
 GameObject:
   m_ObjectHideFlags: 0

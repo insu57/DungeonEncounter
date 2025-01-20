@@ -32,7 +32,7 @@ namespace Player
         //public PlayerEquipmentData EquipmentData { get; private set; }
         private Dictionary<PlayerStatTypes, float> _playerStats;
         public event Action<PlayerStatTypes, float> OnStatChanged;
-
+        public event Action<PlayerStatTypes, bool> OnItemEffect;
         public PlayerWeaponData PlayerDefaultWeaponData { get; private set; }
         private GameObject _equippedWeapon;
         private float _weaponAttackValue;
@@ -41,6 +41,7 @@ namespace Player
         private float _equipmentDefenseValue;
         private List<ItemEffect> _currentItemEffects; //다른 형태?(아이템별 효과 구분)
         private bool _isRecoverEnergy = false;
+        private float _energyRecoverValue = 20f;
         private float _finalAttackValue;
         [SerializeField] private GameObject hitEffect;
         [SerializeField] private GameObject swordAttackBox;
@@ -216,7 +217,7 @@ namespace Player
             OnExitFloatKey?.Invoke();
         }
 
-    public void UseItemQuickSlot(int slotNumber)
+         public void UseItemQuickSlot(int slotNumber)
         {
             OnUseItemQuickSlot?.Invoke(slotNumber);
         }
@@ -225,56 +226,106 @@ namespace Player
         {
             foreach (var itemEffect in data.ItemData)
             {
-                if (itemEffect.effectType == EffectType.Instant)
+                var calculateType = itemEffect.effectCalculate;
+                var effectType = itemEffect.effectType;
+                var statType = itemEffect.effectStat;
+                var effectValue = itemEffect.effectValue;
+                var currentValue = GetStat(itemEffect.effectStat);
+                
+                switch (effectType)
                 {
-                    var effectValue = itemEffect.effectValue;
-                    var currentValue = GetStat(itemEffect.effectStat);
-                    var maxValue = itemEffect.effectStat switch //최댓값
+                    case EffectType.Instant:
                     {
-                        PlayerStatTypes.Health => GetStat(PlayerStatTypes.MaxHealth),
-                        PlayerStatTypes.Energy => GetStat(PlayerStatTypes.MaxEnergy),
-                        _ => currentValue
-                    };
-                    switch (itemEffect.effectCalculate)
-                    {
-                        case CalculateType.Plus:
-                            switch (itemEffect.effectStat)
-                            {
-                                case PlayerStatTypes.Health:
-                                case PlayerStatTypes.Energy:
-                                    currentValue = Mathf.Clamp(currentValue + effectValue,0,maxValue);
-                                    break;//최댓값 넘지 못하게
-                                default:
-                                    currentValue += effectValue;
-                                    break;
-                            }
+                        var maxValue = statType switch //최댓값
+                        {
+                            PlayerStatTypes.Health => GetStat(PlayerStatTypes.MaxHealth),
+                            PlayerStatTypes.Energy => GetStat(PlayerStatTypes.MaxEnergy),
+                            _ => currentValue
+                        };
+
+                        currentValue = statType switch
+                        {
+                            PlayerStatTypes.Health or PlayerStatTypes.Energy => Mathf.Clamp(
+                                ItemEffectCalculate(calculateType, currentValue, effectValue), 0, maxValue),
                             
-                            break;
-                        case CalculateType.Multiply:
-                            switch (itemEffect.effectStat)
-                            {
-                                case PlayerStatTypes.Health:
-                                case PlayerStatTypes.Energy:
-                                    currentValue = Mathf.Clamp(currentValue*effectValue,0,maxValue);
-                                    break;
-                                default:
-                                    currentValue *= effectValue;
-                                    break;
-                            }
-                            break;
-                        default:
-                            break;
+                            _ => ItemEffectCalculate(calculateType, currentValue, effectValue)
+                        };
+                        
+                        SetStat(statType, currentValue);
+                        break;
                     }
-                    SetStat(itemEffect.effectStat, currentValue);
-                }
-                else
-                {
-                    //another effectType...
-                    //Debug.Log("");
+                    case EffectType.Temporary:
+                        StartCoroutine(itemEffect.isTickBased ? 
+                            TickBasedEffect(itemEffect) : TemporaryEffect(itemEffect));
+                        break;
+                    case EffectType.Permanent:
+                        //SetStat(statType, ItemEffectCalculate(calculateType, currentValue, effectValue));
+                        break;
+                    default:
+                        break;
                 }
             }
         }
 
+        private IEnumerator TickBasedEffect(ItemEffect itemEffect)
+        {
+            float startTime = Time.time;
+            float currentValue = GetStat(itemEffect.effectStat);
+            float maxValue = itemEffect.effectStat switch //최대값
+            {
+                PlayerStatTypes.Health => GetStat(PlayerStatTypes.MaxHealth),
+                PlayerStatTypes.Energy => GetStat(PlayerStatTypes.MaxEnergy),
+                _ => currentValue
+            };
+            
+            while (Time.time - startTime < itemEffect.effectDuration)//Duration동안
+            {
+                currentValue = GetStat(itemEffect.effectStat);
+                switch (itemEffect.effectStat)
+                {
+                    case PlayerStatTypes.Health:
+                    case PlayerStatTypes.Energy:
+                        if (currentValue < maxValue)
+                        {
+                            SetStat(PlayerStatTypes.Health, Mathf.Clamp(ItemEffectCalculate(itemEffect.effectCalculate, 
+                                currentValue, itemEffect.effectValue), 0, maxValue));
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                yield return new WaitForSeconds(itemEffect.tickSecond); //Tick마다 실행
+            }
+        }
+        
+        private IEnumerator TemporaryEffect(ItemEffect itemEffect)
+        {
+            float startTime = Time.time;
+            float currentValue = GetStat(itemEffect.effectStat);
+            
+            SetStat(itemEffect.effectStat,
+                ItemEffectCalculate(itemEffect.effectCalculate, currentValue, itemEffect.effectValue));
+            //스탯 적용
+            
+            while (Time.time - startTime < itemEffect.effectDuration)
+            {
+                yield return null;
+            }   
+            //duration 지나면 원래대로
+            SetStat(itemEffect.effectStat, currentValue); //적용중인 ItemEffect 관리-> Dictionary?
+        }
+
+        private static float ItemEffectCalculate(CalculateType calculateType, float currentValue, float effectValue)
+        {
+            return calculateType switch
+            {
+                CalculateType.Plus => currentValue + effectValue,
+                CalculateType.Multiply => currentValue * effectValue,
+                _ => currentValue
+            };
+        }
+        
+        
         public void ActiveSwordAttackBox(bool isActive, bool isSkill)//공격Collider활성
         {
             swordAttackBox.SetActive(isActive);
@@ -341,6 +392,7 @@ namespace Player
         
         private void OnTriggerEnter(Collider other)
         {
+            //피격판정 처리
             if ((other.CompareTag("EnemyMeleeAttack") || other.CompareTag("EnemyRangedAttack")) 
                 && _playerControl.IsDamaged == false && _playerControl.IsDodge == false)
             {
@@ -348,31 +400,30 @@ namespace Player
                 var damage = other.CompareTag("EnemyMeleeAttack") ?
                     other.GetComponent<EnemyMeleeAttack>().Damage 
                     : other.GetComponentInParent<EnemyProjectile>().Damage;
-                //health -= damage;
                 TakeDamage(damage);
-                //SetStat(PlayerStatTypes.Health, health);
-                Debug.Log("Player Health: "+health);
+                //Debug.Log("Player Health: "+health);
                 StartCoroutine(Damaged(1f)); //피격 후 무적시간...1초
             }
 
+            //아이템 획득 처리
             if (other.CompareTag("Item"))
             {
-                if (other.gameObject.layer == (int)ItemLayers.Money)
+                switch (other.gameObject.layer)
                 {
-                    GetItem(other.gameObject);
-                }
-                else if( other.gameObject.layer is (int)ItemLayers.Weapon or (int)ItemLayers.Equipment 
-                        or (int)ItemLayers.Consumable)
-                {
-                    OnFloatKey?.Invoke(FloatText.Get, other.transform.position);
-                    _itemInRange.Add(other.gameObject);
-                    Debug.Log("itemInRange Count: "+_itemInRange.Count);
-                }
-                else if(other.gameObject.layer == (int)ItemLayers.Chest)
-                {
-                    OnFloatKey?.Invoke(FloatText.Open, other.transform.position+ new Vector3(0.3f,0,0));
-                    _itemInRange.Add(other.gameObject);
-                    Debug.Log("itemInRange Count: "+_itemInRange.Count);
+                    case (int)ItemLayers.Money:
+                        GetItem(other.gameObject);
+                        break;
+                    case (int)ItemLayers.Weapon or (int)ItemLayers.Equipment 
+                        or (int)ItemLayers.Consumable:
+                        OnFloatKey?.Invoke(FloatText.Get, other.transform.position);
+                        _itemInRange.Add(other.gameObject);
+                        Debug.Log("itemName "+ other.gameObject.name);
+                        break;
+                    case (int)ItemLayers.Chest:
+                        OnFloatKey?.Invoke(FloatText.Open, other.transform.position+ new Vector3(0.3f,0,0));
+                        _itemInRange.Add(other.gameObject);
+                        // Debug.Log("itemInRange Count: "+_itemInRange.Count);
+                        break;
                 }
             }
             
@@ -386,7 +437,7 @@ namespace Player
                 {
                     _itemInRange.Remove(other.gameObject);
                     OnExitFloatKey?.Invoke();
-                    Debug.Log("itemInRange Count: "+_itemInRange.Count);
+                    //Debug.Log("itemInRange Count: "+_itemInRange.Count);
                 }
             }
         }

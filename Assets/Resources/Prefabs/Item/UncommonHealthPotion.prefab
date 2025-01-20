@@ -261,7 +261,7 @@ GameObject:
   - component: {fileID: 4546289594886808723}
   - component: {fileID: 4881176024969050035}
   m_Layer: 11
-  m_Name: HealthPotion1
+  m_Name: UncommonHealthPotion
   m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -317,7 +317,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 732052c25f636a349afe49cfbd3f1f2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemPrefab: {fileID: 6877928846283078665}
   consumableData: {fileID: 11400000, guid: 44d989d6787bbf54e86bb771a5364be7, type: 2}
 --- !u!1 &8415433030770510704
 GameObject:

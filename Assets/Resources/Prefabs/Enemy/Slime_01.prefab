@@ -232,6 +232,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   originalMaterialColor: {fileID: 2100000, guid: 8c3f067d97073e844a53d8283b2d3820, type: 2}
+  renderers:
+  - {fileID: 7245346047389021147}
 --- !u!54 &4588694604538802614
 Rigidbody:
   m_ObjectHideFlags: 0
