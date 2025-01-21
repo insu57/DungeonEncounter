@@ -30,18 +30,24 @@ namespace Player
         //[SerializeField] private ItemPrefabData itemPrefabData;
         //public PlayerWeaponData WeaponData { get; private set; }
         //public PlayerEquipmentData EquipmentData { get; private set; }
+        private PlayerWeaponData _equippedWeaponData;
+        private PlayerEquipmentData _equippedEquipmentData;
         private Dictionary<PlayerStatTypes, float> _playerStats;
         public event Action<PlayerStatTypes, float> OnStatChanged;
-        public event Action<PlayerStatTypes, bool> OnItemEffect;
+        public event Action<PlayerStatTypes, float> OnTemporaryItemEffect;
         public PlayerWeaponData PlayerDefaultWeaponData { get; private set; }
         private GameObject _equippedWeapon;
-        private float _weaponAttackValue;
+        //private float _weaponAttackValue;
         private WeaponType _playerWeaponType;
         private GameObject _equippedEquipment;
-        private float _equipmentDefenseValue;
-        private List<ItemEffect> _currentItemEffects; //다른 형태?(아이템별 효과 구분)
+        //private float _equipmentDefenseValue;
+        
+        private Dictionary<PlayerStatTypes, float> _currentPlusItemEffects;
+        private Dictionary<PlayerStatTypes, float> _currentMultiplyItemEffects = new Dictionary<PlayerStatTypes, float>();
+        private Dictionary<ItemEffect, Coroutine> _currentActiveItemEffect = new Dictionary<ItemEffect, Coroutine>();
+        
         private bool _isRecoverEnergy = false;
-        private float _energyRecoverValue = 20f;
+        private float _energyRecoverValue = 20f; //에너지 회복량
         private float _finalAttackValue;
         [SerializeField] private GameObject hitEffect;
         [SerializeField] private GameObject swordAttackBox;
@@ -59,7 +65,7 @@ namespace Player
 
         public float GetFinalAttackValue()
         {
-            _finalAttackValue = _weaponAttackValue;
+            _finalAttackValue = GetStat(PlayerStatTypes.AttackValue);
             if (_playerControl.IsSkill) //skill damage x1.5 (...구조 개선 수정 필요)
                 _finalAttackValue *= 1.5f;
             return _finalAttackValue;
@@ -73,6 +79,14 @@ namespace Player
             SetStat(PlayerStatTypes.Health, currentHealth);
         }
 
+        private void SetFinalStat(PlayerStatTypes stat)
+        {
+            var currentValue = GetStat(stat);
+            var plusValue = _currentPlusItemEffects[stat];
+            var multiplyValue = _currentMultiplyItemEffects[stat];
+            SetStat(stat, (currentValue + plusValue) * multiplyValue);
+        }
+        
         public void UseSkill() //스킬사용 에너지 소모
         {
             SetStat(PlayerStatTypes.Energy, GetStat(PlayerStatTypes.Energy) - 100f);
@@ -82,7 +96,7 @@ namespace Player
         {
             _isRecoverEnergy = true;
             yield return new WaitForSeconds(1f);
-            SetStat(PlayerStatTypes.Energy, GetStat(PlayerStatTypes.Energy) + 20f);
+            SetStat(PlayerStatTypes.Energy, GetStat(PlayerStatTypes.Energy) + _energyRecoverValue);
             if (GetStat(PlayerStatTypes.Energy) >= GetStat(PlayerStatTypes.MaxEnergy))
             {
                 SetStat(PlayerStatTypes.Energy, GetStat(PlayerStatTypes.MaxEnergy));
@@ -93,11 +107,46 @@ namespace Player
 
         public void PlayerEquipWeapon(PlayerWeaponData data, GameObject prefab)
         {
-            //WeaponData = data;//제거?
-
+            if (_equippedWeaponData != null && _equippedWeaponData.GetEffects().Length != 0)
+                //기존 아이템이 있을때 아이템 효과가 있으면 
+            {
+                foreach (var itemEffect in _equippedWeaponData.GetEffects()) //기존 효과 정지
+                {
+                    if (itemEffect.effectType != EffectType.Permanent) continue;
+                    
+                    StopCoroutine(_currentActiveItemEffect[itemEffect]);
+                    if (!itemEffect.isTickBased)
+                    {
+                        ItemEffectCalculate(itemEffect.effectCalculate, itemEffect.effectStat,
+                            itemEffect.effectValue, true);
+                    }
+                }
+            }
+            
+            if (_equippedWeaponData == null) //없으면 할당
+            {
+                _equippedWeaponData = data;
+            }
+            
+            foreach (var itemEffect in data.GetEffects())
+            {
+                if (itemEffect.effectType == EffectType.Permanent)
+                {
+                    var coroutine =  StartCoroutine(itemEffect.isTickBased ? 
+                        TickPersistantEffect(itemEffect) : NonTickPersistantEffect(itemEffect));
+                    _currentActiveItemEffect[itemEffect] = coroutine; //아이템 효과 코루틴 관리
+                }
+                else
+                {
+                    Debug.LogWarning("Weapon Item Effect Type is not Permanent");
+                }
+            }
+            
+            SetStat(PlayerStatTypes.AttackValue, data.AttackValue);
+            
             Destroy(_equippedWeapon);
-            GameObject newWeapon = prefab;
-            _equippedWeapon = Instantiate(newWeapon, playerRightHand.transform);
+            _equippedWeapon = Instantiate(prefab, playerRightHand.transform);
+            
             if (!data.IsDefaultWeapon) //기본무기가 아니면
             {
                 _equippedWeapon.GetComponent<BoxCollider>().enabled = false; //드랍 아이템 체크용 BoxCollider 비활성
@@ -108,24 +157,13 @@ namespace Player
             {
                 //_equippedWeapon.AddComponent<PlayerMeleeAttack>();
             }
-
-            _weaponAttackValue = data.AttackValue;
-            SetStat(PlayerStatTypes.AttackValue, _weaponAttackValue);
-            //UpdateFinalAttackValue();
+            
             _playerWeaponType = data.WeaponType; //WeaponType -> Animator change(애니메이터 추가 필요)
-            if (data.GetEffects().Length != 0)
-            {
-                Debug.Log("have Effect");
-            }
-            else
-            {
-                Debug.Log("no Effect");
-            }
+            
         }
 
         public void PlayerEquipEquipment(PlayerEquipmentData data, GameObject prefab)
         {
-            //EquipmentData = data;//제거?
             if (_equippedEquipment != null)
             {
                 Destroy(_equippedEquipment);
@@ -133,26 +171,51 @@ namespace Player
 
             if (data == null)
             {
-                _equipmentDefenseValue = 0;
                 SetStat(PlayerStatTypes.DefenseValue, 0);
                 //itemEffects Remove
             }
             else
             {
-                GameObject newEquipment = prefab;
-                _equippedEquipment = Instantiate(newEquipment, playerHead.transform);
+                
+                if (_equippedEquipmentData != null && _equippedEquipmentData.GetEffects().Length != 0)
+                {
+                    foreach (var itemEffect in _equippedEquipmentData.GetEffects())
+                    {
+                        if (itemEffect.effectType != EffectType.Permanent) continue;
+                        
+                        StopCoroutine(_currentActiveItemEffect[itemEffect]);
+                        if (!itemEffect.isTickBased)
+                        {
+                            ItemEffectCalculate(itemEffect.effectCalculate, itemEffect.effectStat,
+                                itemEffect.effectValue, true);
+                        }
+                    }
+                }
+                
+                if (_equippedEquipmentData == null)
+                {
+                    _equippedEquipmentData = data;
+                }
+                
+                foreach (var itemEffect in data.GetEffects())
+                {
+                    if (itemEffect.effectType == EffectType.Permanent)
+                    {
+                        var coroutine =  StartCoroutine(itemEffect.isTickBased ? 
+                            TickPersistantEffect(itemEffect) : NonTickPersistantEffect(itemEffect));
+                        _currentActiveItemEffect[itemEffect] = coroutine; //아이템 효과 코루틴 관리
+                    }
+                    else
+                    {
+                        Debug.LogWarning("Equipment Item Effect Type is not Permanent");
+                    }
+                }
+                
+                _equippedEquipment = Instantiate(prefab, playerHead.transform);
                 _equippedEquipment.GetComponent<Collider>().enabled = false;
                 _equippedEquipment.GetComponentInChildren<ParticleSystem>().Stop();
-                _equipmentDefenseValue = data.DefenseValue;
-                SetStat(PlayerStatTypes.DefenseValue, _equipmentDefenseValue);
-                if (data.ItemEffect.Length != 0)
-                {
-                    Debug.Log("have Effect");
-                }
-                else
-                {
-                    Debug.Log("no Effect");
-                }
+                SetStat(PlayerStatTypes.DefenseValue,data.DefenseValue);
+                
             }
 
         }
@@ -224,7 +287,7 @@ namespace Player
 
         public void UseConsumableItem(ConsumableItemData data)
         {
-            foreach (var itemEffect in data.ItemData)
+            foreach (var itemEffect in data.ItemData)//소비템의 아이템 효과 데이터
             {
                 var calculateType = itemEffect.effectCalculate;
                 var effectType = itemEffect.effectType;
@@ -234,7 +297,7 @@ namespace Player
                 
                 switch (effectType)
                 {
-                    case EffectType.Instant:
+                    case EffectType.Instant: //즉시 발동 효과 - 일단은 체력/에너지만
                     {
                         var maxValue = statType switch //최댓값
                         {
@@ -243,86 +306,126 @@ namespace Player
                             _ => currentValue
                         };
 
-                        currentValue = statType switch
+                        if (statType is PlayerStatTypes.Health or PlayerStatTypes.Energy)
                         {
-                            PlayerStatTypes.Health or PlayerStatTypes.Energy => Mathf.Clamp(
-                                ItemEffectCalculate(calculateType, currentValue, effectValue), 0, maxValue),
-                            
-                            _ => ItemEffectCalculate(calculateType, currentValue, effectValue)
-                        };
-                        
+                            currentValue = itemEffect.effectCalculate switch
+                            {
+                               CalculateType.Plus => Mathf.Clamp(currentValue + effectValue, 0, maxValue),
+                               CalculateType.Multiply => Mathf.Clamp(currentValue * effectValue, 0, maxValue),
+                               _ => currentValue
+                            };
+                        }
+                        else
+                        {
+                            currentValue = itemEffect.effectCalculate switch
+                            {
+                                CalculateType.Plus => currentValue + effectValue,
+                                CalculateType.Multiply => currentValue * effectValue,
+                                _ => currentValue
+                            };
+                        }
                         SetStat(statType, currentValue);
                         break;
                     }
-                    case EffectType.Temporary:
-                        StartCoroutine(itemEffect.isTickBased ? 
-                            TickBasedEffect(itemEffect) : TemporaryEffect(itemEffect));
+                    //지속효과.
+                    case EffectType.Temporary: 
+                        StartCoroutine(itemEffect.isTickBased ? //틱당 효과
+                            TickPersistantEffect(itemEffect) : NonTickPersistantEffect(itemEffect));
                         break;
                     case EffectType.Permanent:
-                        //SetStat(statType, ItemEffectCalculate(calculateType, currentValue, effectValue));
+                       var coroutine = StartCoroutine(itemEffect.isTickBased ? //틱당 효과
+                            TickPersistantEffect(itemEffect) : NonTickPersistantEffect(itemEffect));
+                        _currentActiveItemEffect[itemEffect] = coroutine;
                         break;
+                    
                     default:
                         break;
                 }
             }
         }
 
-        private IEnumerator TickBasedEffect(ItemEffect itemEffect)
+        private IEnumerator TickPersistantEffect(ItemEffect itemEffect)
         {
-            float startTime = Time.time;
-            float currentValue = GetStat(itemEffect.effectStat);
-            float maxValue = itemEffect.effectStat switch //최대값
+            //Tick만큼 발동 -> 체력/에너지 스탯 (일단 다른 스탯은 고려x)
+            var startTime = Time.time; //시작시간
+            var currentValue = GetStat(itemEffect.effectStat);//현재값
+            var maxValue = itemEffect.effectStat switch //최댓값
             {
                 PlayerStatTypes.Health => GetStat(PlayerStatTypes.MaxHealth),
                 PlayerStatTypes.Energy => GetStat(PlayerStatTypes.MaxEnergy),
                 _ => currentValue
             };
+
+            var isPermanent = itemEffect.effectType == EffectType.Permanent;
             
-            while (Time.time - startTime < itemEffect.effectDuration)//Duration동안
+            while (isPermanent || Time.time - startTime < itemEffect.effectDuration)//Duration동안 or 영구지속이면
             {
                 currentValue = GetStat(itemEffect.effectStat);
-                switch (itemEffect.effectStat)
+
+                if (itemEffect.effectStat is PlayerStatTypes.Health or PlayerStatTypes.Energy)
                 {
-                    case PlayerStatTypes.Health:
-                    case PlayerStatTypes.Energy:
-                        if (currentValue < maxValue)
+                    if (currentValue < maxValue)
+                    {
+                        currentValue = itemEffect.effectCalculate switch
                         {
-                            SetStat(PlayerStatTypes.Health, Mathf.Clamp(ItemEffectCalculate(itemEffect.effectCalculate, 
-                                currentValue, itemEffect.effectValue), 0, maxValue));
-                        }
-                        break;
-                    default:
-                        break;
+                            CalculateType.Plus => Mathf.Clamp(currentValue + itemEffect.effectValue, 0,
+                                maxValue),
+                            CalculateType.Multiply => Mathf.Clamp(currentValue * itemEffect.effectValue, 0,
+                                maxValue),
+                            _ => currentValue
+                        };
+                        SetStat(itemEffect.effectStat, currentValue);
+                    }
                 }
                 yield return new WaitForSeconds(itemEffect.tickSecond); //Tick마다 실행
             }
+            //일시지속이면 Duration동안 실행. 영구지속이면 StopCoroutine으로 정지해야함.
         }
         
-        private IEnumerator TemporaryEffect(ItemEffect itemEffect)
+        private IEnumerator NonTickPersistantEffect(ItemEffect itemEffect)
         {
             float startTime = Time.time;
-            float currentValue = GetStat(itemEffect.effectStat);
-            
-            SetStat(itemEffect.effectStat,
-                ItemEffectCalculate(itemEffect.effectCalculate, currentValue, itemEffect.effectValue));
+
+            ItemEffectCalculate(itemEffect.effectCalculate, itemEffect.effectStat, itemEffect.effectValue, false);
             //스탯 적용
             
-            while (Time.time - startTime < itemEffect.effectDuration)
+            bool isPermanent = itemEffect.effectType == EffectType.Permanent;
+
+            while (isPermanent || Time.time - startTime < itemEffect.effectDuration)
             {
                 yield return null;
-            }   
-            //duration 지나면 원래대로
-            SetStat(itemEffect.effectStat, currentValue); //적용중인 ItemEffect 관리-> Dictionary?
+            } 
+            //duration 지나면 원래대로 , 영구지속일 경우 따로 실행 필요.
+            ItemEffectCalculate(itemEffect.effectCalculate, itemEffect.effectStat, itemEffect.effectValue, true);
         }
 
-        private static float ItemEffectCalculate(CalculateType calculateType, float currentValue, float effectValue)
+        private void ItemEffectCalculate(CalculateType calculateType, PlayerStatTypes stat, float value, bool isRemove) 
         {
-            return calculateType switch
+            
+            if (calculateType == CalculateType.Plus)
             {
-                CalculateType.Plus => currentValue + effectValue,
-                CalculateType.Multiply => currentValue * effectValue,
-                _ => currentValue
-            };
+                if (isRemove)
+                {
+                    _currentPlusItemEffects[stat] -= value;
+                }
+                else
+                {
+                    _currentPlusItemEffects[stat] += value;
+                }
+            }
+            else
+            {
+                if (isRemove)
+                {
+                    _currentMultiplyItemEffects[stat] /= value;
+                }
+                else
+                {
+                    _currentMultiplyItemEffects[stat] *= value;
+                }
+               
+            }
+            SetFinalStat(stat);
         }
         
         
@@ -349,22 +452,20 @@ namespace Player
             
             _playerControl = GetComponent<PlayerControl>();
             _mainCamera = Camera.main;
-            _currentItemEffects = new List<ItemEffect>();
-            _equipmentDefenseValue = 0f;
+            
+            //_equipmentDefenseValue = 0f;
             //실제 들고있는 무기에... 무기교체 기능
             GameObject playerWeaponPrefab = playerJobData.DefaultWeapon;
             IItemData itemData = playerWeaponPrefab.GetComponent<ItemDataAssign>().GetItemData();
-            
+
+            var attackValue = 0f;
             if (itemData is PlayerWeaponData weaponData)
             {
                 //WeaponData = weaponData;
-                _weaponAttackValue = weaponData.AttackValue;//default weapon attack value
+                //_weaponAttackValue = weaponData.AttackValue;//default weapon attack value
+                attackValue = weaponData.AttackValue;
                 _equippedWeapon = Instantiate(playerWeaponPrefab, playerRightHand.transform);
                 PlayerDefaultWeaponData = weaponData;
-            }
-            else
-            {
-                Debug.Log("Why?");
             }
             //else...Ranged
            
@@ -375,10 +476,28 @@ namespace Player
                 { PlayerStatTypes.MaxHealth, playerJobData.MaxHealth },
                 { PlayerStatTypes.Energy, playerJobData.Energy },
                 { PlayerStatTypes.MaxEnergy, playerJobData.MaxEnergy },
-                { PlayerStatTypes.AttackValue, _weaponAttackValue},
+                { PlayerStatTypes.AttackValue, attackValue},
                 { PlayerStatTypes.DefenseValue, 0f}
             };
-            
+
+            _currentPlusItemEffects = new Dictionary<PlayerStatTypes, float>
+            {
+                { PlayerStatTypes.Health, 0f },
+                { PlayerStatTypes.MaxHealth, 0f },
+                { PlayerStatTypes.Energy, 0f },
+                { PlayerStatTypes.MaxEnergy, 0f},
+                { PlayerStatTypes.AttackValue , 0f},
+                { PlayerStatTypes.DefenseValue, 0f}
+            };
+            _currentMultiplyItemEffects = new Dictionary<PlayerStatTypes, float>
+            {
+                { PlayerStatTypes.Health, 1f },
+                { PlayerStatTypes.MaxHealth, 1f },
+                { PlayerStatTypes.Energy, 1f },
+                { PlayerStatTypes.MaxEnergy, 1f },
+                { PlayerStatTypes.AttackValue, 1f },
+                { PlayerStatTypes.DefenseValue, 1f },
+            };
         }
 
         private void Update()
@@ -401,7 +520,6 @@ namespace Player
                     other.GetComponent<EnemyMeleeAttack>().Damage 
                     : other.GetComponentInParent<EnemyProjectile>().Damage;
                 TakeDamage(damage);
-                //Debug.Log("Player Health: "+health);
                 StartCoroutine(Damaged(1f)); //피격 후 무적시간...1초
             }
 
@@ -422,7 +540,6 @@ namespace Player
                     case (int)ItemLayers.Chest:
                         OnFloatKey?.Invoke(FloatText.Open, other.transform.position+ new Vector3(0.3f,0,0));
                         _itemInRange.Add(other.gameObject);
-                        // Debug.Log("itemInRange Count: "+_itemInRange.Count);
                         break;
                 }
             }

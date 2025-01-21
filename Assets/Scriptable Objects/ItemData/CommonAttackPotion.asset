@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8a73577cd75dd7d4f9f57b1fdb1d8a56, type: 3}
-  m_Name: CommonEnergyPotion
+  m_Name: CommonAttackPotion
   m_EditorClassIdentifier: 
-  itemName: Common Energy Potion
-  description: "\uC77C\uBC18 \uC5D0\uB108\uC9C0 \uD3EC\uC158"
+  itemName: Common Attack Potion
+  description: "\uC77C\uBC18 \uACF5\uACA9\uB825 \uD3EC\uC158"
   type: 0
   rarity: 0
   itemData:
-  - effectStat: 2
+  - effectStat: 4
     effectCalculate: 0
-    effectValue: 5
-    effectDescription: "\uC5D0\uB108\uC9C0 \uD68C\uBCF5"
+    effectValue: 10
+    effectDescription: "\uACF5\uACA9\uB825 \uC77C\uC2DC \uC99D\uAC00"
     effectDuration: 60
-    isTickBased: 1
-    tickSecond: 1
+    isTickBased: 0
+    tickSecond: 0
     effectType: 1
-  icon: {fileID: 21300000, guid: 9f8001550a9bd8b4795dc8598a632110, type: 3}
-  prefab: {fileID: 5436874728314371425, guid: 28b6ea4156a77d34388061ee77b1e9fc, type: 3}
+  icon: {fileID: 21300000, guid: 9ed8c6145e721784f86d799a77e95b95, type: 3}
+  prefab: {fileID: 7858611170333342565, guid: 10ee357eccfe74e468787e5166e5e0c0, type: 3}

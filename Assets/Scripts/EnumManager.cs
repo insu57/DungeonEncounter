@@ -14,7 +14,7 @@ public class ItemEffect
     public bool isTickBased;
     public float tickSecond;
     public EffectType effectType;
-    //즉발.지연 추가 필요
+    public bool useOtherStat;
 }
 public enum JobTypes
 {
