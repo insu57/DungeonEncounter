@@ -70,7 +70,7 @@ public class InventoryUIPresenter
     
     private void HandleShowCurrentEquipment()
     {
-        var itemDataWithID = _inventoryManager.CurrentWeaponData;
+        var itemDataWithID = _inventoryManager.CurrentEquipmentData;
         if (itemDataWithID.ItemData == null) return;
         _inventoryUIView.SelectedItem(itemDataWithID);
         _inventoryUIView.ToggleItemEquipBtn(true);//장착버튼 토글.

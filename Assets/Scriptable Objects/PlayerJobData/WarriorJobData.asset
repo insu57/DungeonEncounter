@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerJobName: Warrior
   defaultWeapon: {fileID: 5710825388350084945, guid: b48dac54f99fb3346ac11d045b9a3c99, type: 3}
-  health: 100
-  maxHealth: 100
+  health: 150
+  maxHealth: 150
   energy: 100
   maxEnergy: 100
   moveSpeed: 7

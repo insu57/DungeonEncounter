@@ -4,12 +4,8 @@ using System.Collections.Generic;
 using Enemy;
 using Scriptable_Objects;
 using UnityEngine;
-using UnityEngine.AI;
-using UnityEngine.Serialization;
-
 namespace Player
 {
-    //public enum PlayerStates { Idle = 0, Run, Attack, Dodge, UseItem, Damaged ,Global }
     public enum PlayerStatTypes
     {
         Health, MaxHealth,
@@ -23,28 +19,23 @@ namespace Player
         private PlayerControl _playerControl;
         [SerializeField] private GameObject playerRightHand;
         [SerializeField] private GameObject playerHead;
+   
         private EnemyMeleeAttack _enemyMeleeAttack;
-
         private EnemyProjectile _enemyProjectile;
-
-        //[SerializeField] private ItemPrefabData itemPrefabData;
-        //public PlayerWeaponData WeaponData { get; private set; }
-        //public PlayerEquipmentData EquipmentData { get; private set; }
+        
         private PlayerWeaponData _equippedWeaponData;
         private PlayerEquipmentData _equippedEquipmentData;
         private Dictionary<PlayerStatTypes, float> _playerStats;
         public event Action<PlayerStatTypes, float> OnStatChanged;
-        public event Action<PlayerStatTypes, float> OnTemporaryItemEffect;
+        public event Action<PlayerStatTypes, float> OnTemporaryItemEffect;//UI
         public PlayerWeaponData PlayerDefaultWeaponData { get; private set; }
         private GameObject _equippedWeapon;
-        //private float _weaponAttackValue;
         private WeaponType _playerWeaponType;
         private GameObject _equippedEquipment;
-        //private float _equipmentDefenseValue;
         
         private Dictionary<PlayerStatTypes, float> _currentPlusItemEffects;
-        private Dictionary<PlayerStatTypes, float> _currentMultiplyItemEffects = new Dictionary<PlayerStatTypes, float>();
-        private Dictionary<ItemEffect, Coroutine> _currentActiveItemEffect = new Dictionary<ItemEffect, Coroutine>();
+        private Dictionary<PlayerStatTypes, float> _currentMultiplyItemEffects;
+        private readonly Dictionary<ItemEffect, Coroutine> _currentActiveItemEffect = new Dictionary<ItemEffect, Coroutine>();
         
         private bool _isRecoverEnergy = false;
         private float _energyRecoverValue = 20f; //에너지 회복량
@@ -65,7 +56,7 @@ namespace Player
 
         public float GetFinalAttackValue()
         {
-            _finalAttackValue = GetStat(PlayerStatTypes.AttackValue);
+            _finalAttackValue = GetFinalStat(PlayerStatTypes.AttackValue);
             if (_playerControl.IsSkill) //skill damage x1.5 (...구조 개선 수정 필요)
                 _finalAttackValue *= 1.5f;
             return _finalAttackValue;
@@ -74,17 +65,25 @@ namespace Player
         private void TakeDamage(float damage)
         {
             var currentHealth = GetStat(PlayerStatTypes.Health);
-            var defenseValue = GetStat(PlayerStatTypes.DefenseValue);
+            var defenseValue = GetFinalStat(PlayerStatTypes.DefenseValue);
             currentHealth -= damage * (100f - defenseValue) / 100f;
             SetStat(PlayerStatTypes.Health, currentHealth);
         }
 
+        public float GetFinalStat(PlayerStatTypes stat)
+        {
+            var currentValue = GetStat(stat);
+            var plusValue = _currentPlusItemEffects[stat];
+            var multiplyValue = _currentMultiplyItemEffects[stat];
+            return (currentValue + plusValue) * multiplyValue;
+        }
+        
         private void SetFinalStat(PlayerStatTypes stat)
         {
             var currentValue = GetStat(stat);
             var plusValue = _currentPlusItemEffects[stat];
             var multiplyValue = _currentMultiplyItemEffects[stat];
-            SetStat(stat, (currentValue + plusValue) * multiplyValue);
+            OnStatChanged?.Invoke(stat, (currentValue + plusValue) * multiplyValue);
         }
         
         public void UseSkill() //스킬사용 에너지 소모
@@ -120,6 +119,7 @@ namespace Player
                         ItemEffectCalculate(itemEffect.effectCalculate, itemEffect.effectStat,
                             itemEffect.effectValue, true);
                     }
+                    _currentActiveItemEffect.Remove(itemEffect);
                 }
             }
             
@@ -173,41 +173,54 @@ namespace Player
             {
                 SetStat(PlayerStatTypes.DefenseValue, 0);
                 //itemEffects Remove
+                
+                foreach (var itemEffect in _equippedEquipmentData.GetEffects())
+                {
+                    if (itemEffect.effectType != EffectType.Permanent) continue;
+                    //Debug.Log("Data null...Unequip...Item Effect Remove...StopCoroutine");
+                    StopCoroutine(_currentActiveItemEffect[itemEffect]);
+                    if (!itemEffect.isTickBased)
+                    {
+                        //Debug.Log("Unequip...Item Effect Remove");
+                        ItemEffectCalculate(itemEffect.effectCalculate, itemEffect.effectStat,
+                            itemEffect.effectValue, true);
+                    }
+                }
+                _equippedEquipmentData = null;
             }
             else
             {
                 
-                if (_equippedEquipmentData != null && _equippedEquipmentData.GetEffects().Length != 0)
+                if (_equippedEquipmentData != null)
                 {
                     foreach (var itemEffect in _equippedEquipmentData.GetEffects())
                     {
                         if (itemEffect.effectType != EffectType.Permanent) continue;
-                        
+                        //Debug.Log("EquipmentChange...ItemEffect Remove...StopCoroutine");
                         StopCoroutine(_currentActiveItemEffect[itemEffect]);
                         if (!itemEffect.isTickBased)
                         {
+                            //Debug.Log("Equipment Change...Item Effect Remove");
                             ItemEffectCalculate(itemEffect.effectCalculate, itemEffect.effectStat,
                                 itemEffect.effectValue, true);
                         }
                     }
                 }
                 
-                if (_equippedEquipmentData == null)
-                {
-                    _equippedEquipmentData = data;
-                }
+                _equippedEquipmentData = data;
                 
                 foreach (var itemEffect in data.GetEffects())
                 {
                     if (itemEffect.effectType == EffectType.Permanent)
                     {
+                        //Debug.Log("Equip...Have Item Effect...Start Coroutine");
                         var coroutine =  StartCoroutine(itemEffect.isTickBased ? 
                             TickPersistantEffect(itemEffect) : NonTickPersistantEffect(itemEffect));
                         _currentActiveItemEffect[itemEffect] = coroutine; //아이템 효과 코루틴 관리
                     }
                     else
                     {
-                        Debug.LogWarning("Equipment Item Effect Type is not Permanent");
+                        //Debug.LogWarning("Equipment Item Effect Type is not Permanent");
                     }
                 }
                 
@@ -215,16 +228,17 @@ namespace Player
                 _equippedEquipment.GetComponent<Collider>().enabled = false;
                 _equippedEquipment.GetComponentInChildren<ParticleSystem>().Stop();
                 SetStat(PlayerStatTypes.DefenseValue,data.DefenseValue);
-                
             }
-
         }
 
         private void SetStat(PlayerStatTypes statType, float value)
         {
             if (_playerStats.ContainsKey(statType) && Mathf.Approximately(_playerStats[statType], value)) return;
             _playerStats[statType] = value;
-            OnStatChanged?.Invoke(statType, value);
+            var statValue = value;
+            var plusValue = _currentPlusItemEffects[statType];
+            var multiplyValue = _currentMultiplyItemEffects[statType];
+            OnStatChanged?.Invoke(statType, (value + plusValue) * multiplyValue);
         }
 
         public float GetStat(PlayerStatTypes statType)
@@ -289,7 +303,6 @@ namespace Player
         {
             foreach (var itemEffect in data.ItemData)//소비템의 아이템 효과 데이터
             {
-                var calculateType = itemEffect.effectCalculate;
                 var effectType = itemEffect.effectType;
                 var statType = itemEffect.effectStat;
                 var effectValue = itemEffect.effectValue;
@@ -301,8 +314,8 @@ namespace Player
                     {
                         var maxValue = statType switch //최댓값
                         {
-                            PlayerStatTypes.Health => GetStat(PlayerStatTypes.MaxHealth),
-                            PlayerStatTypes.Energy => GetStat(PlayerStatTypes.MaxEnergy),
+                            PlayerStatTypes.Health => GetFinalStat(PlayerStatTypes.MaxHealth),
+                            PlayerStatTypes.Energy => GetFinalStat(PlayerStatTypes.MaxEnergy),
                             _ => currentValue
                         };
 
@@ -337,9 +350,8 @@ namespace Player
                             TickPersistantEffect(itemEffect) : NonTickPersistantEffect(itemEffect));
                         _currentActiveItemEffect[itemEffect] = coroutine;
                         break;
-                    
                     default:
-                        break;
+                        throw new ArgumentOutOfRangeException();
                 }
             }
         }
@@ -385,7 +397,6 @@ namespace Player
         private IEnumerator NonTickPersistantEffect(ItemEffect itemEffect)
         {
             float startTime = Time.time;
-
             ItemEffectCalculate(itemEffect.effectCalculate, itemEffect.effectStat, itemEffect.effectValue, false);
             //스탯 적용
             
@@ -395,13 +406,13 @@ namespace Player
             {
                 yield return null;
             } 
-            //duration 지나면 원래대로 , 영구지속일 경우 따로 실행 필요.
+            //duration 지나면 원래대로 , 영구지속일 경우 따로 아래 코드 실행 필요.
             ItemEffectCalculate(itemEffect.effectCalculate, itemEffect.effectStat, itemEffect.effectValue, true);
         }
 
         private void ItemEffectCalculate(CalculateType calculateType, PlayerStatTypes stat, float value, bool isRemove) 
         {
-            
+            Debug.Log("before: "+_currentPlusItemEffects[stat]);
             if (calculateType == CalculateType.Plus)
             {
                 if (isRemove)
@@ -425,6 +436,7 @@ namespace Player
                 }
                
             }
+            Debug.Log("after: "+_currentPlusItemEffects[stat]);
             SetFinalStat(stat);
         }
         
@@ -515,7 +527,7 @@ namespace Player
             if ((other.CompareTag("EnemyMeleeAttack") || other.CompareTag("EnemyRangedAttack")) 
                 && _playerControl.IsDamaged == false && _playerControl.IsDodge == false)
             {
-                var health = GetStat(PlayerStatTypes.Health);
+                //var health = GetStat(PlayerStatTypes.Health);
                 var damage = other.CompareTag("EnemyMeleeAttack") ?
                     other.GetComponent<EnemyMeleeAttack>().Damage 
                     : other.GetComponentInParent<EnemyProjectile>().Damage;
@@ -535,7 +547,6 @@ namespace Player
                         or (int)ItemLayers.Consumable:
                         OnFloatKey?.Invoke(FloatText.Get, other.transform.position);
                         _itemInRange.Add(other.gameObject);
-                        Debug.Log("itemName "+ other.gameObject.name);
                         break;
                     case (int)ItemLayers.Chest:
                         OnFloatKey?.Invoke(FloatText.Open, other.transform.position+ new Vector3(0.3f,0,0));
@@ -554,7 +565,6 @@ namespace Player
                 {
                     _itemInRange.Remove(other.gameObject);
                     OnExitFloatKey?.Invoke();
-                    //Debug.Log("itemInRange Count: "+_itemInRange.Count);
                 }
             }
         }

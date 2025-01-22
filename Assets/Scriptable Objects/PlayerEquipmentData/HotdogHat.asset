@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 858e68581f5a4b04cb0c95cd4aa70528, type: 3}
+  m_Name: HotdogHat
+  m_EditorClassIdentifier: 
+  equipmentName: Hotdog Hat
+  description: "\uD56B\uB3C4\uADF8"
+  type: Hat
+  rarity: 2
+  defenseValue: 30
+  itemEffect:
+  - effectStat: 1
+    effectCalculate: 0
+    effectValue: 50
+    effectDescription: "\uCD5C\uB300\uCCB4\uB825 \uCD94\uAC00"
+    effectDuration: 0
+    isTickBased: 0
+    tickSecond: 0
+    effectType: 2
+    useOtherStat: 0
+  icon: {fileID: 21300000, guid: ab7e356221aad284d9239ddbb6f0fde0, type: 3}
+  prefab: {fileID: 4460124308017883686, guid: fb9811d386f84a646b145eb8bec9ed0a, type: 3}

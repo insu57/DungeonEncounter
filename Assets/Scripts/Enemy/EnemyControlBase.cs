@@ -1,39 +1,34 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using Player;
 using UnityEngine;
 using UnityEngine.AI;
 
 namespace Enemy
 {
-    public enum EnemyStates
-    {
-        Idle = 0, Move, Attack, Damaged , Dead ,Global, JumpAttack
-    }
-    public class EnemyControl : MonoBehaviour
+    public abstract class EnemyControlBase : MonoBehaviour
     {
         
-        protected Dictionary<EnemyStates, State<EnemyControl>> States;
-        private StateMachine<EnemyControl> _stateMachine;
+        protected State<EnemyControlBase>[] _states;
+        protected StateMachine<EnemyControlBase> _stateMachine;
         public EnemyStates CurrentState { private set; get; }
         
         public Animator EnemyAnimator { private set; get; }
         private string _currentAnimation;
         private GameObject _player;
-        //protected PlayerManager PlayerManager;
-        protected NavMeshAgent Agent;
+        private PlayerManager _playerManager;
+        private NavMeshAgent _agent;
 
         public bool IsMove { set; get; }
         public bool IsAttack { set; get; }
         public bool WasDamaged { set; get; }
         public bool IsDead { set; get; }
-        protected bool InAttackDelay;
+        private bool InAttackDelay { set; get; }
 
         public void ChangeState(EnemyStates newState)
         {
             CurrentState = newState;
-            _stateMachine.ChangeState(States[newState]);
+            _stateMachine.ChangeState(_states[(int)newState]);
         }
 
         public void ChangeAnimation(string newAnimation, float crossFadeTime = 0.2f)//애니메이션 변경
@@ -44,7 +39,7 @@ namespace Enemy
                 EnemyAnimator.CrossFade(newAnimation,crossFadeTime,-1,0);
             }
         }
-        protected IEnumerator AttackDelay(float duration)
+        private IEnumerator AttackDelay(float duration)
         {
             InAttackDelay = true;
             yield return new WaitForSeconds(duration);
@@ -61,27 +56,25 @@ namespace Enemy
             InAttackDelay = false;
             ChangeState(EnemyStates.Idle);
         }
-        
+
         protected virtual void Awake()
         {
             _player = GameObject.FindGameObjectWithTag("Player");
-            //PlayerManager = FindObjectOfType<PlayerManager>().GetComponent<PlayerManager>();
-            Agent = GetComponent<NavMeshAgent>();
+            _playerManager = _player.GetComponent<PlayerManager>();
+            _agent = GetComponent<NavMeshAgent>();
             EnemyAnimator = GetComponent<Animator>();
-
-            States = new Dictionary<EnemyStates, State<EnemyControl>>()
-            {
-                { EnemyStates.Idle, new Idle() },
-                { EnemyStates.Dead , new Dead()},
-                { EnemyStates.Attack , new Attack()},
-                { EnemyStates.Damaged, new Damaged() },
-                { EnemyStates.Move , new Move()},
-                { EnemyStates.Global , new StateGlobal()}
-            };
-
-            _stateMachine = new StateMachine<EnemyControl>();
-            _stateMachine.Setup(this, States[EnemyStates.Idle]);
-            _stateMachine.SetGlobalState(States[EnemyStates.Global]);
+            
+            _states = new State<EnemyControlBase>[6];
+            //_states[(int)EnemyStates.Idle] = new Idle();
+            //_states[(int)EnemyStates.Move] = new Move();
+            //_states[(int)EnemyStates.Attack] = new Attack();
+            //_states[(int)EnemyStates.Damaged] = new Damaged();
+            //_states[(int)EnemyStates.Dead] = new Dead();
+            //_states[(int)EnemyStates.Global] = new StateGlobal();
+            
+            //_stateMachine = new StateMachine<EnemyControl>();
+            _stateMachine.Setup(this, _states[(int)EnemyStates.Idle]);
+            _stateMachine.SetGlobalState(_states[(int)EnemyStates.Global]);
             
             IsAttack = false;
             IsMove = false;
@@ -90,12 +83,22 @@ namespace Enemy
             InAttackDelay = false;
         }
 
-        protected virtual void EnemyAttack()
+        protected virtual void Update()
         {
+            _stateMachine.Execute();
+            if (IsDead) return;
+        
+            Vector3 dir = _player.transform.position - transform.position;
+            Quaternion targetRotation = Quaternion.LookRotation(dir);
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * 7f);
+            //lerp LookAt Player
+        
+            _agent.SetDestination(_player.transform.position); //NavMeshAgent 플레이어 추적 
+        
             float animTime = EnemyAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime;
-            if (Agent.remainingDistance <= Agent.stoppingDistance && !Agent.pathPending) //Enemy 정지
+            if (_agent.remainingDistance <= _agent.stoppingDistance && !_agent.pathPending) //Enemy 정지
             {
-                Agent.isStopped = true;
+                _agent.isStopped = true;
                 IsMove = false;
             
                 if (InAttackDelay) return;
@@ -109,25 +112,10 @@ namespace Enemy
             }
             else
             {
-                Agent.isStopped = false;
+                _agent.isStopped = false;
                 IsMove = true;
                 IsAttack = false;
             }
-        }
-        
-        protected virtual void Update()
-        {
-            _stateMachine.Execute();
-            if (IsDead) return;
-        
-            Vector3 dir = _player.transform.position - transform.position;
-            Quaternion targetRotation = Quaternion.LookRotation(dir);
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * 7f);
-            //lerp LookAt Player
-        
-            Agent.SetDestination(_player.transform.position); //NavMeshAgent 플레이어 추적 
-        
-            EnemyAttack();
         }
     }
 }

@@ -25,5 +25,6 @@ MonoBehaviour:
     isTickBased: 0
     tickSecond: 0
     effectType: 1
+    useOtherStat: 0
   icon: {fileID: 21300000, guid: 9ed8c6145e721784f86d799a77e95b95, type: 3}
   prefab: {fileID: 7858611170333342565, guid: 10ee357eccfe74e468787e5166e5e0c0, type: 3}

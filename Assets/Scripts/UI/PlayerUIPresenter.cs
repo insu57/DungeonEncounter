@@ -39,7 +39,7 @@ namespace UI
             switch (statTypes)
             {
                 case PlayerStatTypes.Health:
-                    float maxHealth = _playerManager.GetStat(PlayerStatTypes.MaxHealth);
+                    float maxHealth = _playerManager.GetFinalStat(PlayerStatTypes.MaxHealth);
                     _uiView.UpdatePlayerHealthBar(value, maxHealth);
                     break;
                 case PlayerStatTypes.MaxHealth:
@@ -47,7 +47,7 @@ namespace UI
                     _uiView.UpdatePlayerHealthBar(health, value);
                     break;
                 case PlayerStatTypes.Energy:
-                    float maxEnergy = _playerManager.GetStat(PlayerStatTypes.MaxEnergy);
+                    float maxEnergy = _playerManager.GetFinalStat(PlayerStatTypes.MaxEnergy);
                     _uiView.UpdatePlayerEnergyBar(value, maxEnergy);
                     break;
                 case PlayerStatTypes.MaxEnergy:

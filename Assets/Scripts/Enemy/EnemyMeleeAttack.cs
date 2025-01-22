@@ -8,52 +8,46 @@ namespace Enemy
 
     {
         private EnemyManager _enemyManager;
-        private EnemyControl _enemyControl;
+        protected EnemyControl EnemyControl;
         private EnemyData _data;
-        private float _attackStartTime;
-        private float _attackEndTime;
-        [SerializeField] private Collider attackArea;
-        private TrailRenderer _trailRenderer;
-        private Animator _animator;
+        protected float AttackStartTime;
+        protected float AttackEndTime;
+        [SerializeField] protected Collider attackArea;
+        [SerializeField] protected TrailRenderer trailRenderer;
+        //private TrailRenderer _trailRenderer;
+        protected Animator Animator;
         private float _damage;
         public float Damage => _damage;
     
         //적 캐릭터 패턴... 리팩터링 필요
         private void Awake()
         {
-            _enemyControl = GetComponentInParent<EnemyControl>();
+            EnemyControl = GetComponentInParent<EnemyControl>();
             _enemyManager = GetComponentInParent<EnemyManager>(); 
-            //attackArea = GetComponent<Collider>(); //공격 판정 Collider
-            _trailRenderer = GetComponentInChildren<TrailRenderer>(); //공격 이펙트
-            _animator = _enemyManager.GetComponent<Animator>();
+            Animator = _enemyManager.GetComponent<Animator>();
             _data = _enemyManager.Data;
-            _attackStartTime = _data.AttackStartFrame / _data.AttackFullFrame;
-            _attackEndTime = _data.AttackEndFrame / _data.AttackFullFrame;
+            AttackStartTime = _data.AttackStartFrame / _data.AttackFullFrame;
+            AttackEndTime = _data.AttackEndFrame / _data.AttackFullFrame;
             _damage = _data.Damage;
-            //Debug.Log(_damage);
         }
-    
-        private void Update()
-        {
-            float animTime = Mathf.Repeat(_animator.GetCurrentAnimatorStateInfo(0).normalizedTime, 1.0f);
 
-            if (_enemyControl.IsAttack && _attackStartTime <= animTime && animTime <= _attackEndTime)
+        protected virtual void Update()
+        {
+            float animTime = Mathf.Repeat(Animator.GetCurrentAnimatorStateInfo(0).normalizedTime, 1.0f);
+
+            if (EnemyControl.IsAttack && AttackStartTime <= animTime && animTime <= AttackEndTime)
             {
                 attackArea.enabled = true;
-                _trailRenderer.enabled = true;
+                trailRenderer.enabled = true;
             }
             else
             {
                 attackArea.enabled = false;
-                _trailRenderer.Clear();
-                _trailRenderer.enabled = false;
+                trailRenderer.Clear();
+                trailRenderer.enabled = false;
             }
        
         }
 
-        private void OnTriggerEnter(Collider other)
-        {
-            //Debug.Log("Player Hit");
-        }
     }
 }

@@ -144,11 +144,10 @@ GameObject:
   - component: {fileID: 6977459144104073956}
   - component: {fileID: 5723971152261042588}
   - component: {fileID: 4588694604538802614}
-  - component: {fileID: 7216453039916099576}
   - component: {fileID: 3192662496944835522}
   m_Layer: 0
   m_Name: Slime_01
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -231,7 +230,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27cd7f5454861af48a8c10193bfb4143, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalMaterialColor: {fileID: 2100000, guid: 8c3f067d97073e844a53d8283b2d3820, type: 2}
   renderers:
   - {fileID: 7245346047389021147}
 --- !u!54 &4588694604538802614
@@ -261,19 +259,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &7216453039916099576
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3228783404506991743}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0c361b29df1b6146a06c0a91d72192d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attackArea: {fileID: 3953144751963888613}
 --- !u!195 &3192662496944835522
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -288,7 +273,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 360
-  m_StoppingDistance: 1.5
+  m_StoppingDistance: 2
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -513,6 +498,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4646679350083326179}
   - component: {fileID: 3953144751963888613}
+  - component: {fileID: 2090593683142485574}
   m_Layer: 0
   m_Name: AttackArea
   m_TagString: Untagged
@@ -557,6 +543,20 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.7, y: 0.5, z: 0.2}
   m_Center: {x: 0, y: 0.1, z: 0}
+--- !u!114 &2090593683142485574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8238580961831511255}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0c361b29df1b6146a06c0a91d72192d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackArea: {fileID: 3953144751963888613}
+  trailRenderer: {fileID: 4289417582565071205}
 --- !u!1 &8589488709826334088
 GameObject:
   m_ObjectHideFlags: 0

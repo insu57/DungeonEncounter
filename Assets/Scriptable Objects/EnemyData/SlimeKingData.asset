@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d55033d1b653b564c9f5c82e810e171c, type: 3}
+  m_Name: SlimeKingData
+  m_EditorClassIdentifier: 
+  enemyName: Slime King
+  description: "\uC2AC\uB77C\uC784 \uC655"
+  type: Boss
+  rank: Boss
+  maxHealth: 300
+  damage: 30
+  projectilePrefab: {fileID: 0}
+  projectileKey: 0
+  projectileSpeed: 0
+  attackFullFrame: 18
+  attackStartFrame: 4
+  attackEndFrame: 10
+  dropTable: {fileID: 0}
+  enemyKey: 0

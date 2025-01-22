@@ -121,11 +121,6 @@ namespace Enemy
                 {
                     enemy.ChangeState(EnemyStates.Attack);
                 }
-                /*
-                if (enemy.CurrentState != EnemyStates.Damaged && enemy.WasDamaged)
-                {
-                    enemy.ChangeState(EnemyStates.Damaged);
-                }*/
             }
             
         }
