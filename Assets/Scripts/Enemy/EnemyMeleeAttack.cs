@@ -20,7 +20,7 @@ namespace Enemy
         public float Damage => _damage;
     
         //적 캐릭터 패턴... 리팩터링 필요
-        private void Awake()
+        protected virtual void Awake()
         {
             EnemyControl = GetComponentInParent<EnemyControl>();
             _enemyManager = GetComponentInParent<EnemyManager>(); 

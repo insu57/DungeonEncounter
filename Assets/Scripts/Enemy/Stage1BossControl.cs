@@ -18,6 +18,46 @@ public class Stage1BossControl : EnemyControl
     private int _attackCount = 0;
     private int _randomStack;
     public bool IsJumpAttack { private set; get; }
+
+    private Stage1BossMeleeAttack _stage1BossMeleeAttack;
+
+    protected override IEnumerator AttackDelay(float duration)
+    {
+        InAttackDelay = true;
+        yield return new WaitForSeconds(duration);
+        
+        if (_attackCount == 0)
+        {
+            _randomStack = Random.Range(3, 6);//3~5
+        }
+            
+        _attackCount++;
+            
+        if (_attackCount == _randomStack)
+        {
+            IsJumpAttack = true;
+            _attackCount = 0;
+            jumpAttackEffect.SetActive(true);
+            Debug.Log("Jump Attack"); //이펙트 이상..?
+        }
+        else
+        {
+            if (IsJumpAttack)
+            {
+                IsJumpAttack = false;
+                jumpAttackEffect.SetActive(false);
+            }
+        }
+        
+        _stage1BossMeleeAttack.JumpAttackArea();
+        
+        InAttackDelay = false;
+        
+    }
+    
+    
+    
+    
     protected override void EnemyAttack()
     {
         float animTime = EnemyAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime;
@@ -30,29 +70,6 @@ public class Stage1BossControl : EnemyControl
             IsMove = false;
             
             if (InAttackDelay) return;
-            
-            if (_attackCount == 0)
-            {
-                _randomStack = Random.Range(3, 6);//3~5
-            }
-            
-            _attackCount++;
-            
-            if (_attackCount == _randomStack)
-            {
-                IsJumpAttack = true;
-                _attackCount = 0;
-                jumpAttackEffect.SetActive(true);
-                Debug.Log("Jump Attack"); //이펙트 이상
-            }
-            else
-            {
-                if (IsJumpAttack)
-                {
-                    IsJumpAttack = false;
-                    jumpAttackEffect.SetActive(false);
-                }
-            }
             
             IsAttack = true;
             bool isAttack = EnemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("Attack") ||
@@ -76,5 +93,6 @@ public class Stage1BossControl : EnemyControl
     {
         base.Awake();
         States[EnemyStates.Attack] = new Stage1BossAttack();
+        _stage1BossMeleeAttack = GetComponentInChildren<Stage1BossMeleeAttack>();
     }
 }

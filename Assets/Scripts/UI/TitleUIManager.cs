@@ -1,8 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using NUnit.Framework.Constraints;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
@@ -21,7 +16,7 @@ public class TitleUIManager : MonoBehaviour
     private void Awake()
     {
         _btnPlay = transform.Find("ButtonPlay").GetComponent<Button>();
-        _playTab = transform.Find("PlayTab").GameObject();
+        _playTab = transform.Find("PlayTab").gameObject;
         _btnSetting = transform.Find("ButtonSetting").GetComponent<Button>();
         _btnQuit = transform.Find("ButtonQuit").GetComponent<Button>();
         
@@ -39,7 +34,7 @@ public class TitleUIManager : MonoBehaviour
         //PlayTab
         _btnBack.onClick.AddListener(ClosePlayTab);
         _btnContinue.onClick.AddListener(ChangeMainScene);
-        AudioManager.Instance.PlayBGM(AudioManager.Bgm.TitleBgm);
+        AudioManager.Instance.PlayBGM(AudioManager.BGM.TitleBgm);
     }
 
     private void Update()
@@ -70,7 +65,7 @@ public class TitleUIManager : MonoBehaviour
     {
         //SceneManager.LoadScene("MainScene");
         LoadingManager.LoadScene(LoadingManager.MainScene);
-        AudioManager.Instance.PlayBGM(AudioManager.Bgm.MainBgm);
+        AudioManager.Instance.PlayBGM(AudioManager.BGM.MainBgm);
     }
 
     private void GameQuit() //나중에 종료로 수정

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using UI;
 using UnityEngine;
 
 namespace Player
@@ -38,6 +39,7 @@ namespace Player
         public bool IsSkill { set; get; }
         public bool IsDodge { private set; get; }
         public bool IsDamaged { set; get; }
+        private InventoryUIView _inventoryUIView; //UI presenter 수정필요
         
         public void ChangeState(PlayerStates newState)
         {
@@ -129,7 +131,7 @@ namespace Player
         
             _lookRotation = Quaternion.LookRotation(Vector3.back);
             _lookVector = Vector3.back;
-            
+            _inventoryUIView = FindObjectOfType<InventoryUIView>();
         }
 
         private void Update()
@@ -148,6 +150,7 @@ namespace Player
 
             if (Input.GetKeyDown(KeyCode.F))
             {
+                AudioManager.Instance.PlaySfx(AudioManager.Sfx.ItemPickupSfx);
                 _playerManager.GetItemInRange();//범위안 아이템 획득 처리
             }
             
@@ -160,6 +163,7 @@ namespace Player
                     if (Input.GetKeyDown(KeyCode.Space)) //회피
                     {
                         Vector3 dodgeTarget = transform.position + _lookVector * _dodgeDistance;
+                        AudioManager.Instance.PlaySfx(AudioManager.Sfx.DodgeSfx);
                         StopCoroutine(Dodge(dodgeTarget));
                         StartCoroutine(Dodge(dodgeTarget));
                     }
@@ -171,9 +175,6 @@ namespace Player
                     IsAttack = true;
 
                     AudioManager.Instance.PlaySfx(AudioManager.Sfx.AttackSfx); //Sfx Play
-                    AudioManager.Instance.PlaySfx(AudioManager.Sfx.AttackVoice);
-                    //????
-
                 }
 
                 if (Input.GetMouseButtonDown(1) && _playerManager.GetStat(PlayerStatTypes.Energy) >= 100f
@@ -185,6 +186,8 @@ namespace Player
                     IsSkill = true;
                     _playerManager.UseSkill();//플레이어 스탯 에너지 소모
                     //sound
+                    AudioManager.Instance.PlaySfx(AudioManager.Sfx.SkillSfx);
+                    AudioManager.Instance.PlayVoice(AudioManager.Voice.AttackVoice);
                 }
                 
             
@@ -211,6 +214,12 @@ namespace Player
                     _playerManager.UseItemQuickSlot(2);
                 }
             
+                if (Input.GetKeyDown(KeyCode.I) || Input.GetKeyDown(KeyCode.Tab))
+                {
+                    AudioManager.Instance.PlaySfx(AudioManager.Sfx.InventoryOpenSfx);
+                    _inventoryUIView.TogglePlayerMenu();
+                }
+                
                 /* 원거리 플레이어 회전... 마우스기준 회전
             _lookVec -= transform.position;
             _lookVec.y = 0;

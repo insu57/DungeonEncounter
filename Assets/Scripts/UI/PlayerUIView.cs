@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-using Scriptable_Objects;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace UI

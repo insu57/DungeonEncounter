@@ -44,7 +44,7 @@ namespace Enemy
                 EnemyAnimator.CrossFade(newAnimation,crossFadeTime,-1,0);
             }
         }
-        protected IEnumerator AttackDelay(float duration)
+        protected virtual IEnumerator AttackDelay(float duration)
         {
             InAttackDelay = true;
             yield return new WaitForSeconds(duration);

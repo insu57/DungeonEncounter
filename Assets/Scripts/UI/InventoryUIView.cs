@@ -75,7 +75,7 @@ namespace UI
         public event Action OnDropButton;
         public event Action<int> OnSetQuickSlot;
         
-        private void TogglePlayerMenu()
+        public void TogglePlayerMenu()
         {
             playerMenu.SetActive(!playerMenu.activeSelf);
             inventory.SetActive(false);
@@ -317,10 +317,11 @@ namespace UI
         private void Update()
         {
             //PlayerMenu
+            /*
             if (Input.GetKeyDown(KeyCode.I) || Input.GetKeyDown(KeyCode.Tab))
             {
                 TogglePlayerMenu();
-            }
+            }*/
         }
     }
 }

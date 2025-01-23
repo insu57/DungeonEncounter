@@ -215,7 +215,7 @@ TrailRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.5234966
+        value: 0.9734966
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -223,8 +223,17 @@ TrailRenderer:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.54047376
-        value: 0
+        time: 0.49612427
+        value: 0.4850006
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 0.99389565
+        value: 0.06624985
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -614,7 +623,7 @@ GameObject:
   m_Component:
   - component: {fileID: 65099193881147206}
   - component: {fileID: 1886283001814763635}
-  - component: {fileID: 1168569330677832711}
+  - component: {fileID: 8640700237145749840}
   m_Layer: 0
   m_Name: AttackArea
   m_TagString: EnemyMeleeAttack
@@ -659,7 +668,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.8, y: 0.7, z: 0.8}
   m_Center: {x: 0, y: 0.4, z: 0}
---- !u!114 &1168569330677832711
+--- !u!114 &8640700237145749840
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -668,7 +677,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8044385242489915406}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0c361b29df1b6146a06c0a91d72192d, type: 3}
+  m_Script: {fileID: 11500000, guid: 187b4c236055e61469155b4955db7191, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   attackArea: {fileID: 1886283001814763635}
@@ -734,6 +743,18 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5880797563126852495, guid: 265d3a5ba69981a4698ceabcedf368b0, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5880797563126852495, guid: 265d3a5ba69981a4698ceabcedf368b0, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5880797563126852495, guid: 265d3a5ba69981a4698ceabcedf368b0, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5880797563126852495, guid: 265d3a5ba69981a4698ceabcedf368b0, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -773,6 +794,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5880797563126852495, guid: 265d3a5ba69981a4698ceabcedf368b0, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5880797563127281583, guid: 265d3a5ba69981a4698ceabcedf368b0, type: 3}
       propertyPath: m_Name
       value: CFXR Hit D 3D (Yellow)
@@ -783,7 +808,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5880797563141009103, guid: 265d3a5ba69981a4698ceabcedf368b0, type: 3}
       propertyPath: playOnAwake
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5880797563141035887, guid: 265d3a5ba69981a4698ceabcedf368b0, type: 3}
       propertyPath: m_Materials.Array.size
