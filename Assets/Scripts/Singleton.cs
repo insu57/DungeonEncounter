@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,7 +22,6 @@ public class Singleton<T> : MonoBehaviour where T: Component //Singleton Generic
             return _instance;
         }
     }
-
     public virtual void Awake()
     {
         RemoveDuplicates();
@@ -52,6 +52,7 @@ public class Singleton<T> : MonoBehaviour where T: Component //Singleton Generic
         }
         else
         {
+            Debug.Log(gameObject.name);
             Destroy(gameObject);
         }
     }

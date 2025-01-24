@@ -24,11 +24,34 @@ namespace UI
         [SerializeField] private TextMeshProUGUI energyText;
         [SerializeField] private TextMeshProUGUI attackText;
         [SerializeField] private TextMeshProUGUI defenseText;
-
-        private void TogglePause()
+        //PlayerDeath
+        [Header("Player Death")]
+        [SerializeField] private GameObject playerDeathMenu;        
+        [SerializeField] private Button retryButton;
+        [SerializeField] private Button exitButton;
+        public void TogglePause()
         {
             GameManager.Instance.TogglePause();
             pauseMenu.SetActive(!pauseMenu.activeSelf);
+        }
+
+        public void TogglePlayerDeathMenu(bool isOpen)
+        {
+            if (isOpen)
+            {
+                playerDeathMenu.SetActive(true);
+                pauseMenu.SetActive(false);
+                retryButton.onClick.AddListener(GameManager.Instance.RetryStage);
+                retryButton.onClick.AddListener(() => playerDeathMenu.SetActive(false));
+                exitButton.onClick.AddListener(GameManager.Instance.ReturnMainRoom);
+                exitButton.onClick.AddListener(()=> playerDeathMenu.SetActive(false));
+                GameManager.Instance.HandlePlayerDeath();
+            }
+            else
+            {
+                playerDeathMenu.SetActive(false);
+            }
+            
         }
         
         public void UpdatePlayerHealthBar(float health, float maxHealth)
@@ -44,7 +67,6 @@ namespace UI
             energyText.text = $"{energy}/{maxEnergy}";
         }
         
-        //플레이어 정보 창일때만 호출하게 수정필요
         public void UpdatePlayerAttackValue(float attackValue)
         {
             attackText.text = $"{attackValue}";
@@ -58,6 +80,8 @@ namespace UI
         private void Awake()
         {
             resumeButton.onClick.AddListener(TogglePause);
+            //
+            //
         }
 
         private void Update()

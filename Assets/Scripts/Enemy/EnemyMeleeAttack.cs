@@ -16,9 +16,8 @@ namespace Enemy
         [SerializeField] protected TrailRenderer trailRenderer;
         //private TrailRenderer _trailRenderer;
         protected Animator Animator;
-        private float _damage;
-        public float Damage => _damage;
-    
+        public float Damage { get; private set; }
+
         //적 캐릭터 패턴... 리팩터링 필요
         protected virtual void Awake()
         {
@@ -28,7 +27,7 @@ namespace Enemy
             _data = _enemyManager.Data;
             AttackStartTime = _data.AttackStartFrame / _data.AttackFullFrame;
             AttackEndTime = _data.AttackEndFrame / _data.AttackFullFrame;
-            _damage = _data.Damage;
+            Damage = _data.Damage;
         }
 
         protected virtual void Update()

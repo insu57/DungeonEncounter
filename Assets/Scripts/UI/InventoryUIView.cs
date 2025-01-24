@@ -74,6 +74,15 @@ namespace UI
         public event Action OnEquipButton;
         public event Action OnDropButton;
         public event Action<int> OnSetQuickSlot;
+
+        public void ResetInventoryUI()
+        {
+            ClearEquippedEquipment();
+            ClearItemQuick1();
+            ClearItemQuick2();
+            playerMenu.SetActive(false);
+            ClearItemInfo();
+        }
         
         public void TogglePlayerMenu()
         {
@@ -217,7 +226,18 @@ namespace UI
             itemNameText.text = itemData.GetName();
             itemDescriptionText.text = itemData.GetDescription();
             itemRarityText.text = EnumManager.RarityToString(itemData.GetRarity());
-            itemEffectText.text = itemData.GetEffects().Length != 0 ? "Have Effect" : "None.";
+
+            if (itemData.GetEffects().Length != 0)
+            {
+                foreach (var itemEffect in itemData.GetEffects())
+                {
+                    itemEffectText.text = $"{itemEffect.effectDescription}\n";
+                }
+            }
+            else
+            {
+                itemEffectText.text = "None.";
+            }
             
             switch (itemData)
             {
@@ -312,16 +332,6 @@ namespace UI
             itemDropButton.onClick.AddListener(()=>OnDropButton?.Invoke());
             setQuick1Button.onClick.AddListener(() => OnSetQuickSlot?.Invoke(1));
             setQuick2Button.onClick.AddListener(() => OnSetQuickSlot?.Invoke(2));
-        }
-
-        private void Update()
-        {
-            //PlayerMenu
-            /*
-            if (Input.GetKeyDown(KeyCode.I) || Input.GetKeyDown(KeyCode.Tab))
-            {
-                TogglePlayerMenu();
-            }*/
         }
     }
 }

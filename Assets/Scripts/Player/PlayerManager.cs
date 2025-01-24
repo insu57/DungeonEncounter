@@ -28,6 +28,7 @@ namespace Player
         private Dictionary<PlayerStatTypes, float> _playerStats;
         public event Action<PlayerStatTypes, float> OnStatChanged;
         public event Action<PlayerStatTypes, float> OnTemporaryItemEffect;//UI
+        public bool IsPlayerDead { get; private set; }
         public PlayerWeaponData PlayerDefaultWeaponData { get; private set; }
         private GameObject _equippedWeapon;
         private WeaponType _playerWeaponType;
@@ -51,7 +52,8 @@ namespace Player
         public event Action<int> OnUseItemQuickSlot;
         public event Action<FloatText, Vector3> OnFloatKey;
         public event Action OnExitFloatKey;
-
+        public event Action OnPlayerDeath;
+        
         private Camera _mainCamera;
 
         public float GetFinalAttackValue()
@@ -106,7 +108,7 @@ namespace Player
 
         public void PlayerEquipWeapon(PlayerWeaponData data, GameObject prefab)
         {
-            if (_equippedWeaponData != null && _equippedWeaponData.GetEffects().Length != 0)
+            if (_equippedWeaponData && _equippedWeaponData.GetEffects().Length != 0)
                 //기존 아이템이 있을때 아이템 효과가 있으면 
             {
                 foreach (var itemEffect in _equippedWeaponData.GetEffects()) //기존 효과 정지
@@ -123,7 +125,7 @@ namespace Player
                 }
             }
             
-            if (_equippedWeaponData == null) //없으면 할당
+            if (!_equippedWeaponData) //없으면 할당
             {
                 _equippedWeaponData = data;
             }
@@ -164,16 +166,16 @@ namespace Player
 
         public void PlayerEquipEquipment(PlayerEquipmentData data, GameObject prefab)
         {
-            if (_equippedEquipment != null)
+            if (_equippedEquipment)
             {
                 Destroy(_equippedEquipment);
             }
 
-            if (data == null)
+            if (!data)
             {
                 SetStat(PlayerStatTypes.DefenseValue, 0);
                 //itemEffects Remove
-                
+                if (!_equippedEquipmentData) return;
                 foreach (var itemEffect in _equippedEquipmentData.GetEffects())
                 {
                     if (itemEffect.effectType != EffectType.Permanent) continue;
@@ -187,11 +189,12 @@ namespace Player
                     }
                 }
                 _equippedEquipmentData = null;
+
             }
             else
             {
                 
-                if (_equippedEquipmentData != null)
+                if (_equippedEquipmentData)
                 {
                     foreach (var itemEffect in _equippedEquipmentData.GetEffects())
                     {
@@ -277,7 +280,7 @@ namespace Player
         public void GetItemInRange()
         {
             if(_itemInRange.Count == 0) return;
-
+            AudioManager.Instance.PlaySfx(AudioManager.Sfx.ItemPickupSfx);
             for (var i = 0; i < _itemInRange.Count; i++)
             {
                 if (_itemInRange[i].layer == (int)ItemLayers.Chest)
@@ -457,6 +460,45 @@ namespace Player
         {
             dodgeEffect.SetActive(isActive);
         }
+
+        private void HandlePlayerDeath()
+        {
+            IsPlayerDead = true;
+            OnPlayerDeath?.Invoke();
+            //사망창...
+            foreach (var active in _currentActiveItemEffect)
+            {
+                StopCoroutine(active.Value);
+            }
+            _currentActiveItemEffect.Clear();
+            var keys = new List<PlayerStatTypes>(_currentPlusItemEffects.Keys);
+            foreach (var key in keys)
+            {
+                _currentPlusItemEffects[key] = 0f;
+                _currentMultiplyItemEffects[key] = 1f;
+            }
+            
+            //스탯초기화.
+            _playerStats[PlayerStatTypes.Health] = playerJobData.Health;
+            _playerStats[PlayerStatTypes.Energy] = playerJobData.Energy;
+            _playerStats[PlayerStatTypes.MaxHealth] = playerJobData.MaxHealth;
+            _playerStats[PlayerStatTypes.MaxEnergy] = playerJobData.MaxEnergy;
+            
+            //아이템 초기화
+            PlayerEquipWeapon(PlayerDefaultWeaponData, PlayerDefaultWeaponData.GetItemPrefab());
+            PlayerEquipEquipment(null,null);
+            Debug.Log("player dead...Reset need.");
+        }
+
+        public void ResetStat()
+        {
+            SetFinalStat(PlayerStatTypes.Health);
+            SetFinalStat(PlayerStatTypes.Energy);
+            SetFinalStat(PlayerStatTypes.MaxHealth);
+            SetFinalStat(PlayerStatTypes.MaxEnergy);
+            SetFinalStat(PlayerStatTypes.AttackValue);
+            SetFinalStat(PlayerStatTypes.DefenseValue);
+        }
         
         public override void Awake()
         {
@@ -510,6 +552,8 @@ namespace Player
                 { PlayerStatTypes.AttackValue, 1f },
                 { PlayerStatTypes.DefenseValue, 1f },
             };
+            
+            IsPlayerDead = false;
         }
 
         private void Update()
@@ -518,6 +562,12 @@ namespace Player
                 && _isRecoverEnergy == false)
             {
                 StartCoroutine(RecoveryEnergy());//에너지 회복
+            }
+
+            if (IsPlayerDead == false && GetStat(PlayerStatTypes.Health) <= 0f)
+            {
+                HandlePlayerDeath();
+                
             }
         }
         
@@ -545,8 +595,8 @@ namespace Player
                         break;
                     case (int)ItemLayers.Weapon or (int)ItemLayers.Equipment 
                         or (int)ItemLayers.Consumable:
-                        OnFloatKey?.Invoke(FloatText.Get, other.transform.position);
-                        _itemInRange.Add(other.gameObject);
+                        OnFloatKey?.Invoke(FloatText.Get, other.transform.position);//텍스트 띄우기 이벤트
+                        _itemInRange.Add(other.gameObject); //가까운 아이템 리스트 추가
                         break;
                     case (int)ItemLayers.Chest:
                         OnFloatKey?.Invoke(FloatText.Open, other.transform.position+ new Vector3(0.3f,0,0));

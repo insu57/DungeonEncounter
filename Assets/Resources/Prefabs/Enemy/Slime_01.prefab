@@ -30,7 +30,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 857281001720837938}
-  - {fileID: 4646679350083326179}
   m_Father: {fileID: 7575431103915424986}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2356911787251745507
@@ -94,6 +93,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3036391209035287442}
+  - {fileID: 4646679350083326179}
   - {fileID: 7118983670132187457}
   - {fileID: 9014516218334679747}
   m_Father: {fileID: 3302798739598333137}
@@ -501,7 +501,7 @@ GameObject:
   - component: {fileID: 2090593683142485574}
   m_Layer: 0
   m_Name: AttackArea
-  m_TagString: Untagged
+  m_TagString: EnemyMeleeAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -514,13 +514,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8238580961831511255}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.022265784, y: -0.0020751774, z: 0.105468825, w: 0.99417114}
-  m_LocalPosition: {x: 0.026348334, y: -0.3327913, z: 0.21203211}
+  m_LocalRotation: {x: -0, y: 0.00000011920928, z: 0.000000003074089, w: 1}
+  m_LocalPosition: {x: 0, y: 0.24999979, z: 0.19699983}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3429048392409409203}
-  m_Father: {fileID: 9014516218334679747}
+  m_Father: {fileID: 7575431103915424986}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &3953144751963888613
 BoxCollider:
@@ -541,8 +541,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 0
   serializedVersion: 3
-  m_Size: {x: 0.7, y: 0.5, z: 0.2}
-  m_Center: {x: 0, y: 0.1, z: 0}
+  m_Size: {x: 0.8, y: 0.8, z: 0.5}
+  m_Center: {x: 0, y: 0.3, z: 0}
 --- !u!114 &2090593683142485574
 MonoBehaviour:
   m_ObjectHideFlags: 0

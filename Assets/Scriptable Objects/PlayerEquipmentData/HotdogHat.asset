@@ -21,7 +21,7 @@ MonoBehaviour:
   - effectStat: 1
     effectCalculate: 0
     effectValue: 50
-    effectDescription: "\uCD5C\uB300\uCCB4\uB825 \uCD94\uAC00"
+    effectDescription: "\uCD5C\uB300\uCCB4\uB825\uC744 50\uB9CC\uD07C \uCD94\uAC00\uD55C\uB2E4."
     effectDuration: 0
     isTickBased: 0
     tickSecond: 0

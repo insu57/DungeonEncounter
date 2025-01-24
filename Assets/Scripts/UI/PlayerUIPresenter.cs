@@ -18,7 +18,7 @@ namespace UI
             _uiView = uiView; //view
 
             _playerManager.OnStatChanged += HandleStatChanged;
-            
+            _playerManager.OnPlayerDeath += HandlePlayerDeath;
             //init stat
             float health = _playerManager.GetStat(PlayerStatTypes.Health);
             float maxHealth = _playerManager.GetStat(PlayerStatTypes.MaxHealth);
@@ -34,6 +34,11 @@ namespace UI
             
         }
 
+        private void HandlePlayerDeath()
+        {
+            _uiView.TogglePlayerDeathMenu(true);
+        }
+        
         private void HandleStatChanged(PlayerStatTypes statTypes, float value)
         {
             switch (statTypes)

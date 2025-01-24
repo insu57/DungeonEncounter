@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using Player;
+using UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,23 +11,44 @@ public class GameManager : Singleton<GameManager> //Singleton Game Manager ì‹±ê¸
 {
     public bool GamePaused { get; private set; }
     private PlayerManager _playerManager;
-    private bool _playerDead;
-
+    private StageManager _stageManager;
     public void TogglePause()
     {
         GamePaused = !GamePaused;
     }
-    
+
+    public void HandlePlayerDeath()
+    {
+        GamePaused = true;
+        _stageManager = FindObjectOfType<StageManager>();
+        if (_stageManager)
+        {
+            _stageManager.ResetStage();
+        }
+    }
+
+    public void RetryStage()
+    {
+        _playerManager.transform.position = Vector3.zero;
+        _playerManager.ResetStat();
+        GamePaused = false;
+    }
+
+    public void ReturnMainRoom()
+    {
+        LoadingManager.LoadScene(LoadingManager.MainScene);
+        _playerManager.transform.position = Vector3.zero;
+        _playerManager.ResetStat();
+        GamePaused = false;
+    }
     public override void Awake()
     {
         base.Awake();
         _playerManager = FindObjectOfType<PlayerManager>();
-        _playerDead = false;
+        _playerManager.OnPlayerDeath += HandlePlayerDeath;
     }
     private void Update()
     {
-        //if(_playerDead)
-        
         if(GamePaused) 
         {
             Time.timeScale = 0f;
@@ -36,9 +59,5 @@ public class GameManager : Singleton<GameManager> //Singleton Game Manager ì‹±ê¸
             Time.timeScale = 1f;
             DOTween.PlayAll();
         }
-        
-        
     }
-    
-    
 }

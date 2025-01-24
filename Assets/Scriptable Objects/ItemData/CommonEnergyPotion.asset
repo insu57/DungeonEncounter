@@ -20,10 +20,12 @@ MonoBehaviour:
   - effectStat: 2
     effectCalculate: 0
     effectValue: 5
-    effectDescription: "\uC5D0\uB108\uC9C0 \uD68C\uBCF5"
+    effectDescription: "1\uCD08\uB2F9 \uCD94\uAC00\uC801\uC73C\uB85C \uC5D0\uB108\uC9C0\uB97C 
+      5\uB9CC\uD07C \uD68C\uBCF5\uD55C\uB2E4."
     effectDuration: 60
     isTickBased: 1
     tickSecond: 1
     effectType: 1
+    useOtherStat: 0
   icon: {fileID: 21300000, guid: 9f8001550a9bd8b4795dc8598a632110, type: 3}
   prefab: {fileID: 5436874728314371425, guid: 28b6ea4156a77d34388061ee77b1e9fc, type: 3}

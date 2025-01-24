@@ -33,6 +33,7 @@ namespace Enemy
         private WorldUIView _worldUIView;
         private EnemyWorldUIPresenter _uiPresenter;
         private StageManager _stageManager;
+        public PoolKeys key { get; private set; }
         public event Action<float,float> OnHealthChanged;
         public event Action OnDeath;
         public float GetStat(EnemyStatTypes type)
@@ -158,7 +159,7 @@ namespace Enemy
             //초기화.
             enemyCollider.enabled = true;
             _enemyStats[EnemyStatTypes.Health] = GetStat(EnemyStatTypes.MaxHealth);
-            Debug.Log("Enemy On Enable...Name: "+gameObject.name+" Position: "+transform.position);
+            //Debug.Log("Enemy On Enable...Name: "+gameObject.name+" Position: "+transform.position);
         }
 
         private void Awake()
@@ -178,8 +179,8 @@ namespace Enemy
             };
             
             _worldUIView = FindObjectOfType<WorldUIView>();
-            
             _flashOnHit = GetComponent<FlashOnHit>();
+            key = data.EnemyKey;
         }
         
         private void OnTriggerEnter(Collider other)

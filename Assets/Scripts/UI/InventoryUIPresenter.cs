@@ -29,12 +29,13 @@ public class InventoryUIPresenter
         _playerManager.OnGetItem += HandleAddItem;
         _playerManager.OnUseItemQuickSlot += HandleOnUseItemQuickSlot;
         _inventoryManager.OnUpdateMoneyAmount += HandleUpdateTotalMoney;
-     
+        _playerManager.OnPlayerDeath += HandlePlayerDeath;
+        
         _inventoryUIView.OnEquipButton += HandleOnEquipButton;
         _inventoryUIView.OnDropButton += HandleOnDropButton;
         _inventoryUIView.OnSetQuickSlot += HandleOnSetQuickSlot;
-        
-        
+
+
         //init
         //기본무기 설정-인벤토리/UI
         var defaultWeaponData = _playerManager.PlayerDefaultWeaponData;
@@ -45,19 +46,37 @@ public class InventoryUIPresenter
             ItemPrefab = defaultWeaponPrefab,
             ItemID = 1,
         };
-        _inventoryManager.AddItemData(defaultWeaponWithID );
+        _inventoryManager.AddItemData(defaultWeaponWithID);
         _inventoryManager.SetWeapon(defaultWeaponWithID);
         _inventoryUIView.UpdateEquippedWeapon(defaultWeaponData.Icon);
-        
-        int maxCount = _inventoryManager.weaponInventoryMaxCount;  //생성은 초기화, 최대칸 증가 시에만
+
+        int maxCount = _inventoryManager.weaponInventoryMaxCount; //생성은 초기화, 최대칸 증가 시에만
         for (int i = 0; i < maxCount; i++)
         {
             _inventoryUIView.InitInventory();
         }
 
     }
-    
-    private void HandleShowCurrentWeapon() //현재 무기 데이터 표시
+
+    private void HandlePlayerDeath()
+    {
+        //
+        _inventoryManager.ResetInventory();
+        var defaultWeaponData = _playerManager.PlayerDefaultWeaponData;
+        var defaultWeaponPrefab = _playerManager.PlayerDefaultWeaponData.GetItemPrefab();
+        var defaultWeaponWithID = new ItemDataWithID()
+        {
+            ItemData = defaultWeaponData,
+            ItemPrefab = defaultWeaponPrefab,
+            ItemID = 1,
+        };
+        _inventoryManager.AddItemData(defaultWeaponWithID);
+        _inventoryManager.SetWeapon(defaultWeaponWithID);
+        _inventoryUIView.UpdateEquippedWeapon(defaultWeaponData.Icon);
+        _inventoryUIView.ResetInventoryUI();
+    }
+
+private void HandleShowCurrentWeapon() //현재 무기 데이터 표시
     {
         var itemDataWithID = _inventoryManager.CurrentWeaponData;
         if (itemDataWithID.ItemData == null) return;

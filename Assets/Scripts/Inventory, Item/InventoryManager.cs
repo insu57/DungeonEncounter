@@ -44,9 +44,32 @@ public class InventoryManager : MonoBehaviour
     public int consumableInventoryMaxCount { private set; get; }
     //아이템별 현재 수량...
     public int consumableItemMaxQuantity { private set; get; }
-    
+
+    private const int DefaultMaxCount = 20;
     //inventory
 
+    public void ResetInventory()
+    {
+        WeaponDataList.Clear();
+        EquipmentDataList.Clear();
+        ConsumableDataList.Clear();
+        
+        weaponInventoryCount = 0;
+        equipmentInventoryCount = 0;
+        consumableInventoryCount = 0;
+        weaponInventoryMaxCount = DefaultMaxCount;
+        equipmentInventoryMaxCount = DefaultMaxCount;
+        consumableInventoryMaxCount = DefaultMaxCount;
+        
+        CurrentWeaponData = null;
+        CurrentEquipmentData = null;
+        ItemQuickSlot1Data = null;
+        ItemQuickSlot2Data = null;
+        SelectedItem = null;
+        _weaponID = 1;
+        _equipmentID = 1;
+    }
+    
     public void SetSelectedItem(ItemDataWithID itemDataWithID)
     {
         SelectedItem = itemDataWithID;
@@ -155,13 +178,13 @@ public class InventoryManager : MonoBehaviour
         //base.Awake();
         
         weaponInventoryCount = 0;
-        weaponInventoryMaxCount = 20;
+        weaponInventoryMaxCount = DefaultMaxCount;
         
         equipmentInventoryCount = 0;
-        equipmentInventoryMaxCount = 20;
+        equipmentInventoryMaxCount = DefaultMaxCount;
         
         consumableInventoryCount = 0;
-        consumableInventoryMaxCount = 20;
+        consumableInventoryMaxCount = DefaultMaxCount;
 
         consumableItemMaxQuantity = 10;//현재-모든 소비템 최대 보유 개수 통일
 

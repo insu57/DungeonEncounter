@@ -20,10 +20,11 @@ MonoBehaviour:
   - effectStat: 0
     effectCalculate: 0
     effectValue: 50
-    effectDescription: "\uC989\uC2DC \uCCB4\uB825 50\uD68C\uBCF5"
+    effectDescription: "\uC989\uC2DC \uCCB4\uB825\uC744 50\uB9CC\uD07C \uD68C\uBCF5\uD55C\uB2E4."
     effectDuration: 0
     isTickBased: 0
     tickSecond: 0
     effectType: 0
+    useOtherStat: 0
   icon: {fileID: 21300000, guid: b82d122cb0b35bc4a9db6222121463a8, type: 3}
   prefab: {fileID: 7183969217170220544, guid: 6f0fc7668c627c2479a0be5f772a0d60, type: 3}

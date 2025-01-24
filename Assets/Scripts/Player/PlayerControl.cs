@@ -150,7 +150,6 @@ namespace Player
 
             if (Input.GetKeyDown(KeyCode.F))
             {
-                AudioManager.Instance.PlaySfx(AudioManager.Sfx.ItemPickupSfx);
                 _playerManager.GetItemInRange();//범위안 아이템 획득 처리
             }
             

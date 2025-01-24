@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Enemy;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Serialization;
@@ -10,7 +11,7 @@ public class RoomManager : MonoBehaviour
     public float RoomWidth {get; private set;}
     public float RoomHeight {get; private set;}
     public Vector3 RoomCenter {get; private set;}
-    
+    //public RoomType RoomType => roomType;
     public bool IsCleared {get; private set;}
 
     [SerializeField] private int enemyMaxNum;
@@ -30,6 +31,30 @@ public class RoomManager : MonoBehaviour
         }
     }
 
+    public void RoomReset()
+    {
+        switch (roomType)
+        {
+            case RoomType.NormalRoom:
+            case RoomType.BossRoom:
+                IsCleared = false;
+                break;
+            case RoomType.ChestRoom:
+                break;
+            case RoomType.NpcRoom:
+                break;
+            default:
+                break;
+        }
+        BlockRoomDoors(false);
+        var enemies = FindObjectsOfType<EnemyManager>();
+        foreach (var enemy in enemies)
+        {
+            ObjectPoolingManager.Instance.ReturnToPool(enemy.key, enemy.gameObject);
+        }
+        //ObjectPoolingManager.Instance.
+    }
+    
     public void RoomCleared()
     {
         //방 클리어 시
