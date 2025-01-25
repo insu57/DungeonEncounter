@@ -15,7 +15,8 @@ MonoBehaviour:
   stageName: Stage1
   roomNumber: 9
   enemyKeys: 050000000600000007000000
-  bossKeys: 
+  bossData:
+  - {fileID: 11400000, guid: 65e125db003970d4eb62ddcbeb8afa10, type: 2}
   poolingObjects:
   - poolKey: 0
     prefab: {fileID: 9051860450588113054, guid: 4b9e9b78378f846459138cedfe5a51f1, type: 3}
@@ -45,3 +46,16 @@ MonoBehaviour:
     prefab: {fileID: 3228783404506991743, guid: 7ef10e6a4f63d264b800c70cc4409550, type: 3}
     defaultCapacity: 5
     maxSize: 10
+  playerWeapons:
+  - {fileID: 11400000, guid: 6355779932e71e943871c8dd939781cf, type: 2}
+  - {fileID: 11400000, guid: 2e5915928362a9645947c3605d712051, type: 2}
+  - {fileID: 11400000, guid: cfae09f87c7baae4b8710150dc85a469, type: 2}
+  playerEquipments:
+  - {fileID: 11400000, guid: 41a1446097fcb6f499864c1dcd190c09, type: 2}
+  - {fileID: 11400000, guid: 4c78e11e92c584f47ba1bb8acc468e24, type: 2}
+  - {fileID: 11400000, guid: 8de894d13fc6bdd40bdb11fc4190ba0f, type: 2}
+  consumableItems:
+  - {fileID: 11400000, guid: 23b0c79bd28ec0d46a6dc4833c879efe, type: 2}
+  - {fileID: 11400000, guid: 44d989d6787bbf54e86bb771a5364be7, type: 2}
+  - {fileID: 11400000, guid: 9946dbcb068b7b640a8616f027c84540, type: 2}
+  - {fileID: 11400000, guid: 0ee3b9c1624c62c4a8d479d775856d00, type: 2}

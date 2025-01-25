@@ -20,26 +20,33 @@ public class GameManager : Singleton<GameManager> //Singleton Game Manager ì‹±ê¸
     public void HandlePlayerDeath()
     {
         GamePaused = true;
+        
+    }
+
+    public void RetryStage()
+    {
         _stageManager = FindObjectOfType<StageManager>();
         if (_stageManager)
         {
             _stageManager.ResetStage();
         }
-    }
-
-    public void RetryStage()
-    {
-        _playerManager.transform.position = Vector3.zero;
-        _playerManager.ResetStat();
+   
         GamePaused = false;
+       // _playerManager.ResetStat();
+        //_playerManager.transform.position = Vector3.zero;
     }
 
     public void ReturnMainRoom()
     {
         LoadingManager.LoadScene(LoadingManager.MainScene);
-        _playerManager.transform.position = Vector3.zero;
-        _playerManager.ResetStat();
+        _stageManager = FindObjectOfType<StageManager>();
+        if (_stageManager)
+        {
+            _stageManager.ResetStage();
+        }
         GamePaused = false;
+        //_playerManager.ResetStat();
+        //_playerManager.transform.position = Vector3.zero;
     }
     public override void Awake()
     {

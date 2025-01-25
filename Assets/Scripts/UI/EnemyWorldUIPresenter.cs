@@ -30,7 +30,13 @@ namespace UI
 
         private void HandleEnemyDeath()
         {
-            ObjectPoolingManager.Instance.ReturnToPool(PoolKeys.HealthBar, _healthBar.gameObject);//사망시 ReturnToPool
+            ReturnHealthBar();//사망시 ReturnToPool
+        }
+
+        public void ReturnHealthBar()
+        {
+            _healthBar.transform.SetParent(null);
+            ObjectPoolingManager.Instance.ReturnToPool(PoolKeys.HealthBar, _healthBar.gameObject);
         }
         
         public void Dispose()

@@ -47,12 +47,6 @@ public class RoomManager : MonoBehaviour
                 break;
         }
         BlockRoomDoors(false);
-        var enemies = FindObjectsOfType<EnemyManager>();
-        foreach (var enemy in enemies)
-        {
-            ObjectPoolingManager.Instance.ReturnToPool(enemy.key, enemy.gameObject);
-        }
-        //ObjectPoolingManager.Instance.
     }
     
     public void RoomCleared()

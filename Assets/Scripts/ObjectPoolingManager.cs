@@ -8,11 +8,21 @@ using UnityEngine.Serialization;
 public class ObjectPoolingManager : Singleton<ObjectPoolingManager>
 {
     private readonly Dictionary<PoolKeys, ObjectPool<GameObject>> _pools = new Dictionary<PoolKeys, ObjectPool<GameObject>>();
-
+    private GameObject _temporaryPoolParent;
     public void InitStagePools(List<PoolingObject> poolingObjects)
     {
-        _pools.Clear();
         
+        _pools.Clear();
+
+        if (_temporaryPoolParent != null)
+        {
+            Destroy(_temporaryPoolParent);
+        }
+        
+        _temporaryPoolParent = new GameObject("TemporaryPoolParent");
+        _temporaryPoolParent.transform.SetParent(null);
+        
+        Debug.Log("pools length: " + poolingObjects.Count);
         foreach (var poolingObject in poolingObjects)
         {
             ObjectPool<GameObject> pool = new ObjectPool<GameObject>(
@@ -39,10 +49,9 @@ public class ObjectPoolingManager : Singleton<ObjectPoolingManager>
         }
     }
     
-
     private GameObject CreatePoolItem(GameObject prefab)
     {
-        GameObject item = Instantiate(prefab, transform);
+        GameObject item = Instantiate(prefab, _temporaryPoolParent.transform);
         return item;
     }
 

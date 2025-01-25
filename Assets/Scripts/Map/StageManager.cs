@@ -3,6 +3,7 @@ using System.Numerics;
 using System.Collections.Generic;
 using Enemy;
 using Player;
+using Scriptable_Objects;
 using UnityEngine;
 using UnityEngine.AI;
 using Quaternion = UnityEngine.Quaternion;
@@ -28,12 +29,19 @@ public class StageManager : MonoBehaviour
     private RoomManager _currentRoom;
     private int _enemyNumber = 0;
     private int _enemyKillCount = 0;
-
+   
+    private Chest[] _chests;
+    
     public void ResetStage()
     {
         foreach (var room in Rooms)
         {
             room.RoomReset();
+        }
+        var enemies = FindObjectsOfType<EnemyManager>();
+        foreach (var enemy in enemies)
+        {
+            enemy.EnemyOnStageReset();
         }
     }
     
@@ -46,15 +54,6 @@ public class StageManager : MonoBehaviour
         Vector3 center = new Vector3(room.RoomCenter.x,0,room.RoomCenter.z); //중심 Position
         _enemyNumber = room.GetEnemyNumber(); //Room의 적의 수 정보
         int areaMask = 1 << room.RoomIndex+3;
-
-        /*
-        if (NavMesh.SamplePosition(_player.transform.position, out _hit, room.RoomIndex, areaMask))
-        {
-            Debug.Log("Player hit area mask "+_hit.mask);
-            Debug.Log("room area mask: "+areaMask);
-        }
-        */
-        //Debug.Log("AreaMask: "+areaMask+" RoomIndex: "+room.RoomIndex+" RoomCenter: "+center);
         
         const float playerMinRadius = 4f; //플레이어 4f이상 떨어져야함
         const int retryMaxCount = 100; //무한루프 방지 랜덤위치 재시도 제한
@@ -65,7 +64,7 @@ public class StageManager : MonoBehaviour
             Vector3 randomPos;
             do
             {
-                Debug.Log("Retry:" +retryCount);
+                //Debug.Log("Retry:" +retryCount);
                 randomPos = new Vector3(Random.Range(-halfW, halfW), 0f,
                     Random.Range(-halfH, halfH)) + room.RoomCenter; //무작위 위치
                 distance = Vector3.Distance(randomPos, _player.transform.position); //무작위 위치와 플레이어 거리
@@ -98,6 +97,7 @@ public class StageManager : MonoBehaviour
             _enemyKillCount = 0;
             _currentRoom.RoomCleared();
         }
+        
     }
     
         
@@ -134,6 +134,25 @@ public class StageManager : MonoBehaviour
         _roomNumber = stageData.GetRoomNumber(); //StageData 받아오기
         _enemyKeys = stageData.GetEnemies();
         ObjectPoolingManager.Instance.InitStagePools(stageData.GetPoolingObjects());
+        _chests = FindObjectsOfType<Chest>();
+        foreach (var chest in _chests)
+        {
+            var randomWeaponWeight = Random.value;
+            if (randomWeaponWeight < 0.5)
+            {
+                //weapon
+                var randomWeaponIdx = Random.Range(0, stageData.GetPlayerWeapons().Length);
+                PlayerWeaponData weaponData = stageData.GetPlayerWeapons()[randomWeaponIdx];
+                chest.SetItem(weaponData.GetItemPrefab());
+            }
+            else
+            {
+                //equipment
+                var randomEquipmentIdx = Random.Range(0, stageData.GetPlayerEquipments().Length);
+                PlayerEquipmentData equipmentData = stageData.GetPlayerEquipments()[randomEquipmentIdx];
+                chest.SetItem(equipmentData.GetItemPrefab());
+            }
+        }
     }
     
     private void Start()

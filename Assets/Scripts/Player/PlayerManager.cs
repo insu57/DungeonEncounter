@@ -443,7 +443,6 @@ namespace Player
             SetFinalStat(stat);
         }
         
-        
         public void ActiveSwordAttackBox(bool isActive, bool isSkill)//공격Collider활성
         {
             swordAttackBox.SetActive(isActive);
@@ -464,6 +463,7 @@ namespace Player
         private void HandlePlayerDeath()
         {
             IsPlayerDead = true;
+            hitEffect.SetActive(false);
             OnPlayerDeath?.Invoke();
             //사망창...
             foreach (var active in _currentActiveItemEffect)
@@ -498,6 +498,8 @@ namespace Player
             SetFinalStat(PlayerStatTypes.MaxEnergy);
             SetFinalStat(PlayerStatTypes.AttackValue);
             SetFinalStat(PlayerStatTypes.DefenseValue);
+            transform.position = Vector3.zero;
+            IsPlayerDead = false;
         }
         
         public override void Awake()
@@ -567,7 +569,6 @@ namespace Player
             if (IsPlayerDead == false && GetStat(PlayerStatTypes.Health) <= 0f)
             {
                 HandlePlayerDeath();
-                
             }
         }
         

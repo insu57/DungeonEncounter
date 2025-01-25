@@ -78,6 +78,14 @@ namespace Enemy
             StartCoroutine(EnemyReturnToPool(1f));
         }
 
+        public void EnemyOnStageReset()
+        {
+            _uiPresenter.ReturnHealthBar();
+            _uiPresenter.Dispose();
+            OnDeath -= _stageManager.HandleEnemyDeath;
+            ObjectPoolingManager.Instance.ReturnToPool(data.EnemyKey, gameObject);
+        }
+
         private IEnumerator EnemyReturnToPool(float waitTime)
         {
             yield return new WaitForSeconds(waitTime);

@@ -201,6 +201,13 @@ namespace Player
                 
                 _characterController.Move(_moveVector * (_moveSpeed * Time.deltaTime)); //Player Move 이동
 
+                if (_playerManager.IsPlayerDead)
+                {
+                    _characterController.enabled = false;
+                    _playerManager.ResetStat();
+                    _characterController.enabled = true;
+                }
+                
                 if (Input.GetKeyDown(KeyCode.Q))
                 {
                     //QuickSlot1
