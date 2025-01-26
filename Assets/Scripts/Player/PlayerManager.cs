@@ -249,6 +249,11 @@ namespace Player
             return _playerStats.GetValueOrDefault(statType, 0);
         }
 
+        private void UseMoney(int amount)
+        {
+            OnGetMoney?.Invoke(amount);
+        }
+        
         private void GetItem(GameObject item)
         {
             if (item.layer == (int)ItemLayers.Money)
@@ -517,8 +522,6 @@ namespace Player
             var attackValue = 0f;
             if (itemData is PlayerWeaponData weaponData)
             {
-                //WeaponData = weaponData;
-                //_weaponAttackValue = weaponData.AttackValue;//default weapon attack value
                 attackValue = weaponData.AttackValue;
                 _equippedWeapon = Instantiate(playerWeaponPrefab, playerRightHand.transform);
                 PlayerDefaultWeaponData = weaponData;

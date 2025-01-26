@@ -38,7 +38,11 @@ public class DoorTriggerCheck : MonoBehaviour
     {
         _stageManager = FindObjectOfType<StageManager>();
         _roomManager = GetComponentInParent<RoomManager>();
-        _roomIndex = StageManager.GetRoomIndex(transform);
         _doorTrigger = GetComponent<BoxCollider>();//Door의 Trigger
+    }
+
+    private void Start()
+    {
+        _roomIndex = _roomManager.RoomIndex;
     }
 }

@@ -5,6 +5,7 @@ using Player;
 using Scriptable_Objects;
 using UI;
 using UnityEngine;
+using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
 
@@ -57,9 +58,11 @@ namespace Enemy
             EnemyHealthBar healthBar = _worldUIView.InitEnemyHealthBar(this);
             _uiPresenter = new EnemyWorldUIPresenter(this, healthBar);
             _stageManager = FindObjectOfType<StageManager>();
-
+            
+            var navMeshAgent = GetComponent<NavMeshAgent>();
+            navMeshAgent.enabled = false;
             transform.position = spawnPos;
-            //EnemyWorldUI초기화
+            navMeshAgent.enabled = true;
         }
         
         private void EnemyDeath()

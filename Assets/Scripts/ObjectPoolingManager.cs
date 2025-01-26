@@ -14,6 +14,7 @@ public class ObjectPoolingManager : Singleton<ObjectPoolingManager>
         
         _pools.Clear();
 
+        
         if (_temporaryPoolParent != null)
         {
             Destroy(_temporaryPoolParent);
@@ -51,7 +52,8 @@ public class ObjectPoolingManager : Singleton<ObjectPoolingManager>
     
     private GameObject CreatePoolItem(GameObject prefab)
     {
-        GameObject item = Instantiate(prefab, _temporaryPoolParent.transform);
+        //GameObject item = Instantiate(prefab, _temporaryPoolParent.transform);
+        GameObject item = Instantiate(prefab, transform);
         return item;
     }
 

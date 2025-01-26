@@ -70,6 +70,7 @@ public class StageManager : MonoBehaviour
                 distance = Vector3.Distance(randomPos, _player.transform.position); //무작위 위치와 플레이어 거리
                 retryCount++;
             } while (distance <= playerMinRadius && retryCount <= retryMaxCount);
+            
             PoolKeys keys = _enemyKeys[Random.Range(0, _enemyKeys.Length)];
             
             NavMeshHit hit;
@@ -78,13 +79,11 @@ public class StageManager : MonoBehaviour
                 //Debug.Log("RandomPos_hit_pos: " + hit.position);
                 GameObject enemy = ObjectPoolingManager.Instance
                     .GetObjectFromPool(keys, randomPos, Quaternion.identity);
-                //Instantiate()
+                
                 EnemyManager enemyManager = enemy.GetComponent<EnemyManager>();
-               
+                // Debug.Log("EnemySpawn: "+randomPos);
                 enemyManager.InitEnemySpawn(randomPos);
                 enemyManager.OnDeath += HandleEnemyDeath;
-                
-               // Debug.Log("Enemy Position: "+enemyManager.transform.position);
             }
         }
     }
@@ -99,7 +98,6 @@ public class StageManager : MonoBehaviour
         }
         
     }
-    
         
     public static int GetRoomIndex(Transform transform)
     {
@@ -129,6 +127,24 @@ public class StageManager : MonoBehaviour
         //Room의 IsCleared값을 리턴. Rooms에 없으면 True(clear상태)리턴
     }
 
+    public ConsumableItemData GetRandomConsumableItemData()
+    {
+        var randomIdx = Random.Range(0, stageData.GetConsumableItems().Length);   
+        return stageData.GetConsumableItems()[randomIdx];
+    }
+
+    public PlayerWeaponData GetRandomWeaponData()
+    {
+        var randomIdx = Random.Range(0, stageData.GetPlayerWeapons().Length);
+        return stageData.GetPlayerWeapons()[randomIdx];
+    }
+
+    public PlayerEquipmentData GetRandomEquipmentData()
+    {
+        var randomIdx = Random.Range(0, stageData.GetPlayerEquipments().Length);
+        return stageData.GetPlayerEquipments()[randomIdx];
+    }
+    
     private void Awake()
     {
         _roomNumber = stageData.GetRoomNumber(); //StageData 받아오기
