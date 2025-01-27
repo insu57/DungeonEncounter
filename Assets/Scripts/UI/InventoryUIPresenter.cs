@@ -48,7 +48,7 @@ public class InventoryUIPresenter
         };
         _inventoryManager.AddItemData(defaultWeaponWithID);
         _inventoryManager.SetWeapon(defaultWeaponWithID);
-        _inventoryUIView.UpdateEquippedWeapon(defaultWeaponData.Icon);
+        _inventoryUIView.UpdateEquippedWeapon(defaultWeaponData.GetIcon());
 
         int maxCount = _inventoryManager.weaponInventoryMaxCount; //생성은 초기화, 최대칸 증가 시에만
         for (int i = 0; i < maxCount; i++)
@@ -72,7 +72,7 @@ public class InventoryUIPresenter
         };
         _inventoryManager.AddItemData(defaultWeaponWithID);
         _inventoryManager.SetWeapon(defaultWeaponWithID);
-        _inventoryUIView.UpdateEquippedWeapon(defaultWeaponData.Icon);
+        _inventoryUIView.UpdateEquippedWeapon(defaultWeaponData.GetIcon());
         _inventoryUIView.ResetInventoryUI();
     }
 

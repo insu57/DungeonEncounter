@@ -4,75 +4,89 @@ using System.Collections.Generic;
 using Player;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class TraderNPC : MonoBehaviour
+public class TraderNpc : MonoBehaviour
 {
    private PlayerManager _playerManager;
    private InventoryManager _inventoryManager;
    private float _distance;
-   private StageManager _stageManager;
+   [SerializeField] private GameObject pressF;
+   [SerializeField] private StageManager stageManager;
+   [SerializeField] private TraderNpcUI traderNpcUI;
+   [SerializeField] private int rerollCost;
+   private int _item1Price;
+   private int _item2Price;
+   private int _item3Price;
+   private IItemData _item1Data;
+   private IItemData _item2Data;
+   private IItemData _item3Data;
    
-   [SerializeField] private GameObject traderUI;
-   [SerializeField] private TextMeshProUGUI playerMoneyText;
-   [Header("Item 1")]
-   [SerializeField] private Image itemImage1;
-   [SerializeField] private TextMeshProUGUI itemName1Txt;
-   [SerializeField] private TextMeshProUGUI itemRarity1Txt;
-   [SerializeField] private TextMeshProUGUI itemEffect1Txt;
-   [SerializeField] private TextMeshProUGUI itemPrice1Txt;
-   [SerializeField] private Button itemBuyBtn1;
-   [Header("Item 2")]
-   [SerializeField] private Image itemImage2;
-   [SerializeField] private TextMeshProUGUI itemName2Txt;
-   [SerializeField] private TextMeshProUGUI itemRarity2Txt;
-   [SerializeField] private TextMeshProUGUI itemEffect2Txt;
-   [SerializeField] private TextMeshProUGUI itemPrice2Txt;
-   [SerializeField] private Button itemBuyBtn2;
-   [Header("Item 3")]
-   [SerializeField] private Image itemImage3;
-   [SerializeField] private TextMeshProUGUI itemName3Txt;
-   [SerializeField] private TextMeshProUGUI itemRarity3Txt;
-   [SerializeField] private TextMeshProUGUI itemEffect3Txt;
-   [SerializeField] private TextMeshProUGUI itemPrice3Txt;
-   [SerializeField] private Button itemBuyBtn3;
-   [Header("Reroll")]
-   [SerializeField] private TextMeshProUGUI rerollCostTxt;
-   [SerializeField] private Button rerollBtn;
-
-
-   private void RerollItem()
+   public int GetItemPrice(int itemIdx)
    {
-      //item1-Consumable
-      var consumableItemData = _stageManager.GetRandomConsumableItemData();
-      itemImage1.sprite = consumableItemData.GetIcon();
-      itemName1Txt.text = consumableItemData.GetName();
-      itemRarity1Txt.text = EnumManager.RarityToString(consumableItemData.GetRarity());
-      foreach (var itemEffect in consumableItemData.GetEffects())
+      return itemIdx switch
       {
-         itemEffect1Txt.text += $"{itemEffect.effectDescription}\n";
+         1 => _item1Price,
+         2 => _item2Price,
+         3 => _item3Price,
+         _ => 0
+      };
+   }
+
+   public void SetItemPrice(int itemIdx, int itemPrice)
+   {
+      switch (itemIdx)
+      {
+         case 1: _item1Price = itemPrice; break;
+         case 2: _item2Price = itemPrice; break;
+         case 3: _item3Price = itemPrice; break;
       }
-      //price?
+   }
+
+   public IItemData GetItemData(int itemIdx)
+   {
+      return itemIdx switch
+      {
+         1 => _item1Data,
+         2 => _item2Data,
+         3 => _item3Data,
+         _ => throw new ArgumentOutOfRangeException(nameof(itemIdx), itemIdx,$"Invalid ItemIdx...{itemIdx}. (Idx: 1~3)")
+      };
+   }
+
+   public void SetItemData(int itemIdx, IItemData itemData)
+   {
+      switch (itemIdx)
+      {
+         case 1: _item1Data = itemData; break;
+         case 2: _item2Data = itemData; break;
+         case 3: _item3Data = itemData; break;
+      }
+   }
+
+   public int GetRerollCost()
+   {
+      return rerollCost;
    }
    
-   private void HandleOnUpdateMoney(int money)
+   public void IncreaseRerollCost()
    {
-      playerMoneyText.text = money.ToString();
+      rerollCost = Convert.ToInt32(rerollCost * 1.5);
    }
    
    private void Awake()
    {
       _playerManager = FindObjectOfType<PlayerManager>();
-      _stageManager = FindObjectOfType<StageManager>();
-      _inventoryManager = FindObjectOfType<InventoryManager>();
-      _inventoryManager.OnUpdateMoneyAmount += HandleOnUpdateMoney;
-      
-      
    }
 
    private void Update()
    {
       _distance = Vector3.Distance(_playerManager.transform.position, transform.position);
-      traderUI.SetActive(_distance < 1f);
+      if (Input.GetKeyDown(KeyCode.F))
+      {
+         traderNpcUI.ToggleTraderUI(_distance <= 1.5f);
+      }
+      pressF.SetActive(_distance <= 1.5f);
    }
 }

@@ -17,14 +17,9 @@ namespace Scriptable_Objects
         [SerializeField] private Sprite icon;
         [SerializeField] private bool isDefaultWeapon;
         [SerializeField] private GameObject prefab;
-        public string WeaponName => weaponName;
-        public string Description => description;
         public WeaponType WeaponType => weaponType;
         public AttackType AttackType => attackType;
-        public Rarity Rarity => rarity;
         public float AttackValue => attackValue;
-        public ItemEffect[] ItemEffects => itemEffects;
-        public Sprite Icon => icon;
         public bool IsDefaultWeapon => isDefaultWeapon;
         public ItemTypes ItemType => ItemTypes.Weapon;
         public string GetName()

@@ -173,6 +173,14 @@ public class InventoryManager : MonoBehaviour
         OnUpdateMoneyAmount?.Invoke(_moneyAmount);//총 보유량 갱신 이벤트
     }
 
+    public bool UseMoney(int amount)
+    {
+        if (_moneyAmount - amount < 0) return false;
+        _moneyAmount -= amount;
+        OnUpdateMoneyAmount?.Invoke(_moneyAmount);
+        return true;
+    }
+    
     private void Awake()
     {
         //base.Awake();

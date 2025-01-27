@@ -15,12 +15,7 @@ namespace Scriptable_Objects
         [SerializeField] private ItemEffect[] itemData;
         [SerializeField] private Sprite icon;
         [SerializeField] private GameObject prefab;
-        public string ItemName => itemName;
-        public string Description => description;
         public ConsumableType Type => type;
-        public Rarity Rarity => rarity;
-        public ItemEffect[] ItemData => itemData;
-        public Sprite Icon => icon;
         public ItemTypes ItemType => ItemTypes.Consumable;
         public string GetName()
         {

@@ -16,6 +16,7 @@ public class StageManager : MonoBehaviour
     
     //StageInfo <- SO?
     [SerializeField] private StageData stageData;
+    [SerializeField] private ItemPrice itemPrice;
     private int _roomNumber;
     private PoolKeys[] _enemyKeys;
 
@@ -29,9 +30,8 @@ public class StageManager : MonoBehaviour
     private RoomManager _currentRoom;
     private int _enemyNumber = 0;
     private int _enemyKillCount = 0;
-   
     private Chest[] _chests;
-    
+   
     public void ResetStage()
     {
         foreach (var room in Rooms)
@@ -143,6 +143,34 @@ public class StageManager : MonoBehaviour
     {
         var randomIdx = Random.Range(0, stageData.GetPlayerEquipments().Length);
         return stageData.GetPlayerEquipments()[randomIdx];
+    }
+
+    public int GetItemPrice(IItemData itemData, Rarity rarity)
+    {
+        switch (itemData)
+        {
+            case ConsumableItemData:
+                return rarity switch
+                {
+                    Rarity.Common => itemPrice.consumablePrice.commonPrice,
+                    Rarity.Uncommon => itemPrice.consumablePrice.uncommonPrice,
+                    Rarity.Rare => itemPrice.consumablePrice.rarePrice,
+                    Rarity.Epic => itemPrice.consumablePrice.epicPrice,
+                    Rarity.Legendary => itemPrice.consumablePrice.legendaryPrice,
+                    _ => 0
+                };
+            case PlayerWeaponData or PlayerEquipmentData:
+                return rarity switch
+                {
+                    Rarity.Common => itemPrice.weaponEquipmentPrice.commonPrice,
+                    Rarity.Uncommon => itemPrice.weaponEquipmentPrice.uncommonPrice,
+                    Rarity.Rare => itemPrice.weaponEquipmentPrice.rarePrice,
+                    Rarity.Epic => itemPrice.weaponEquipmentPrice.epicPrice,
+                    Rarity.Legendary => itemPrice.weaponEquipmentPrice.legendaryPrice,
+                    _ => 0
+                };
+        }
+        return 0;
     }
     
     private void Awake()
