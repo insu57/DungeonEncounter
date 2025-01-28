@@ -4,6 +4,8 @@
 ///
 /// - 1.7.7
 ///     - Fixed <see cref="Draw.xz.SolidRectangle"/> would render the rectangle in the XY plane, instead of the XZ plane.
+///     - Fixed an exception could be thrown when cameras were rendered without a color target.
+///     - Added <see cref="PolylineWithSymbol.up"/>, to allow you to configure the orientation of the symbols. Previously it was hardcoded to Vector3.up.
 ///
 /// - 1.7.6 (2024-10-14)
 ///     - Fixed a compatibility issue with the high definition render pipeline, accidentally introduced in 1.7.5.

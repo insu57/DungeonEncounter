@@ -21,7 +21,7 @@ public class StageData : ScriptableObject
     [SerializeField] private string stageName;
     [SerializeField] private int roomNumber;
     [SerializeField] private PoolKeys[] enemyKeys;
-    [SerializeField] private EnemyData[] bossData;
+    [SerializeField] private GameObject[] bossPrefabs;
     [SerializeField] private List<PoolingObject> poolingObjects;
     [SerializeField] private PlayerWeaponData[] playerWeapons;
     [SerializeField] private PlayerEquipmentData[] playerEquipments;
@@ -29,7 +29,7 @@ public class StageData : ScriptableObject
     public string GetStageName(){ return stageName;}
     public int GetRoomNumber() { return roomNumber; }
     public PoolKeys[] GetEnemies() { return enemyKeys; }
-    public EnemyData[] GetBoss() { return bossData; }
+    public GameObject[] GetBoss() { return bossPrefabs; }
     public PlayerWeaponData[] GetPlayerWeapons() { return playerWeapons; }
     public PlayerEquipmentData[] GetPlayerEquipments() { return playerEquipments; }
     public ConsumableItemData[] GetConsumableItems() { return consumableItems; }

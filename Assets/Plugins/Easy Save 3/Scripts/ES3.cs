@@ -1135,7 +1135,7 @@ public class ES3
     public static void CopyDirectory(ES3Settings oldSettings, ES3Settings newSettings)
     {
         if (oldSettings.location != Location.File)
-            throw new InvalidOperationException("ES3.CopyDirectory can only be used when the save location is 'File'");
+            throw new InvalidOperationException("ES3.CopyDirectory can only be used when the save location is 'File' or 'Cache', and can't be used with WebGL.");
 
         if (!DirectoryExists(oldSettings))
             throw new System.IO.DirectoryNotFoundException("Directory " + oldSettings.FullPath + " not found");
@@ -1145,11 +1145,11 @@ public class ES3
 
         foreach (var fileName in ES3.GetFiles(oldSettings))
             CopyFile(ES3IO.CombinePathAndFilename(oldSettings.path, fileName),
-                        ES3IO.CombinePathAndFilename(newSettings.path, fileName));
+                        ES3IO.CombinePathAndFilename(newSettings.path, fileName), oldSettings, newSettings);
 
         foreach (var directoryName in GetDirectories(oldSettings))
             CopyDirectory(ES3IO.CombinePathAndFilename(oldSettings.path, directoryName),
-                            ES3IO.CombinePathAndFilename(newSettings.path, directoryName));
+                            ES3IO.CombinePathAndFilename(newSettings.path, directoryName), oldSettings, newSettings);
     }
 
     /// <summary>Renames a file.</summary>
@@ -1366,8 +1366,8 @@ public class ES3
     {
         if (settings.location == Location.File)
             return ES3IO.DirectoryExists(settings.FullPath);
-        else if (settings.location == Location.PlayerPrefs || settings.location == Location.Cache)
-            throw new System.NotSupportedException("Directories are not supported for the Cache and PlayerPrefs location.");
+        else if (settings.location == Location.PlayerPrefs || Application.platform == RuntimePlatform.WebGLPlayer)
+            throw new System.NotSupportedException("Directories are not supported for PlayerPrefs or WebGL.");
         else if (settings.location == Location.Resources)
             throw new System.NotSupportedException("Checking existence of folder in Resources not supported.");
         return false;

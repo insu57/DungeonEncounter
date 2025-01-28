@@ -662,7 +662,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a705f1fd95105f4582d18bf472edc13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  page: 
+  page: example_pointgraph
 --- !u!1 &1625365292
 GameObject:
   m_ObjectHideFlags: 0

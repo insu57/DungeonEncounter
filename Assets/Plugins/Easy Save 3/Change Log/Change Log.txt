@@ -1,3 +1,10 @@
+3.5.21
+- You can now select what is saved from an ES3AutoSave Component.
+- OnBeforeSerialize and OnAfterDeserialize are now automatically called when a class is an ISerializationCallbackReceiver.
+- Added option to automatically create save file when the user creates a new save slot.
+- Fixed bug with save slots where slots weren't deleted in some cases.
+- Worked around bug at Unity's end where they apply the incorrect HideFlags for TextureAtlas and it's underlying Texture, causing a "Could not extract GUID in text file" error.
+
 3.5.20
 - Added support for Nullable types.
 - Resolved issue where a Debug.Log call was not stripped from the release package.

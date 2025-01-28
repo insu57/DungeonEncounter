@@ -23,7 +23,7 @@ public class TraderNpc : MonoBehaviour
    private IItemData _item2Data;
    private IItemData _item3Data;
    
-   public int GetItemPrice(int itemIdx)
+   public int GetItemPrice(int itemIdx)//아이템 가격 리턴
    {
       return itemIdx switch
       {
@@ -34,7 +34,7 @@ public class TraderNpc : MonoBehaviour
       };
    }
 
-   public void SetItemPrice(int itemIdx, int itemPrice)
+   public void SetItemPrice(int itemIdx, int itemPrice)//아이템 가격 설정
    {
       switch (itemIdx)
       {
@@ -44,7 +44,7 @@ public class TraderNpc : MonoBehaviour
       }
    }
 
-   public IItemData GetItemData(int itemIdx)
+   public IItemData GetItemData(int itemIdx)//아이템 데이터 리턴
    {
       return itemIdx switch
       {
@@ -52,10 +52,11 @@ public class TraderNpc : MonoBehaviour
          2 => _item2Data,
          3 => _item3Data,
          _ => throw new ArgumentOutOfRangeException(nameof(itemIdx), itemIdx,$"Invalid ItemIdx...{itemIdx}. (Idx: 1~3)")
+         //예외처리
       };
    }
 
-   public void SetItemData(int itemIdx, IItemData itemData)
+   public void SetItemData(int itemIdx, IItemData itemData)//아이템데이터 설정
    {
       switch (itemIdx)
       {
@@ -65,12 +66,12 @@ public class TraderNpc : MonoBehaviour
       }
    }
 
-   public int GetRerollCost()
+   public int GetRerollCost() //리롤 비용 리턴
    {
       return rerollCost;
    }
    
-   public void IncreaseRerollCost()
+   public void IncreaseRerollCost() //한 번 리롤마다 비용 1.5배 상승
    {
       rerollCost = Convert.ToInt32(rerollCost * 1.5);
    }
@@ -85,7 +86,7 @@ public class TraderNpc : MonoBehaviour
       _distance = Vector3.Distance(_playerManager.transform.position, transform.position);
       if (Input.GetKeyDown(KeyCode.F))
       {
-         traderNpcUI.ToggleTraderUI(_distance <= 1.5f);
+         traderNpcUI.ToggleTraderUI(_distance <= 1.5f);//거래UI
       }
       pressF.SetActive(_distance <= 1.5f);
    }

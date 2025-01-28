@@ -1639,6 +1639,14 @@ namespace Pathfinding.Drawing {
 			readonly bool reverseSymbols;
 			bool odd;
 
+			/// <summary>
+			/// The up direction of the symbols.
+			///
+			/// This is used to determine the orientation of the symbols.
+			/// By default this is set to (0,1,0).
+			/// </summary>
+			public float3 up;
+
 			/// <summary>Create a new polyline with symbol generator.</summary>
 			/// <param name="symbol">The symbol to use</param>
 			/// <param name="symbolSize">The size of the symbol. In case of a circle, this is the diameter.</param>
@@ -1656,6 +1664,7 @@ namespace Pathfinding.Drawing {
 				this.symbolPadding = symbolPadding;
 				this.symbolSpacing = math.max(0, symbolSpacing - symbolPadding * 2f - symbolSize);
 				this.reverseSymbols = reverseSymbols;
+				this.up = new float3(0, 1, 0);
 				symbolOffset = symbol == SymbolDecoration.ArrowHead ? -0.25f * symbolSize : 0;
 				if (reverseSymbols) {
 					symbolOffset = -symbolOffset;
@@ -1683,7 +1692,7 @@ namespace Pathfinding.Drawing {
 				var dir = next - prev;
 				float3 up = default;
 				if (symbol != SymbolDecoration.None) {
-					up = math.normalizesafe(math.cross(dir, math.cross(dir, new float3(0, 1, 0))));
+					up = math.normalizesafe(math.cross(dir, math.cross(dir, this.up)));
 					if (math.all(up == 0f)) {
 						up = new float3(0, 0, 1);
 					}

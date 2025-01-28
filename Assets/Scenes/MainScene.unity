@@ -17970,7 +17970,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b6a1b0bb69f11348aacb4db6c557393, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: 0, y: 4, z: -4}
+  offset: {x: 0, y: 5, z: -6}
   rotation: {x: 35, y: 0, z: 0}
 --- !u!43 &1883845867
 Mesh:

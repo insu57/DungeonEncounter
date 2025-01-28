@@ -36,12 +36,40 @@ public class StageManager : MonoBehaviour
     {
         foreach (var room in Rooms)
         {
-            room.RoomReset();
+            room.InitRoom();
         }
         var enemies = FindObjectsOfType<EnemyManager>();
         foreach (var enemy in enemies)
         {
             enemy.EnemyOnStageReset();
+        }
+    }
+
+    private void InitTraderNpc()
+    {
+        
+    }
+    
+    private void InitChests()
+    {
+        _chests = FindObjectsOfType<Chest>();
+        foreach (var chest in _chests)
+        {
+            var randomWeaponWeight = Random.value;
+            if (randomWeaponWeight < 0.5)
+            {
+                //weapon
+                var randomWeaponIdx = Random.Range(0, stageData.GetPlayerWeapons().Length);
+                PlayerWeaponData weaponData = stageData.GetPlayerWeapons()[randomWeaponIdx];
+                chest.SetItem(weaponData.GetItemPrefab());
+            }
+            else
+            {
+                //equipment
+                var randomEquipmentIdx = Random.Range(0, stageData.GetPlayerEquipments().Length);
+                PlayerEquipmentData equipmentData = stageData.GetPlayerEquipments()[randomEquipmentIdx];
+                chest.SetItem(equipmentData.GetItemPrefab());
+            }
         }
     }
     
@@ -58,6 +86,7 @@ public class StageManager : MonoBehaviour
         const float playerMinRadius = 4f; //플레이어 4f이상 떨어져야함
         const int retryMaxCount = 100; //무한루프 방지 랜덤위치 재시도 제한
         int retryCount = 0;
+        
         for (int i = 0; i < _enemyNumber; i++)
         {
             float distance = 0f;
@@ -76,25 +105,39 @@ public class StageManager : MonoBehaviour
             NavMeshHit hit;
             if (NavMesh.SamplePosition(randomPos, out hit, 2f, areaMask))
             {
-                //Debug.Log("RandomPos_hit_pos: " + hit.position);
-                GameObject enemy = ObjectPoolingManager.Instance
-                    .GetObjectFromPool(keys, randomPos, Quaternion.identity);
+                if (room.GetRoomType() == RoomType.BossRoom)
+                {
+                    GameObject bossPrefab = stageData.GetBoss()[i];
+                    GameObject boss =  Instantiate(bossPrefab, center, Quaternion.identity);
+                    EnemyManager enemyManager = boss.GetComponent<EnemyManager>();
+                    enemyManager.InitEnemySpawn(center);
+                    enemyManager.OnDeath += HandleEnemyDeath;
+                    //다르게?
+                }
+                else
+                {
+                    GameObject enemy = ObjectPoolingManager.Instance
+                        .GetObjectFromPool(keys, randomPos, Quaternion.identity);
                 
-                EnemyManager enemyManager = enemy.GetComponent<EnemyManager>();
-                // Debug.Log("EnemySpawn: "+randomPos);
-                enemyManager.InitEnemySpawn(randomPos);
-                enemyManager.OnDeath += HandleEnemyDeath;
+                    EnemyManager enemyManager = enemy.GetComponent<EnemyManager>();
+            
+                    enemyManager.InitEnemySpawn(randomPos);
+                    enemyManager.OnDeath += HandleEnemyDeath;
+                }
+                
+                
             }
         }
     }
-
+    
+    
     public void HandleEnemyDeath()
     {
-        _enemyKillCount++;
+        _enemyKillCount++; //킬 카운트 상승
         if (_enemyKillCount >= _enemyNumber)
         {
             _enemyKillCount = 0;
-            _currentRoom.RoomCleared();
+            _currentRoom.RoomCleared(); //적 전부 처치시 클리어 상태로
         }
         
     }
@@ -127,7 +170,7 @@ public class StageManager : MonoBehaviour
         //Room의 IsCleared값을 리턴. Rooms에 없으면 True(clear상태)리턴
     }
 
-    public ConsumableItemData GetRandomConsumableItemData()
+    public ConsumableItemData GetRandomConsumableItemData() //랜덤 아이템 데이터 리턴
     {
         var randomIdx = Random.Range(0, stageData.GetConsumableItems().Length);   
         return stageData.GetConsumableItems()[randomIdx];
@@ -178,25 +221,7 @@ public class StageManager : MonoBehaviour
         _roomNumber = stageData.GetRoomNumber(); //StageData 받아오기
         _enemyKeys = stageData.GetEnemies();
         ObjectPoolingManager.Instance.InitStagePools(stageData.GetPoolingObjects());
-        _chests = FindObjectsOfType<Chest>();
-        foreach (var chest in _chests)
-        {
-            var randomWeaponWeight = Random.value;
-            if (randomWeaponWeight < 0.5)
-            {
-                //weapon
-                var randomWeaponIdx = Random.Range(0, stageData.GetPlayerWeapons().Length);
-                PlayerWeaponData weaponData = stageData.GetPlayerWeapons()[randomWeaponIdx];
-                chest.SetItem(weaponData.GetItemPrefab());
-            }
-            else
-            {
-                //equipment
-                var randomEquipmentIdx = Random.Range(0, stageData.GetPlayerEquipments().Length);
-                PlayerEquipmentData equipmentData = stageData.GetPlayerEquipments()[randomEquipmentIdx];
-                chest.SetItem(equipmentData.GetItemPrefab());
-            }
-        }
+        
     }
     
     private void Start()

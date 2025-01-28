@@ -29,7 +29,7 @@ public class ES3Slot : MonoBehaviour
     public Button undoButton;
 
     // Whether this slot has been marked for deletion.
-    protected bool markedForDeletion = false;
+    public bool markedForDeletion = false;
 
 #region Initialisation and Clean-up
 
@@ -74,11 +74,18 @@ public class ES3Slot : MonoBehaviour
                 // Show the dialog.
                 confirmationDialog.SetActive(true);
                 // Register the event for the confirmation button.
-                confirmationDialog.GetComponent<ES3SlotDialog>().confirmButton.onClick.AddListener(SelectSlot);
+                confirmationDialog.GetComponent<ES3SlotDialog>().confirmButton.onClick.AddListener(DeleteThenSelectSlot);
                 return;
             }
         }
 
+        SelectSlot();
+    }
+
+    // Deletes the existing data for a slot and then selects it.
+    protected virtual void DeleteThenSelectSlot()
+    {
+        DeleteSlot();
         SelectSlot();
     }
 
@@ -125,10 +132,11 @@ public class ES3Slot : MonoBehaviour
     }
 
     // Deletes a save slot.
-    protected virtual void DeleteSlot()
+    public virtual void DeleteSlot()
     {
-        // Delete the file linked to this slot.
-        ES3.DeleteFile(GetSlotPath());
+        // Delete the file linked to this slot from both disk and cache.
+        ES3.DeleteFile(GetSlotPath(), new ES3Settings(ES3.Location.Cache));
+        ES3.DeleteFile(GetSlotPath(), new ES3Settings(ES3.Location.File));
         // Destroy this slot.
         Destroy(this.gameObject);
     }

@@ -53,14 +53,7 @@ namespace Player
         {
             _startTime = Time.time;//Enter했을 때 시간
             //player.PlayerAnimator.Play("Attack");
-            if (player.IsSkill)
-            {
-                player.ChangeAnimation("Skill");
-            }
-            else
-            {
-                player.ChangeAnimation("Attack");
-            }
+            player.ChangeAnimation(player.IsSkill ? "Skill" : "Attack");
         }
 
         public override void Execute(PlayerControl player)

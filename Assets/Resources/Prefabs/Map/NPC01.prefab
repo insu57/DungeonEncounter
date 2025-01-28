@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5794586744765510838
 Transform:
   m_ObjectHideFlags: 0
@@ -214,6 +214,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0cd1e6f6b8519640a52cee97aed7431, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pressF: {fileID: 1324368115628570342}
   stageManager: {fileID: 0}
   traderNpcUI: {fileID: 0}
   rerollCost: 100

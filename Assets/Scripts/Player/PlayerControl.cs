@@ -147,7 +147,9 @@ namespace Player
             
             _playerManager.ActiveSwordAttackBox(IsAttack, IsSkill);
             _playerManager.ActiveDodgeEffect(IsDodge);
-
+            
+            //FSM 수정(bool 플래그에서 명시적 State로)
+            
             if (Input.GetKeyDown(KeyCode.F))
             {
                 _playerManager.GetItemInRange();//범위안 아이템 획득 처리
@@ -172,7 +174,7 @@ namespace Player
                 {
                     _moveVector = Vector3.zero; //공격 시 정지
                     IsAttack = true;
-
+                    //ChangeState(PlayerStates.Attack);
                     AudioManager.Instance.PlaySfx(AudioManager.Sfx.AttackSfx); //Sfx Play
                 }
 

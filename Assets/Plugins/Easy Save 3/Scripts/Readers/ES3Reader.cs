@@ -243,7 +243,9 @@ public abstract class ES3Reader : System.IDisposable
 		type.ReadInto<T>(this, obj);
 
 		EndReadObject();
-	}
+
+        TryOnAfterDeserialize(obj);
+    }
 
 	protected virtual T ReadObject<T>(ES3Type type)
 	{
@@ -253,8 +255,17 @@ public abstract class ES3Reader : System.IDisposable
 		object obj = type.Read<T>(this);
 
 		EndReadObject();
+
+		TryOnAfterDeserialize(obj);
+
 		return (T)obj;
 	}
+
+	internal static void TryOnAfterDeserialize(object obj)
+	{
+        if (obj is ISerializationCallbackReceiver scr)
+            scr.OnAfterDeserialize();
+    }
 		
 
 	#endregion

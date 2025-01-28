@@ -15,8 +15,8 @@ MonoBehaviour:
   stageName: Stage1
   roomNumber: 9
   enemyKeys: 050000000600000007000000
-  bossData:
-  - {fileID: 11400000, guid: 65e125db003970d4eb62ddcbeb8afa10, type: 2}
+  bossPrefabs:
+  - {fileID: 7008257957677175781, guid: b4734ed84e208a940a96ab5c8956368a, type: 3}
   poolingObjects:
   - poolKey: 0
     prefab: {fileID: 9051860450588113054, guid: 4b9e9b78378f846459138cedfe5a51f1, type: 3}

@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 6928121644693385477}
   - component: {fileID: 8015915462955443866}
   - component: {fileID: -3552068850180921555}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: PlayerWeapon03
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -118,5 +118,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef6ff78ceaa8e6b468b827a4b1531ca7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemPrefab: {fileID: 4771580841648920502}
   weaponData: {fileID: 11400000, guid: cfae09f87c7baae4b8710150dc85a469, type: 2}

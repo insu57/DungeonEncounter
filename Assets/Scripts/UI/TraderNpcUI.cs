@@ -55,20 +55,22 @@ public class TraderNpcUI : MonoBehaviour
     
     private void RerollItem1()
     {
-        var consumableItemData = stageManager.GetRandomConsumableItemData();
+        //아이템 리롤
+        var consumableItemData = stageManager.GetRandomConsumableItemData(); //랜덤 아이템 데이터 받아오기
         
-        itemImage1.sprite = consumableItemData.GetIcon();
-        itemName1Txt.text = consumableItemData.GetName();
-        itemRarity1Txt.text = EnumManager.RarityToString(consumableItemData.GetRarity());
-        if(consumableItemData.GetEffects().Length == 0) itemEffect1Txt.text += "None.";
+        itemImage1.sprite = consumableItemData.GetIcon(); //아이콘
+        itemName1Txt.text = consumableItemData.GetName(); //이름
+        itemRarity1Txt.text = EnumManager.RarityToString(consumableItemData.GetRarity()); //레어도
+        if(consumableItemData.GetEffects().Length == 0) itemEffect1Txt.text += "None."; //효과 없으면 NONE.
         foreach (var itemEffect in consumableItemData.GetEffects())
         {
-            itemEffect1Txt.text += $"{itemEffect.effectDescription}\n";
+            itemEffect1Txt.text += $"\n{itemEffect.effectDescription}"; //있으면 효과 설명 추가
         }
         var itemPrice = stageManager.GetItemPrice(consumableItemData, consumableItemData.GetRarity());
-        itemPrice1Txt.text = itemPrice.ToString();
-        traderNpc.SetItemPrice(1, itemPrice);
-        traderNpc.SetItemData(1, consumableItemData);
+        //종류, 레어도에 따라 가격 가져오기
+        itemPrice1Txt.text = itemPrice.ToString(); //가격 표시
+        traderNpc.SetItemPrice(1, itemPrice); //가격 설정
+        traderNpc.SetItemData(1, consumableItemData); //데이터 설정
     }
     private void RerollItem2()
     {
@@ -108,27 +110,28 @@ public class TraderNpcUI : MonoBehaviour
 
     private void ItemReroll()
     {
-        if (!_inventoryManager.UseMoney(traderNpc.GetRerollCost())) return;
-        traderNpc.IncreaseRerollCost();
-        rerollCostTxt.text = traderNpc.GetRerollCost().ToString();
-        RerollItem1();
+        //전체 아이템 리롤
+        if (!_inventoryManager.UseMoney(traderNpc.GetRerollCost())) return; //가격 부족하면 실패
+        traderNpc.IncreaseRerollCost(); //비용 증가
+        rerollCostTxt.text = traderNpc.GetRerollCost().ToString(); //비용 표시 업데이트
+        RerollItem1(); //1~3 아이템 리롤
         RerollItem2();
         RerollItem3();
-        soldOutImage1.SetActive(false);
+        soldOutImage1.SetActive(false); //판매완료 이미지 숨김
         soldOutImage2.SetActive(false);
         soldOutImage3.SetActive(false);
     }
     
     private void HandleOnUpdateMoney(int money)
     {
-        playerMoneyText.text = money.ToString();
+        playerMoneyText.text = money.ToString(); //가격 변동 시 업데이트
         itemPrice1Txt.color = traderNpc.GetItemPrice(1) > money ? Color.red : Color.white;
         itemPrice2Txt.color = traderNpc.GetItemPrice(2) > money ? Color.red : Color.white;
         itemPrice3Txt.color = traderNpc.GetItemPrice(3) > money ? Color.red : Color.white;
         rerollCostTxt.color = traderNpc.GetRerollCost() > money ? Color.red : Color.white;
     }
 
-    private void SpawnPurchasedItem(IItemData purchasedItem)
+    private void SpawnPurchasedItem(IItemData purchasedItem) //구매아이템 스폰
     {
         var position = traderNpc.transform.position;
         Instantiate(purchasedItem.GetItemPrefab(), position + Vector3.back*2f, Quaternion.identity);
@@ -136,15 +139,16 @@ public class TraderNpcUI : MonoBehaviour
 
     private void PurchaseItem(int btnIdx)
     {
+        //아이템 구매
         switch (btnIdx)
         {
             case 1:
                 if (_inventoryManager.UseMoney(traderNpc.GetItemPrice(1))) //금액이 충분하면 true리턴하고 금액계산
                 {
-                    soldOutImage1.SetActive(true);
-                    SpawnPurchasedItem(traderNpc.GetItemData(1));
+                    soldOutImage1.SetActive(true); //판매완료 이미지 활성
+                    SpawnPurchasedItem(traderNpc.GetItemData(1)); // 구매 아이템 스폰
                 }
-                //else 구매금액 부족
+                //else 구매금액 부족시 처리?
                 break;
             case 2:
                 if (_inventoryManager.UseMoney(traderNpc.GetItemPrice(2)))
@@ -168,14 +172,13 @@ public class TraderNpcUI : MonoBehaviour
         _inventoryManager = FindObjectOfType<InventoryManager>();
         _inventoryManager.OnUpdateMoneyAmount += HandleOnUpdateMoney;
 
+        //초기화
         RerollItem1();
         RerollItem2();
         RerollItem3();
-        
         rerollCostTxt.text = traderNpc.GetRerollCost().ToString();
-        rerollBtn.onClick.AddListener(ItemReroll);
-
-        itemBuyBtn1.onClick.AddListener(() => PurchaseItem(1));
+        rerollBtn.onClick.AddListener(ItemReroll);//버튼별 콜백함수 등록
+        itemBuyBtn1.onClick.AddListener(() => PurchaseItem(1)); 
         itemBuyBtn2.onClick.AddListener(() => PurchaseItem(2));
         itemBuyBtn3.onClick.AddListener(() => PurchaseItem(3));
     }

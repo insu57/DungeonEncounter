@@ -30,7 +30,7 @@ using Thread = System.Threading.Thread;
 [HelpURL("https://arongranberg.com/astar/documentation/stable/astarpath.html")]
 public class AstarPath : VersionedMonoBehaviour {
 	/// <summary>The version number for the A* Pathfinding Project</summary>
-	public static readonly System.Version Version = new System.Version(5, 3, 1);
+	public static readonly System.Version Version = new System.Version(5, 3, 2);
 
 	/// <summary>Information about where the package was downloaded</summary>
 	public enum AstarDistribution { WebsiteDownload, AssetStore, PackageManager };
@@ -1664,6 +1664,16 @@ public class AstarPath : VersionedMonoBehaviour {
 		public void DirtyBounds (Bounds bounds) {}
 	}
 
+	class DestroyGraphPromise : IGraphUpdatePromise {
+		public IGraphInternals graph;
+		public IEnumerator<JobHandle> Prepare () {
+			return null;
+		}
+		public void Apply (IGraphUpdateContext context) {
+			graph.DestroyAllNodes();
+		}
+	}
+
 	IEnumerable<Progress> ScanInternal (NavGraph[] graphsToScan, bool async) {
 		if (graphsToScan == null) graphsToScan = graphs;
 
@@ -1762,7 +1772,7 @@ public class AstarPath : VersionedMonoBehaviour {
 		var promises = new List<(IGraphUpdatePromise, IEnumerator<JobHandle>)>(graphsToScan.Length);
 		for (int i = 0; i < graphsToScan.Length; i++) {
 			if (graphsToScan[i] != null) {
-				var promise = ((IGraphInternals)graphsToScan[i]).ScanInternal(async);
+				var promise = ((IGraphInternals)graphsToScan[i]).ScanInternal(async) ?? new DestroyGraphPromise { graph = (IGraphInternals)graphsToScan[i] };
 				var iterator = promise.Prepare();
 				promises.Add((promise, iterator));
 			}

@@ -14,6 +14,7 @@ using TMPro;
 using System.Text.RegularExpressions;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 public class ES3SlotManager : MonoBehaviour
 {
@@ -21,6 +22,8 @@ public class ES3SlotManager : MonoBehaviour
     public bool showConfirmationIfExists = true;
     [Tooltip("Whether the Create new slot button should be visible.")]
     public bool showCreateSlotButton = true;
+    [Tooltip("Whether we should automatically create an empty save file when the user creates a new save slot. This will be created using the default settings, so you should set this to false if you are using ES3Settings objects.")]
+    public bool autoCreateSaveFile = false;
 
     [Space(16)]
 
@@ -52,7 +55,7 @@ public class ES3SlotManager : MonoBehaviour
     public static string selectedSlotPath = null;
 
     // A list of slots which have been created.
-    protected List<GameObject> slots = new List<GameObject>();
+    public List<GameObject> slots = new List<GameObject>();
 
     // If a file doesn't have a timestamp, it will return have this DateTime.
     static DateTime falseDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
@@ -131,12 +134,6 @@ public class ES3SlotManager : MonoBehaviour
 
     #region Utility Methods
 
-    // Closes the slot window.
-    public virtual void Close()
-    {
-        gameObject.SetActive(false);
-    }
-
     // Destroys all slots which have been created, but doesn't delete their underlying save files.
     protected virtual void DestroySlots()
     {
@@ -159,7 +156,6 @@ public class ES3SlotManager : MonoBehaviour
 // Manages the context menu items for creating the slots.
 public class ES3SlotMenuItems : MonoBehaviour
 {
-
     [MenuItem("GameObject/Easy Save 3/Add Save Slots to Scene", false, 33)]
     [MenuItem("Assets/Easy Save 3/Add Save Slots to Scene", false, 33)]
     [MenuItem("Tools/Easy Save 3/Add Save Slots to Scene", false, 150)]
@@ -169,8 +165,11 @@ public class ES3SlotMenuItems : MonoBehaviour
         EditorUtility.DisplayDialog("Cannot create save slots", "The 'TextMeshPro' and 'Unity UI' packages must be installed in Window > Package Manager to use Easy Save's slot functionality.", "Ok");
 #else
         var mgr = AddSlotsToScene();
+        mgr.gameObject.name = "Save Slots Canvas";
+        mgr.transform.parent.gameObject.name = "Save Slots";
         mgr.showConfirmationIfExists = true;
         mgr.showCreateSlotButton = true;
+        AddEventSystemToSceneIfNotExists();
 #endif
     }
 
@@ -183,13 +182,28 @@ public class ES3SlotMenuItems : MonoBehaviour
         EditorUtility.DisplayDialog("Cannot create save slots", "The 'TextMeshPro' and 'Unity UI' packages must be installed in Window > Package Manager to use Easy Save's slot functionality.", "Ok");
 #else
         var mgr = AddSlotsToScene();
+        mgr.gameObject.name = "Load Slots Canvas";
+        mgr.transform.parent.gameObject.name = "Load Slots";
         mgr.showConfirmationIfExists = false;
         mgr.showCreateSlotButton = false;
         mgr.GetComponentInChildren<ES3CreateSlot>().gameObject.SetActive(false);
+        AddEventSystemToSceneIfNotExists();
 #endif
     }
 
 #if ES3_TMPRO && ES3_UGUI
+
+    static void AddEventSystemToSceneIfNotExists()
+    {
+        if (UnityEngine.Object.FindObjectOfType<EventSystem>() == null)
+        {
+            GameObject eventSystemGameObject = new GameObject("EventSystem");
+            eventSystemGameObject.AddComponent<EventSystem>();
+            eventSystemGameObject.AddComponent<StandaloneInputModule>();
+            Undo.RegisterCreatedObjectUndo(eventSystemGameObject, "Created EventSystem");
+        }
+    }
+
     static ES3SlotManager AddSlotsToScene()
     {
         if (!SceneManager.GetActiveScene().isLoaded)

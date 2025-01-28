@@ -18,20 +18,14 @@ public class DoorTriggerCheck : MonoBehaviour
     
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
-        {
-            int playerIdx = StageManager.GetRoomIndex(other.transform);
-            if (playerIdx == _roomIndex)
-            {
-                Debug.Log("Player Enter Room: " + _roomIndex.ToString("D2"));
-                bool isCleared =  _stageManager.CheckIsCleared(_roomIndex);
-                _roomManager.BlockRoomDoors(!isCleared);//클리어 상태가 아니면 Block
-                if (!isCleared)
-                {
-                    _stageManager.SpawnEnemy(_roomManager);
-                }
-            }
-        }
+        if (!other.CompareTag("Player")) return;
+        var playerIdx = StageManager.GetRoomIndex(other.transform);
+        if (playerIdx != _roomIndex) return;
+        Debug.Log("Player Enter Room: " + _roomIndex.ToString("D2"));
+        var isCleared =  _stageManager.CheckIsCleared(_roomIndex);
+        _roomManager.BlockRoomDoors(!isCleared);//클리어 상태가 아니면 Block
+        if (isCleared) return;
+        _stageManager.SpawnEnemy(_roomManager);
     }
 
     private void Awake()
