@@ -4,6 +4,7 @@ using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
 
@@ -13,7 +14,8 @@ public class AudioManager : SerializeSingleton<AudioManager>
     public enum BGM
     {
         TitleBgm,
-        MainBgm
+        MainBgm,
+        Stage1BGM,
     }  
     public enum Sfx 
     {
@@ -23,6 +25,9 @@ public class AudioManager : SerializeSingleton<AudioManager>
         SkillSfx,
         InventoryOpenSfx,
         ItemPickupSfx,
+        MoneyPickupSfx,
+        PlayerDamageSfx,
+        EnemyDamageSfx,
     }
     
     public enum Voice
@@ -67,6 +72,24 @@ public class AudioManager : SerializeSingleton<AudioManager>
         audioBgm.Play();
     }
 
+    private void ChangeBGMOnSceneLoad(string sceneName)
+    {
+        //AudioClip newBGM = null;
+        switch (sceneName)
+        {
+            case LoadingManager.TitleScene:
+                PlayBGM(BGM.TitleBgm);
+                break;
+            case LoadingManager.MainScene:
+                PlayBGM(BGM.MainBgm);
+                break;
+            case LoadingManager.Stage1Scene:
+                PlayBGM(BGM.Stage1BGM);
+                break;
+            
+        }
+    }
+
     public void PlaySfx(Sfx sfx)
     {
         //_audioSfx.PlayOneShot(sfxs[(int)sfxIdx]);
@@ -86,6 +109,11 @@ public class AudioManager : SerializeSingleton<AudioManager>
         audioFootstep.Play();
 
     }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        ChangeBGMOnSceneLoad(scene.name);
+    }
     
     public override void Awake()
     {
@@ -93,5 +121,11 @@ public class AudioManager : SerializeSingleton<AudioManager>
         audioBgm = transform.Find("AudioBGM").GetComponent<AudioSource>();
         audioSfx = transform.Find("AudioSfx").GetComponent<AudioSource>();
         audioFootstep = transform.Find("AudioFootstep").GetComponent<AudioSource>();
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 }

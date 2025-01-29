@@ -15,7 +15,7 @@ public class TraderNpcUI : MonoBehaviour
     [Header("UI Elements")]
     [SerializeField] private GameObject traderUI;
     [SerializeField] private TextMeshProUGUI playerMoneyText;
-    
+    [SerializeField] private Button closeButton;
     [Header("Item 1")]
     [SerializeField] private Image itemImage1;
     [SerializeField] private TextMeshProUGUI itemName1Txt;
@@ -171,7 +171,8 @@ public class TraderNpcUI : MonoBehaviour
     {
         _inventoryManager = FindObjectOfType<InventoryManager>();
         _inventoryManager.OnUpdateMoneyAmount += HandleOnUpdateMoney;
-
+        
+        closeButton.onClick.AddListener(() => ToggleTraderUI(false));//닫기
         //초기화
         RerollItem1();
         RerollItem2();

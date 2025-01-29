@@ -11,7 +11,9 @@ namespace UI
         [Header("Pause Menu")]
         [SerializeField] private GameObject pauseMenu;
         [SerializeField] private Button resumeButton;
-    
+        [SerializeField] private Button returnTitleBtn;
+        [SerializeField] private Button quitGameBtn;
+        
         //Player Info
         [Header("Player Info")]
         //직업 관련 추가 필요
@@ -76,12 +78,16 @@ namespace UI
         {
             defenseText.text = $"{defenseValue}";
         }
-
+        
         private void Awake()
         {
             resumeButton.onClick.AddListener(TogglePause);
-            //
-            //
+            returnTitleBtn.onClick.AddListener(() =>
+            {
+                GameManager.Instance.TogglePause();
+                LoadingManager.LoadScene(LoadingManager.TitleScene);
+            });
+            quitGameBtn.onClick.AddListener(Application.Quit);
         }
 
         private void Update()

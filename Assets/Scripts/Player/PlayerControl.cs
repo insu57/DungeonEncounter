@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UI;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Player
 {
@@ -170,27 +171,29 @@ namespace Player
                     }
                 }
 
-                if (Input.GetMouseButtonDown(0) && !_isAttackCool) //Mouse left click Attack 마우스 좌클릭 공격
+                if (!EventSystem.current.IsPointerOverGameObject()) //UI 마우스 제한
                 {
-                    _moveVector = Vector3.zero; //공격 시 정지
-                    IsAttack = true;
-                    //ChangeState(PlayerStates.Attack);
-                    AudioManager.Instance.PlaySfx(AudioManager.Sfx.AttackSfx); //Sfx Play
-                }
+                    if (Input.GetMouseButtonDown(0) && !_isAttackCool) //Mouse left click Attack 마우스 좌클릭 공격
+                    {
+                        _moveVector = Vector3.zero; //공격 시 정지
+                        IsAttack = true;
+                        //ChangeState(PlayerStates.Attack);
+                        AudioManager.Instance.PlaySfx(AudioManager.Sfx.AttackSfx); //Sfx Play
+                    }
 
-                if (Input.GetMouseButtonDown(1) && _playerManager.GetStat(PlayerStatTypes.Energy) >= 100f
-                                                && !_isAttackCool)
-                    //우클릭 스킬 공격, 에너지 100이상일때만
-                {
-                    _moveVector = Vector3.zero;
-                    IsAttack = true;
-                    IsSkill = true;
-                    _playerManager.UseSkill();//플레이어 스탯 에너지 소모
-                    //sound
-                    AudioManager.Instance.PlaySfx(AudioManager.Sfx.SkillSfx);
-                    AudioManager.Instance.PlayVoice(AudioManager.Voice.AttackVoice);
+                    if (Input.GetMouseButtonDown(1) && _playerManager.GetStat(PlayerStatTypes.Energy) >= 100f
+                                                    && !_isAttackCool)
+                        //우클릭 스킬 공격, 에너지 100이상일때만
+                    {
+                        _moveVector = Vector3.zero;
+                        IsAttack = true;
+                        IsSkill = true;
+                        _playerManager.UseSkill();//플레이어 스탯 에너지 소모
+                        //sound
+                        AudioManager.Instance.PlaySfx(AudioManager.Sfx.SkillSfx);
+                        AudioManager.Instance.PlayVoice(AudioManager.Voice.AttackVoice);
+                    }
                 }
-                
             
                 if (_moveVector != Vector3.zero)
                 {

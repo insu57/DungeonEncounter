@@ -29,12 +29,12 @@ public class TitleUIManager : MonoBehaviour
     {
         _btnPlay.onClick.AddListener(OpenPlayTab);
         _btnSetting.onClick.AddListener(OpenSettingTab);
-        _btnQuit.onClick.AddListener(GameQuit);
+        _btnQuit.onClick.AddListener(Application.Quit);
         
         //PlayTab
         _btnBack.onClick.AddListener(ClosePlayTab);
         _btnContinue.onClick.AddListener(ChangeMainScene);
-        AudioManager.Instance.PlayBGM(AudioManager.BGM.TitleBgm);
+        //AudioManager.Instance.PlayBGM(AudioManager.BGM.TitleBgm);
     }
 
     private void Update()
@@ -61,16 +61,10 @@ public class TitleUIManager : MonoBehaviour
         _playTab.SetActive(false);
     }
 
-    private void ChangeMainScene()
+    private static void ChangeMainScene()
     {
-        //SceneManager.LoadScene("MainScene");
         LoadingManager.LoadScene(LoadingManager.MainScene);
-        AudioManager.Instance.PlayBGM(AudioManager.BGM.MainBgm);
-    }
-
-    private void GameQuit() //나중에 종료로 수정
-    {
-        Debug.Log("Game Close");
+        //AudioManager.Instance.PlayBGM(AudioManager.BGM.MainBgm);
     }
 
 }

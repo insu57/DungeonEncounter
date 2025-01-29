@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using Enemy;
 using Scriptable_Objects;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 namespace Player
 {
     public enum PlayerStatTypes
@@ -506,6 +508,14 @@ namespace Player
             transform.position = Vector3.zero;
             IsPlayerDead = false;
         }
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            if (scene.name == LoadingManager.TitleScene)
+            {
+                Destroy(gameObject); //안됨???
+            }
+        }
         
         public override void Awake()
         {
@@ -559,6 +569,8 @@ namespace Player
             };
             
             IsPlayerDead = false;
+            
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
         private void Update()
@@ -574,7 +586,12 @@ namespace Player
                 HandlePlayerDeath();
             }
         }
-        
+
+        private void OnDestroy()
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+
         private void OnTriggerEnter(Collider other)
         {
             //피격판정 처리

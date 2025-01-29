@@ -74,6 +74,7 @@ namespace UI
         public void Dispose()
         {
             _playerManager.OnStatChanged -= HandleStatChanged;
+            _playerManager.OnPlayerDeath -= HandlePlayerDeath;
         }
     }
 }

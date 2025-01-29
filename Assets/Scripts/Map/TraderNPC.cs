@@ -84,9 +84,13 @@ public class TraderNpc : MonoBehaviour
    private void Update()
    {
       _distance = Vector3.Distance(_playerManager.transform.position, transform.position);
-      if (Input.GetKeyDown(KeyCode.F))
+      if (Input.GetKeyDown(KeyCode.F) && _distance <= 1.5f)
       {
-         traderNpcUI.ToggleTraderUI(_distance <= 1.5f);//거래UI
+         traderNpcUI.ToggleTraderUI(true);//거래UI
+      }
+      else
+      {
+         traderNpcUI.ToggleTraderUI(false);
       }
       pressF.SetActive(_distance <= 1.5f);
    }

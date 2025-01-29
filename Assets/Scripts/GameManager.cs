@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using Player;
 using UI;
+using UnityEditor.Localization.Plugins.XLIFF.V20;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -17,6 +18,8 @@ public class GameManager : Singleton<GameManager> //Singleton Game Manager ì‹±ê¸
         GamePaused = !GamePaused;
     }
 
+    
+    
     public void HandlePlayerDeath()
     {
         GamePaused = true;
@@ -32,8 +35,6 @@ public class GameManager : Singleton<GameManager> //Singleton Game Manager ì‹±ê¸
         }
    
         GamePaused = false;
-       // _playerManager.ResetStat();
-        //_playerManager.transform.position = Vector3.zero;
     }
 
     public void ReturnMainRoom()
@@ -45,14 +46,26 @@ public class GameManager : Singleton<GameManager> //Singleton Game Manager ì‹±ê¸
             _stageManager.ResetStage();
         }
         GamePaused = false;
-        //_playerManager.ResetStat();
-        //_playerManager.transform.position = Vector3.zero;
     }
+    
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == LoadingManager.TitleScene)
+        {
+            Destroy(gameObject);
+            //Debug.Log("GameManager...load TitleScene");
+        }
+    }
+    
     public override void Awake()
     {
         base.Awake();
         _playerManager = FindObjectOfType<PlayerManager>();
         _playerManager.OnPlayerDeath += HandlePlayerDeath;
+        
+        GamePaused = false;
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
     private void Update()
     {
@@ -66,5 +79,11 @@ public class GameManager : Singleton<GameManager> //Singleton Game Manager ì‹±ê¸
             Time.timeScale = 1f;
             DOTween.PlayAll();
         }
+    }
+
+    private void OnDestroy()
+    {
+        _playerManager.OnPlayerDeath -= HandlePlayerDeath;
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 }
