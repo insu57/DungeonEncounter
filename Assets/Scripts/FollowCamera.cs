@@ -15,7 +15,7 @@ public class FollowCamera : MonoBehaviour //Player Follow Camera(Quarter view) í
     private PlayerManager _playerManager;
     private void Start()
     {
-        offset = new Vector3(0, 4, -4);
+        offset = new Vector3(0, 5, -6);
         rotation = new Vector3(35, 0, 0);
         
         _playerManager = FindObjectOfType<PlayerManager>();

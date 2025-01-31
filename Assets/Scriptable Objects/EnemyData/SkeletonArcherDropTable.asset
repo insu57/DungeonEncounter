@@ -12,9 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 848a54609b52296418c5fcb432d81838, type: 3}
   m_Name: SkeletonArcherDropTable
   m_EditorClassIdentifier: 
-  moneyPrefab: {fileID: 9051860450588113054, guid: 4b9e9b78378f846459138cedfe5a51f1, type: 3}
   moneyRangeStart: 15
   moneyRangeEnd: 100
+  rarityDropWeights:
+  - rarity: 0
+    dropWeight: 55
+  - rarity: 1
+    dropWeight: 20
+  - rarity: 2
+    dropWeight: 10
+  - rarity: 3
+    dropWeight: 5
+  - rarity: 4
+    dropWeight: 1
   consumableItems:
   - dropPrefab: {fileID: 6877928846283078665, guid: 633cb1ebbec254849aa77967842467fd, type: 3}
     dropWeight: 30
@@ -34,7 +44,6 @@ MonoBehaviour:
     dropWeight: 30
   equipmentTotalWeight: 100
   consumableChance: 0.4
-  chestPrefab: {fileID: 8547558045587734986, guid: 34ca5d5f1125faf46a8c60b7f34a2ae1, type: 3}
   chestChance: 0.25
   weaponChance: 0.5
   equipmentChance: 0.5

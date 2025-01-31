@@ -173,9 +173,10 @@ public class InventoryManager : MonoBehaviour
         OnUpdateMoneyAmount?.Invoke(_moneyAmount);//총 보유량 갱신 이벤트
     }
 
-    public bool UseMoney(int amount)
+    public bool UseMoney(int amount, bool onlyCheck)
     {
         if (_moneyAmount - amount < 0) return false;
+        if (onlyCheck) return true;
         _moneyAmount -= amount;
         OnUpdateMoneyAmount?.Invoke(_moneyAmount);
         return true;

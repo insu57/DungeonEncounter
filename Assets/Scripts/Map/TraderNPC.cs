@@ -10,7 +10,7 @@ using UnityEngine.UI;
 public class TraderNpc : MonoBehaviour
 {
    private PlayerManager _playerManager;
-   private InventoryManager _inventoryManager;
+   //private InventoryManager _inventoryManager;
    private float _distance;
    [SerializeField] private GameObject pressF;
    [SerializeField] private StageManager stageManager;
@@ -33,17 +33,7 @@ public class TraderNpc : MonoBehaviour
          _ => 0
       };
    }
-
-   public void SetItemPrice(int itemIdx, int itemPrice)//아이템 가격 설정
-   {
-      switch (itemIdx)
-      {
-         case 1: _item1Price = itemPrice; break;
-         case 2: _item2Price = itemPrice; break;
-         case 3: _item3Price = itemPrice; break;
-      }
-   }
-
+   
    public IItemData GetItemData(int itemIdx)//아이템 데이터 리턴
    {
       return itemIdx switch
@@ -56,13 +46,22 @@ public class TraderNpc : MonoBehaviour
       };
    }
 
-   public void SetItemData(int itemIdx, IItemData itemData)//아이템데이터 설정
+   public void SetItemData(int itemIdx)//아이템데이터 설정
    {
       switch (itemIdx)
       {
-         case 1: _item1Data = itemData; break;
-         case 2: _item2Data = itemData; break;
-         case 3: _item3Data = itemData; break;
+         case 1:
+            _item1Data = stageManager.GetRandomConsumableItemData();
+            _item1Price = stageManager.GetItemPrice(_item1Data);
+            break;
+         case 2:
+            _item2Data = stageManager.GetRandomWeaponData(); 
+            _item2Price = stageManager.GetItemPrice(_item2Data);
+            break;
+         case 3:
+            _item3Data = stageManager.GetRandomEquipmentData();
+            _item3Price = stageManager.GetItemPrice(_item3Data);
+            break;
       }
    }
 
@@ -76,9 +75,15 @@ public class TraderNpc : MonoBehaviour
       rerollCost = Convert.ToInt32(rerollCost * 1.5);
    }
    
+   public void SpawnPurchasedItem(int itemIdx) //구매아이템 스폰
+   {
+      Instantiate(GetItemData(itemIdx).GetItemPrefab(), transform.position + Vector3.back*2f, Quaternion.identity);
+   }
+   
    private void Awake()
    {
       _playerManager = FindObjectOfType<PlayerManager>();
+     
    }
 
    private void Update()
@@ -88,10 +93,13 @@ public class TraderNpc : MonoBehaviour
       {
          traderNpcUI.ToggleTraderUI(true);//거래UI
       }
-      else
+
+      if (_distance > 1.5f)
       {
          traderNpcUI.ToggleTraderUI(false);
       }
+      
+      
       pressF.SetActive(_distance <= 1.5f);
    }
 }

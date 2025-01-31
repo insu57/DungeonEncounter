@@ -13,7 +13,6 @@ public class RoomManager : MonoBehaviour
     public float RoomWidth {get; private set;}
     public float RoomHeight {get; private set;}
     public Vector3 RoomCenter {get; private set;}
-    //public RoomType RoomType => roomType;
     public bool IsCleared {get; private set;}
 
     [SerializeField] private int enemyMaxNum;
@@ -47,9 +46,12 @@ public class RoomManager : MonoBehaviour
                 {
                     ObjectPoolingManager.Instance.ReturnToPool(PoolKeys.Chest01, _chestGameObject);
                 }
-                var chest = ObjectPoolingManager.Instance.GetObjectFromPool(PoolKeys.Chest01, RoomCenter, Quaternion.identity)
+                
+                var spawnPosition = new Vector3(RoomCenter.x, 0, RoomCenter.z);
+                var chest = ObjectPoolingManager.Instance.GetObjectFromPool(PoolKeys.Chest01, spawnPosition, Quaternion.identity)
                     .GetComponent<Chest>();
                 var randomWeaponWeight = Random.value;
+                
                 //RandomItem
                 chest.SetItem(randomWeaponWeight < 0.5 ? 
                     _stageManager.GetRandomWeaponData().GetItemPrefab()

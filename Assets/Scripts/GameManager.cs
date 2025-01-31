@@ -1,10 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
 using Player;
-using UI;
-using UnityEditor.Localization.Plugins.XLIFF.V20;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -17,8 +12,6 @@ public class GameManager : Singleton<GameManager> //Singleton Game Manager ì‹±ê¸
     {
         GamePaused = !GamePaused;
     }
-
-    
     
     public void HandlePlayerDeath()
     {

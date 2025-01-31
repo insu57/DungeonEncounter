@@ -24,6 +24,9 @@ MonoBehaviour:
     bufferSize: 2048
     saveChildren: 1
     postprocessRawCachedData: 0
+    storeCacheAtEndOfEveryFrame: 1
+    storeCacheOnApplicationQuit: 1
+    storeCacheOnApplicationPause: 1
     typeChecking: 1
     safeReflection: 1
     memberReferenceMode: 0
@@ -39,7 +42,6 @@ MonoBehaviour:
     - Cinemachine
     - Drawing
     - Gentleland.SteampunkUI.DemoAndExample
-    - Gentleland.Utils.SteampunkUI
     - IngameDebugConsole.Runtime
     - KinoBloom.Runtime
     - PackageTools

@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848a54609b52296418c5fcb432d81838, type: 3}
+  m_Name: SlimeKingDropTable
+  m_EditorClassIdentifier: 
+  moneyRangeStart: 0
+  moneyRangeEnd: 0
+  rarityDropWeights:
+  - rarity: 0
+    dropWeight: 30
+  - rarity: 1
+    dropWeight: 50
+  - rarity: 2
+    dropWeight: 30
+  - rarity: 3
+    dropWeight: 15
+  - rarity: 4
+    dropWeight: 5
+  consumableItems: []
+  consumableTotalWeight: 0
+  weapons: []
+  weaponsTotalWeight: 0
+  equipments: []
+  equipmentTotalWeight: 0
+  consumableChance: 0
+  chestChance: 0
+  weaponChance: 0
+  equipmentChance: 0

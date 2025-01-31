@@ -11,6 +11,13 @@ namespace Scriptable_Objects
         public int dropWeight;
     }
 
+    [System.Serializable]
+    public class RarityDropWeight
+    {
+        public Rarity rarity;
+        public int dropWeight;
+    }
+    
     [CreateAssetMenu(fileName = "EnemyDropTable",
         menuName = "ScriptableObjects/EnemyDropTable", order = int.MaxValue)]
     public class EnemyDropTable : ScriptableObject
@@ -18,6 +25,8 @@ namespace Scriptable_Objects
         [Header("Money")]
         [SerializeField] private int moneyRangeStart;
         [SerializeField] private int moneyRangeEnd;
+        [Header("Rarity Weight")]
+        [SerializeField] private List<RarityDropWeight> rarityDropWeights;
         [Header("Consumables")]
         [SerializeField] private List<DropEntry> consumableItems;
         [SerializeField] private int consumableTotalWeight;
@@ -32,10 +41,10 @@ namespace Scriptable_Objects
         [SerializeField] private float chestChance;
         [SerializeField] private float weaponChance;
         [SerializeField] private float equipmentChance;
-        //데이터 XML에서 받아오게 수정. Chest->등급별 리스트에서 가져오기
 
         public int MoneyRangeStart => moneyRangeStart;
         public int MoneyRangeEnd => moneyRangeEnd;
+        public List<RarityDropWeight> RarityDropWeights => rarityDropWeights;
         public List<DropEntry> ConsumableItems => consumableItems;
         public int ConsumableTotalWeight => consumableTotalWeight;
         public List<DropEntry> Weapons => weapons;

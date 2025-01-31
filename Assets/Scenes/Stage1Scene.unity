@@ -16636,6 +16636,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stageData: {fileID: 11400000, guid: 9a9225aa57e717049894427b2936cd19, type: 2}
   itemPrice: {fileID: 11400000, guid: 822094a590aa3c448bcbbbd4de7500e6, type: 2}
+  traderNpc: {fileID: 1844040302}
+  traderNpcUI: {fileID: 1553470672810922511}
 --- !u!1 &682951318
 GameObject:
   m_ObjectHideFlags: 0

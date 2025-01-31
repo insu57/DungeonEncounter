@@ -14,6 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moneyRangeStart: 10
   moneyRangeEnd: 80
+  rarityDropWeights:
+  - rarity: 0
+    dropWeight: 60
+  - rarity: 1
+    dropWeight: 15
+  - rarity: 2
+    dropWeight: 8
+  - rarity: 3
+    dropWeight: 5
+  - rarity: 4
+    dropWeight: 1
   consumableItems:
   - dropPrefab: {fileID: 7183969217170220544, guid: 6f0fc7668c627c2479a0be5f772a0d60, type: 3}
     dropWeight: 80

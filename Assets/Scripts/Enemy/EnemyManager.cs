@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Player;
 using Scriptable_Objects;
 using UI;
+using UnityEditor.Localization.Plugins.XLIFF.V12;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
@@ -116,6 +118,40 @@ namespace Enemy
             
             if (randomChance < consumableChance)
             {
+                int totalRarityWeight = _dropTable.RarityDropWeights
+                    .Sum(rarityDropWeight => rarityDropWeight.dropWeight);
+                int randomWeight = Random.Range(0, totalRarityWeight);
+                int cumulativeWeight = 0;
+                Rarity consumableItemRarity = Rarity.Common; //기본값 Common...예외처리
+                foreach (var rarityDropWeight in _dropTable.RarityDropWeights)
+                {
+                    cumulativeWeight += rarityDropWeight.dropWeight;
+                    if(cumulativeWeight <= randomWeight) continue;
+                    consumableItemRarity = rarityDropWeight.rarity;
+                    break;
+                }
+
+                var filteredItems = _stageManager.GetStageConsumableItemData()
+                    .Where(item => item.GetRarity() == consumableItemRarity).ToArray();
+
+                if (filteredItems.Length > 0)
+                {
+                    var item = filteredItems[Random.Range(0, filteredItems.Length)];
+                    Instantiate(item.GetItemPrefab(),pos+Vector3.left,Quaternion.identity);
+                }
+                else
+                {
+                    //빈 상태면 Uncommon레어도 아이템으로
+                    filteredItems = _stageManager.GetStageConsumableItemData().
+                        Where(item => item.GetRarity() == Rarity.Uncommon).ToArray();
+                    var item = filteredItems[Random.Range(0, filteredItems.Length)];
+                    Instantiate(item.GetItemPrefab(),pos+Vector3.right,Quaternion.identity);
+                }
+                
+
+                //해당 Rarity인 consumable에서 랜덤
+
+                /*
                 int consumableTotalWeight = _dropTable.ConsumableTotalWeight;
                 int randomWeight = Random.Range(0, consumableTotalWeight);
                 int cumulativeWeight = 0;
@@ -125,7 +161,7 @@ namespace Enemy
                     if (cumulativeWeight <= randomWeight) continue;
                     Instantiate(drop.dropPrefab, pos+Vector3.left, Quaternion.identity);
                     break;
-                }
+                }*/
             }
             //Chest
             float chestChance = _dropTable.ChestChance;

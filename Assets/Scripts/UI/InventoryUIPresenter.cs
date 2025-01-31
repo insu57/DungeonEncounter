@@ -1,7 +1,6 @@
 using Player;
 using Scriptable_Objects;
 using UI;
-using UnityEditor.Localization.Plugins.XLIFF.V12;
 using UnityEngine;
 
 public class InventoryUIPresenter

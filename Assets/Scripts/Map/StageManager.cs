@@ -6,6 +6,7 @@ using Player;
 using Scriptable_Objects;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
 using Quaternion = UnityEngine.Quaternion;
 using Random = UnityEngine.Random;
 using Vector3 = UnityEngine.Vector3;
@@ -32,6 +33,10 @@ public class StageManager : MonoBehaviour
     private int _enemyKillCount = 0;
     private Chest[] _chests;
    
+    [SerializeField] private TraderNpc traderNpc;
+    [SerializeField] private TraderNpcUI traderNpcUI;
+    private TraderNpcUIPresenter _traderNpcUIPresenter;
+    
     public void ResetStage()
     {
         foreach (var room in Rooms)
@@ -43,11 +48,6 @@ public class StageManager : MonoBehaviour
         {
             enemy.EnemyOnStageReset();
         }
-    }
-
-    private void InitTraderNpc()
-    {
-        
     }
     
     private void InitChests()
@@ -130,7 +130,6 @@ public class StageManager : MonoBehaviour
         }
     }
     
-    
     public void HandleEnemyDeath()
     {
         _enemyKillCount++; //킬 카운트 상승
@@ -188,32 +187,45 @@ public class StageManager : MonoBehaviour
         return stageData.GetPlayerEquipments()[randomIdx];
     }
 
-    public int GetItemPrice(IItemData itemData, Rarity rarity)
+    public int GetItemPrice(IItemData itemData)
     {
-        switch (itemData)
+        return itemData switch
         {
-            case ConsumableItemData:
-                return rarity switch
-                {
-                    Rarity.Common => itemPrice.consumablePrice.commonPrice,
-                    Rarity.Uncommon => itemPrice.consumablePrice.uncommonPrice,
-                    Rarity.Rare => itemPrice.consumablePrice.rarePrice,
-                    Rarity.Epic => itemPrice.consumablePrice.epicPrice,
-                    Rarity.Legendary => itemPrice.consumablePrice.legendaryPrice,
-                    _ => 0
-                };
-            case PlayerWeaponData or PlayerEquipmentData:
-                return rarity switch
-                {
-                    Rarity.Common => itemPrice.weaponEquipmentPrice.commonPrice,
-                    Rarity.Uncommon => itemPrice.weaponEquipmentPrice.uncommonPrice,
-                    Rarity.Rare => itemPrice.weaponEquipmentPrice.rarePrice,
-                    Rarity.Epic => itemPrice.weaponEquipmentPrice.epicPrice,
-                    Rarity.Legendary => itemPrice.weaponEquipmentPrice.legendaryPrice,
-                    _ => 0
-                };
-        }
-        return 0;
+            ConsumableItemData => itemData.GetRarity() switch
+            {
+                Rarity.Common => itemPrice.consumablePrice.commonPrice,
+                Rarity.Uncommon => itemPrice.consumablePrice.uncommonPrice,
+                Rarity.Rare => itemPrice.consumablePrice.rarePrice,
+                Rarity.Epic => itemPrice.consumablePrice.epicPrice,
+                Rarity.Legendary => itemPrice.consumablePrice.legendaryPrice,
+                _ => 0
+            },
+            PlayerWeaponData or PlayerEquipmentData => itemData.GetRarity() switch
+            {
+                Rarity.Common => itemPrice.weaponEquipmentPrice.commonPrice,
+                Rarity.Uncommon => itemPrice.weaponEquipmentPrice.uncommonPrice,
+                Rarity.Rare => itemPrice.weaponEquipmentPrice.rarePrice,
+                Rarity.Epic => itemPrice.weaponEquipmentPrice.epicPrice,
+                Rarity.Legendary => itemPrice.weaponEquipmentPrice.legendaryPrice,
+                _ => 0
+            },
+            _ => 0
+        };
+    }
+
+    public ConsumableItemData[] GetStageConsumableItemData()
+    {
+        return stageData.GetConsumableItems();
+    }
+
+    public PlayerWeaponData[] GetStagePlayerWeaponData()
+    {
+        return stageData.GetPlayerWeapons();
+    }
+
+    public PlayerEquipmentData[] GetStagePlayerEquipmentData()
+    {
+        return stageData.GetPlayerEquipments();
     }
     
     private void Awake()
@@ -221,13 +233,19 @@ public class StageManager : MonoBehaviour
         _roomNumber = stageData.GetRoomNumber(); //StageData 받아오기
         _enemyKeys = stageData.GetEnemies();
         ObjectPoolingManager.Instance.InitStagePools(stageData.GetPoolingObjects());
-        
     }
     
     private void Start()
     {
         _player = FindObjectOfType<PlayerManager>();
         PlayerRoomIdx = 0; //초기 Room00
+        
+        var inventoryManager = FindObjectOfType<InventoryManager>();
+        _traderNpcUIPresenter = new TraderNpcUIPresenter(traderNpc, traderNpcUI, inventoryManager);
     }
-    
+
+    private void OnDestroy()
+    {
+        _traderNpcUIPresenter?.Dispose();
+    }
 }
