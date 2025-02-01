@@ -5,7 +5,6 @@ using System.Linq;
 using Player;
 using Scriptable_Objects;
 using UI;
-using UnityEditor.Localization.Plugins.XLIFF.V12;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
@@ -112,24 +111,28 @@ namespace Enemy
                 .GetObjectFromPool(PoolKeys.Money, pos+Vector3.back, Quaternion.identity);
             money.GetComponent<Money>().SetMoneyAmount(moneyAmount);
             
+            
+            int totalRarityWeight = _dropTable.RarityDropWeights
+                .Sum(rarityDropWeight => rarityDropWeight.dropWeight);  //레어도 드랍 가중치 총합
+            
             //Consumable
             float consumableChance = _dropTable.ConsumableChance;
             float randomChance = Random.value;
             
+            int randomWeight = Random.Range(0, totalRarityWeight); 
+            int cumulativeWeight = 0;
+            
             if (randomChance < consumableChance)
             {
-                int totalRarityWeight = _dropTable.RarityDropWeights
-                    .Sum(rarityDropWeight => rarityDropWeight.dropWeight);
-                int randomWeight = Random.Range(0, totalRarityWeight);
-                int cumulativeWeight = 0;
+                
                 Rarity consumableItemRarity = Rarity.Common; //기본값 Common...예외처리
                 foreach (var rarityDropWeight in _dropTable.RarityDropWeights)
                 {
                     cumulativeWeight += rarityDropWeight.dropWeight;
-                    if(cumulativeWeight <= randomWeight) continue;
+                    if(cumulativeWeight <= randomWeight) continue; 
                     consumableItemRarity = rarityDropWeight.rarity;
                     break;
-                }
+                } //레어도 정하기
 
                 var filteredItems = _stageManager.GetStageConsumableItemData()
                     .Where(item => item.GetRarity() == consumableItemRarity).ToArray();
@@ -147,21 +150,6 @@ namespace Enemy
                     var item = filteredItems[Random.Range(0, filteredItems.Length)];
                     Instantiate(item.GetItemPrefab(),pos+Vector3.right,Quaternion.identity);
                 }
-                
-
-                //해당 Rarity인 consumable에서 랜덤
-
-                /*
-                int consumableTotalWeight = _dropTable.ConsumableTotalWeight;
-                int randomWeight = Random.Range(0, consumableTotalWeight);
-                int cumulativeWeight = 0;
-                foreach (var drop in _dropTable.ConsumableItems)
-                {
-                    cumulativeWeight += drop.dropWeight;
-                    if (cumulativeWeight <= randomWeight) continue;
-                    Instantiate(drop.dropPrefab, pos+Vector3.left, Quaternion.identity);
-                    break;
-                }*/
             }
             //Chest
             float chestChance = _dropTable.ChestChance;
@@ -169,34 +157,61 @@ namespace Enemy
             if (randomChance >= chestChance) return; //상자 확률값 이상이면 소환x
             float weaponChance = _dropTable.WeaponChance;
             randomChance = Random.value;
+            
+            randomWeight = Random.Range(0, totalRarityWeight); //랜덤 가중치 0~Total
+            cumulativeWeight = 0;
+            Rarity itemRarity = Rarity.Common;
+            
+            foreach (var rarityDropWeight in _dropTable.RarityDropWeights)
+            {
+                cumulativeWeight += rarityDropWeight.dropWeight;
+                if (cumulativeWeight <= randomWeight) continue;
+                itemRarity = rarityDropWeight.rarity;
+                break;
+            }
+            
             if (randomChance < weaponChance) //무기 확률값보다 작으면 무기 아니면 장비
             {
-                int weaponTotalWeight = _dropTable.WeaponsTotalWeight; //가중치 총합
-                int randomWeight = Random.Range(0, weaponTotalWeight); //랜덤 가중치 0~Total
-                int cumulativeWeight = 0;
-                foreach (var drop in _dropTable.Weapons)
+                var filteredItems = _stageManager.GetStagePlayerWeaponData()
+                    .Where(item => item.GetRarity() == itemRarity).ToArray();
+
+                if (filteredItems.Length > 0)
                 {
-                    cumulativeWeight += drop.dropWeight; //누적 가중치
-                    if (cumulativeWeight <= randomWeight) continue; //누적 가중치가 더 작으면 다음 아이템으로
+                    var item = filteredItems[Random.Range(0, filteredItems.Length)];
                     GameObject chest = ObjectPoolingManager.Instance
-                        .GetObjectFromPool(PoolKeys.Chest01, pos+Vector3.right, Quaternion.identity);
-                    chest.GetComponent<Chest>().SetItem(drop.dropPrefab);
-                    break;
+                        .GetObjectFromPool(PoolKeys.Chest01, pos+Vector3.back, Quaternion.identity);
+                    chest.GetComponent<Chest>().SetItem(item.GetItemPrefab());
                 }
+                else
+                {
+                    filteredItems = _stageManager.GetStagePlayerWeaponData()
+                        .Where(item => item.GetRarity() == Rarity.Uncommon).ToArray();
+                    var item = filteredItems[Random.Range(0, filteredItems.Length)];
+                    GameObject chest = ObjectPoolingManager.Instance
+                        .GetObjectFromPool(PoolKeys.Chest01, pos+Vector3.back, Quaternion.identity);
+                    chest.GetComponent<Chest>().SetItem(item.GetItemPrefab());
+                }
+                
             }
             else
             {
-                int equipmentTotalWeight = _dropTable.EquipmentTotalWeight;
-                int randomWeight = Random.Range(0, equipmentTotalWeight);
-                int cumulativeWeight = 0;
-                foreach (var drop in _dropTable.Equipments)
+                var filteredItems = _stageManager.GetStagePlayerEquipmentData()
+                    .Where(item => item.GetRarity() == itemRarity).ToArray();
+                if (filteredItems.Length > 0)
                 {
-                    cumulativeWeight += drop.dropWeight;
-                    if (cumulativeWeight <= randomWeight) continue;
+                    var item = filteredItems[Random.Range(0, filteredItems.Length)];
                     GameObject chest = ObjectPoolingManager.Instance
-                        .GetObjectFromPool(PoolKeys.Chest01, pos+Vector3.right, Quaternion.identity);
-                    chest.GetComponent<Chest>().SetItem(drop.dropPrefab);
-                    break;
+                        .GetObjectFromPool(PoolKeys.Chest01, pos+Vector3.back, Quaternion.identity);
+                    chest.GetComponent<Chest>().SetItem(item.GetItemPrefab());
+                }
+                else
+                {
+                    filteredItems = _stageManager.GetStagePlayerEquipmentData()
+                        .Where(item => item.GetRarity() == Rarity.Uncommon).ToArray();
+                    var item = filteredItems[Random.Range(0, filteredItems.Length)];
+                    GameObject chest = ObjectPoolingManager.Instance
+                        .GetObjectFromPool(PoolKeys.Chest01, pos+Vector3.back, Quaternion.identity);
+                    chest.GetComponent<Chest>().SetItem(item.GetItemPrefab());
                 }
             }
         }
@@ -235,6 +250,7 @@ namespace Enemy
             if (other.CompareTag("PlayerAttack") && _enemyControl.WasDamaged == false 
                                                  && _enemyControl.IsDead == false)
             {
+                AudioManager.Instance.PlaySfx(AudioManager.Sfx.EnemyDamageSfx);
                 _flashOnHit.TriggerFlash();
                 float damage = _playerManager.GetFinalAttackValue();
                 UpdateHealth(damage);

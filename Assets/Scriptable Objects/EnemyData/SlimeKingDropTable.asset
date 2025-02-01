@@ -31,7 +31,7 @@ MonoBehaviour:
   weaponsTotalWeight: 0
   equipments: []
   equipmentTotalWeight: 0
-  consumableChance: 0
-  chestChance: 0
-  weaponChance: 0
-  equipmentChance: 0
+  consumableChance: 0.7
+  chestChance: 0.5
+  weaponChance: 0.5
+  equipmentChance: 0.5

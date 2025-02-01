@@ -68,6 +68,7 @@ namespace Player
 
         private void TakeDamage(float damage)
         {
+            AudioManager.Instance.PlaySfx(AudioManager.Sfx.PlayerDamageSfx);
             var currentHealth = GetStat(PlayerStatTypes.Health);
             var defenseValue = GetFinalStat(PlayerStatTypes.DefenseValue);
             currentHealth -= damage * (100f - defenseValue) / 100f;
@@ -250,11 +251,6 @@ namespace Player
         {
             return _playerStats.GetValueOrDefault(statType, 0);
         }
-
-        private void UseMoney(int amount)
-        {
-            OnGetMoney?.Invoke(amount);
-        }
         
         private void GetItem(GameObject item)
         {
@@ -263,6 +259,7 @@ namespace Player
                 Money money = item.GetComponent<Money>();
                 OnGetMoney?.Invoke(money.moneyAmount);
                 ObjectPoolingManager.Instance.ReturnToPool(PoolKeys.Money, item);
+                AudioManager.Instance.PlaySfx(AudioManager.Sfx.MoneyPickupSfx);
             }
             else
             {

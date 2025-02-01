@@ -1,3 +1,6 @@
+## 5.3.3 (2025-01-31)
+- Fixed scanning grid graphs in Unity 6000.0.36f1+ would throw an exception, due to changes to unity's job system.
+
 ## 5.3.2 (2025-01-27)
 - Fixed compatibility with com.unity.entities version 1.3.9 (latest version at the time of this update).
 - Fixed an out of range exception that could happen when using local avoidance and the latest burst package was installed (it was optimizing away my error checking!).
