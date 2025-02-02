@@ -491,7 +491,7 @@ namespace Player
             //아이템 초기화
             PlayerEquipWeapon(PlayerDefaultWeaponData, PlayerDefaultWeaponData.GetItemPrefab());
             PlayerEquipEquipment(null,null);
-            Debug.Log("player dead...Reset need.");
+            
         }
 
         public void ResetStat()
@@ -510,7 +510,7 @@ namespace Player
         {
             if (scene.name == LoadingManager.TitleScene)
             {
-                Destroy(gameObject); //안됨???
+                Destroy(gameObject);
             }
         }
         

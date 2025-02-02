@@ -16,7 +16,6 @@ public class GameManager : Singleton<GameManager> //Singleton Game Manager ì‹±ê¸
     public void HandlePlayerDeath()
     {
         GamePaused = true;
-        
     }
 
     public void RetryStage()
@@ -26,7 +25,9 @@ public class GameManager : Singleton<GameManager> //Singleton Game Manager ì‹±ê¸
         {
             _stageManager.ResetStage();
         }
-   
+        
+        //
+        
         GamePaused = false;
     }
 
@@ -46,7 +47,6 @@ public class GameManager : Singleton<GameManager> //Singleton Game Manager ì‹±ê¸
         if (scene.name == LoadingManager.TitleScene)
         {
             Destroy(gameObject);
-            //Debug.Log("GameManager...load TitleScene");
         }
     }
     

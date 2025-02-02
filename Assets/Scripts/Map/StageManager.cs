@@ -50,29 +50,6 @@ public class StageManager : MonoBehaviour
         }
     }
     
-    private void InitChests()
-    {
-        _chests = FindObjectsOfType<Chest>();
-        foreach (var chest in _chests)
-        {
-            var randomWeaponWeight = Random.value;
-            if (randomWeaponWeight < 0.5)
-            {
-                //weapon
-                var randomWeaponIdx = Random.Range(0, stageData.GetPlayerWeapons().Length);
-                PlayerWeaponData weaponData = stageData.GetPlayerWeapons()[randomWeaponIdx];
-                chest.SetItem(weaponData.GetItemPrefab());
-            }
-            else
-            {
-                //equipment
-                var randomEquipmentIdx = Random.Range(0, stageData.GetPlayerEquipments().Length);
-                PlayerEquipmentData equipmentData = stageData.GetPlayerEquipments()[randomEquipmentIdx];
-                chest.SetItem(equipmentData.GetItemPrefab());
-            }
-        }
-    }
-    
     public void SpawnEnemy(RoomManager room)
     {
         _currentRoom = room;
