@@ -308,6 +308,7 @@ namespace Player
 
         public void UseConsumableItem(ConsumableItemData data)
         {
+            AudioManager.Instance.PlaySfx(AudioManager.Sfx.HealSfx);
             foreach (var itemEffect in data.GetEffects())//소비템의 아이템 효과 데이터
             {
                 var effectType = itemEffect.effectType;

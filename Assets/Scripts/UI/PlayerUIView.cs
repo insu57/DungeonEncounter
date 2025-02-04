@@ -35,6 +35,7 @@ namespace UI
         {
             GameManager.Instance.TogglePause();
             pauseMenu.SetActive(!pauseMenu.activeSelf);
+            Cursor.visible = pauseMenu.activeSelf;
         }
 
         public void TogglePlayerDeathMenu(bool isOpen)

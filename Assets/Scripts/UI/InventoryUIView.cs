@@ -229,6 +229,7 @@ namespace UI
 
             if (itemData.GetEffects().Length != 0)
             {
+                itemEffectText.text = "";
                 foreach (var itemEffect in itemData.GetEffects())
                 {
                     itemEffectText.text += $"{itemEffect.effectDescription}\n";

@@ -173,6 +173,7 @@ namespace Player
 
                 if (!EventSystem.current.IsPointerOverGameObject()) //UI 마우스 제한
                 {
+                    Cursor.visible = false;
                     if (Input.GetMouseButtonDown(0) && !_isAttackCool) //Mouse left click Attack 마우스 좌클릭 공격
                     {
                         _moveVector = Vector3.zero; //공격 시 정지
@@ -193,6 +194,10 @@ namespace Player
                         AudioManager.Instance.PlaySfx(AudioManager.Sfx.SkillSfx);
                         AudioManager.Instance.PlayVoice(AudioManager.Voice.AttackVoice);
                     }
+                }
+                else
+                {
+                    Cursor.visible = true;
                 }
             
                 if (_moveVector != Vector3.zero)

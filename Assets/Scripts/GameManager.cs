@@ -26,8 +26,6 @@ public class GameManager : Singleton<GameManager> //Singleton Game Manager ì‹±ê¸
             _stageManager.ResetStage();
         }
         
-        //
-        
         GamePaused = false;
     }
 

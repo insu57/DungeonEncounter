@@ -28,6 +28,7 @@ public class AudioManager : SerializeSingleton<AudioManager>
         MoneyPickupSfx,
         PlayerDamageSfx,
         EnemyDamageSfx,
+        HealSfx,
     }
     
     public enum Voice
