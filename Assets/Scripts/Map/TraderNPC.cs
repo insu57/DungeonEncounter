@@ -99,7 +99,6 @@ public class TraderNpc : MonoBehaviour
          traderNpcUI.ToggleTraderUI(false);
       }
       
-      
       pressF.SetActive(_distance <= 1.5f);
    }
 }

@@ -68,6 +68,9 @@ public class InventoryManager : MonoBehaviour
         SelectedItem = null;
         _weaponID = 1;
         _equipmentID = 1;
+        
+        _moneyAmount = 0;
+        OnUpdateMoneyAmount?.Invoke(_moneyAmount);
     }
     
     public void SetSelectedItem(ItemDataWithID itemDataWithID)

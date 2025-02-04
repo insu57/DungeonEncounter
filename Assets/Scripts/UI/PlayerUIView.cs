@@ -36,12 +36,15 @@ namespace UI
             GameManager.Instance.TogglePause();
             pauseMenu.SetActive(!pauseMenu.activeSelf);
             Cursor.visible = pauseMenu.activeSelf;
+            Cursor.lockState = pauseMenu.activeSelf ? CursorLockMode.None : CursorLockMode.Confined;
         }
 
         public void TogglePlayerDeathMenu(bool isOpen)
         {
             if (isOpen)
             {
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
                 playerDeathMenu.SetActive(true);
                 pauseMenu.SetActive(false);
                 retryButton.onClick.AddListener(GameManager.Instance.RetryStage);
@@ -52,6 +55,8 @@ namespace UI
             }
             else
             {
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Confined;
                 playerDeathMenu.SetActive(false);
             }
             

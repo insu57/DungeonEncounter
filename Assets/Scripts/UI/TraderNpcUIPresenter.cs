@@ -79,6 +79,8 @@ public class TraderNpcUIPresenter
         if (_inventoryManager.UseMoney(_traderNpc.GetItemPrice(itemIdx), false))
         {
             _traderNpcUI.ItemSoldOut(itemIdx);
+            _traderNpc.SpawnPurchasedItem(itemIdx);
+            AudioManager.Instance.PlaySfx(AudioManager.Sfx.MoneyPickupSfx);
         }
     }
     

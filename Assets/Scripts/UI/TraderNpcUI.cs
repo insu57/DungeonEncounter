@@ -52,7 +52,9 @@ public class TraderNpcUI : MonoBehaviour
     
     public void ToggleTraderUI(bool isActive)
     {
+        if (traderUI.activeSelf == isActive) return;
         traderUI.SetActive(isActive);
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.InventoryOpenSfx);
     }
     
     public void RerollItem1(ConsumableItemData consumableItemData, int itemPrice)
