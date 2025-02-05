@@ -1,3 +1,5 @@
-# SuperRandom
+# DungeonEncounter
 <br>
-Unity3D 액션 게임!
+Unity3D 쿼터뷰 RPG
+
+
