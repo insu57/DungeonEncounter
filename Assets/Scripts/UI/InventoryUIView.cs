@@ -74,7 +74,7 @@ namespace UI
         public event Action OnEquipButton;
         public event Action OnDropButton;
         public event Action<int> OnSetQuickSlot;
-
+        
         public void ResetInventoryUI()
         {
             ClearEquippedEquipment();

@@ -16,7 +16,6 @@ public class GameManager : Singleton<GameManager> //Singleton Game Manager ì‹±ê¸
     public void HandlePlayerDeath()
     {
         GamePaused = true;
-        
     }
 
     public void RetryStage()

@@ -33,8 +33,7 @@ public class InventoryUIPresenter
         _inventoryUIView.OnEquipButton += HandleOnEquipButton;
         _inventoryUIView.OnDropButton += HandleOnDropButton;
         _inventoryUIView.OnSetQuickSlot += HandleOnSetQuickSlot;
-
-
+        
         //init
         //기본무기 설정-인벤토리/UI
         var defaultWeaponData = _playerManager.PlayerDefaultWeaponData;

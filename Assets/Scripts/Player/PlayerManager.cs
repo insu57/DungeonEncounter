@@ -22,8 +22,8 @@ namespace Player
         [SerializeField] private GameObject playerRightHand;
         [SerializeField] private GameObject playerHead;
    
-        private EnemyMeleeAttack _enemyMeleeAttack;
-        private EnemyProjectile _enemyProjectile;
+        //private EnemyMeleeAttack _enemyMeleeAttack;
+        //private EnemyProjectile _enemyProjectile;
         
         private PlayerWeaponData _equippedWeaponData;
         private PlayerEquipmentData _equippedEquipmentData;

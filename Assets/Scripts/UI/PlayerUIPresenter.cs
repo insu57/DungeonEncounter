@@ -8,7 +8,7 @@ namespace UI
 
     {
         private readonly PlayerManager _playerManager;
-        private readonly InventoryManager _inventoryManager;
+        //private readonly InventoryManager _inventoryManager;
         private readonly PlayerUIView _uiView;
         
         
