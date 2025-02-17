@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
+using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
 public class ObjectPoolingManager : Singleton<ObjectPoolingManager>
@@ -97,10 +98,23 @@ public class ObjectPoolingManager : Singleton<ObjectPoolingManager>
             Debug.LogError("Return Pool ERROR");
         }
     }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == LoadingManager.TitleScene)
+        {
+            Destroy(gameObject);
+        }
+    }
     
     public override void Awake()
     {
         base.Awake();
-        //InitPools();
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 }

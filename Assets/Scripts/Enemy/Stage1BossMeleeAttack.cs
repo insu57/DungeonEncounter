@@ -41,7 +41,8 @@ public class Stage1BossMeleeAttack : EnemyMeleeAttack
                 attackArea.enabled = true;
                 trailRenderer.enabled = false;
             }
-            else if (EnemyControl.IsAttack && AttackStartTime <= animTime && animTime <= AttackEndTime)
+            else if (EnemyControl.CurrentState == EnemyStates.Attack 
+                     && AttackStartTime <= animTime && animTime <= AttackEndTime)
             {
                 attackArea.enabled = true;
                 trailRenderer.enabled = true;
@@ -53,8 +54,6 @@ public class Stage1BossMeleeAttack : EnemyMeleeAttack
                 trailRenderer.enabled = false;
             }
         }
-        
-        
         
     }
 }

@@ -14,7 +14,6 @@ namespace Enemy
         protected float AttackEndTime;
         [SerializeField] protected Collider attackArea;
         [SerializeField] protected TrailRenderer trailRenderer;
-        //private TrailRenderer _trailRenderer;
         protected Animator Animator;
         public float Damage { get; private set; }
 
@@ -34,7 +33,7 @@ namespace Enemy
         {
             float animTime = Mathf.Repeat(Animator.GetCurrentAnimatorStateInfo(0).normalizedTime, 1.0f);
 
-            if (EnemyControl.IsAttack && AttackStartTime <= animTime && animTime <= AttackEndTime)
+            if (EnemyControl.CurrentState == EnemyStates.Attack && AttackStartTime <= animTime && animTime <= AttackEndTime)
             {
                 attackArea.enabled = true;
                 trailRenderer.enabled = true;

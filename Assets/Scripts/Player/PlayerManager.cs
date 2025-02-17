@@ -21,9 +21,6 @@ namespace Player
         private PlayerControl _playerControl;
         [SerializeField] private GameObject playerRightHand;
         [SerializeField] private GameObject playerHead;
-   
-        //private EnemyMeleeAttack _enemyMeleeAttack;
-        //private EnemyProjectile _enemyProjectile;
         
         private PlayerWeaponData _equippedWeaponData;
         private PlayerEquipmentData _equippedEquipmentData;
@@ -56,6 +53,8 @@ namespace Player
         public event Action<FloatText, Vector3> OnFloatKey;
         public event Action OnExitFloatKey;
         public event Action OnPlayerDeath;
+        
+        public Action OnOpenPlayerMenu;
         
         private Camera _mainCamera;
 
@@ -158,11 +157,6 @@ namespace Player
                 _equippedWeapon.GetComponent<BoxCollider>().enabled = false; //드랍 아이템 체크용 BoxCollider 비활성
                 _equippedWeapon.GetComponentInChildren<ParticleSystem>().Stop(); //자식객체 ParticleSystem 이펙트 정지
             }
-
-            if (data.AttackType == AttackType.Melee) //근접무기일시
-            {
-                //_equippedWeapon.AddComponent<PlayerMeleeAttack>();
-            }
             
             _playerWeaponType = data.WeaponType; //WeaponType -> Animator change(애니메이터 추가 필요)
             
@@ -227,7 +221,7 @@ namespace Player
                     }
                     else
                     {
-                        //Debug.LogWarning("Equipment Item Effect Type is not Permanent");
+                        Debug.LogWarning("Equipment Item Effect Type is not Permanent");
                     }
                 }
                 
@@ -242,7 +236,6 @@ namespace Player
         {
             if (_playerStats.ContainsKey(statType) && Mathf.Approximately(_playerStats[statType], value)) return;
             _playerStats[statType] = value;
-            var statValue = value;
             var plusValue = _currentPlusItemEffects[statType];
             var multiplyValue = _currentMultiplyItemEffects[statType];
             OnStatChanged?.Invoke(statType, (value + plusValue) * multiplyValue);
@@ -523,8 +516,6 @@ namespace Player
             _playerControl = GetComponent<PlayerControl>();
             _mainCamera = Camera.main;
             
-            //_equipmentDefenseValue = 0f;
-            //실제 들고있는 무기에... 무기교체 기능
             GameObject playerWeaponPrefab = playerJobData.DefaultWeapon;
             IItemData itemData = playerWeaponPrefab.GetComponent<ItemDataAssign>().GetItemData();
 

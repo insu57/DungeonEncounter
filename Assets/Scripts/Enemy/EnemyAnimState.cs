@@ -4,17 +4,13 @@ namespace Enemy
     {
         public override void Enter(EnemyControl enemy)
         {
-            //enemy.EnemyAnimator.Play("Idle");
+            
             enemy.ChangeAnimation("Idle");
         }
 
         public override void Execute(EnemyControl enemy)
         {
-            if (enemy.IsMove)
-            {
-                enemy.ChangeState(EnemyStates.Move);
-            }
-                
+            
         }
 
         public override void Exit(EnemyControl enemy)
@@ -27,16 +23,12 @@ namespace Enemy
     {
         public override void Enter(EnemyControl enemy)
         {
-            //enemy.EnemyAnimator.Play("Move");
             enemy.ChangeAnimation("Move");
         }
 
         public override void Execute(EnemyControl enemy)
         {
-            if (!enemy.IsMove)
-            {
-                enemy.ChangeState(EnemyStates.Idle);
-            }
+            
         }
 
         public override void Exit(EnemyControl enemy)
@@ -49,14 +41,12 @@ namespace Enemy
     {
         public override void Enter(EnemyControl enemy)
         {
-            //enemy.EnemyAnimator.Play("Attack");
             enemy.ChangeAnimation("Attack");
         }
 
         public override void Execute(EnemyControl enemy)
         {
-            if (enemy.IsAttack) return;
-            enemy.ChangeState(EnemyStates.Idle);
+           
         }
 
         public override void Exit(EnemyControl enemy)
@@ -87,7 +77,6 @@ namespace Enemy
     {
         public override void Enter(EnemyControl enemy)
         {
-            //enemy.EnemyAnimator.Play("Dead");
             enemy.ChangeAnimation("Dead");
         }
 
@@ -111,18 +100,7 @@ namespace Enemy
 
         public override void Execute(EnemyControl enemy)
         {
-            if (enemy.IsDead)
-            {
-                enemy.ChangeState(EnemyStates.Dead);
-            }
-            else
-            {
-                if (enemy.CurrentState != EnemyStates.Attack && enemy.IsAttack)
-                {
-                    enemy.ChangeState(EnemyStates.Attack);
-                }
-            }
-            
+           
         }
 
         public override void Exit(EnemyControl enemy)

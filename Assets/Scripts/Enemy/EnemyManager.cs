@@ -29,6 +29,7 @@ namespace Enemy
         //private Collider _enemyCollider;
         public float Height { get; private set; }
         private FlashOnHit _flashOnHit;
+        private bool _isDamaged;
         [SerializeField] private Collider enemyCollider;
         [SerializeField] private ParticleSystem deathSmokeParticle;
         //할당방식 변경필요?
@@ -68,9 +69,8 @@ namespace Enemy
         
         private void EnemyDeath()
         {
-            _enemyControl.IsAttack = false;
-            _enemyControl.IsMove = false;
-            _enemyControl.IsDead = true;
+            _isDamaged = false;
+            _enemyControl.ChangeState(EnemyStates.Dead);
             DropItem();//아이템 드랍
             OnDeath?.Invoke();//사망이벤트 
             enemyCollider.enabled = false;//충돌 비활성
@@ -95,7 +95,6 @@ namespace Enemy
             yield return new WaitForSeconds(waitTime);
             ObjectPoolingManager.Instance.ReturnToPool(data.EnemyKey, gameObject);
             StopAllCoroutines();
-            //transform.position = Vector3.zero;
         }
         
         
@@ -221,7 +220,6 @@ namespace Enemy
             //초기화.
             enemyCollider.enabled = true;
             _enemyStats[EnemyStatTypes.Health] = GetStat(EnemyStatTypes.MaxHealth);
-            //Debug.Log("Enemy On Enable...Name: "+gameObject.name+" Position: "+transform.position);
         }
 
         private void Awake()
@@ -230,8 +228,7 @@ namespace Enemy
             _playerManager = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>();
             _dropTable = data.DropTable;
             _type = data.Type;
-
-            //enemyCollider = GetComponent<Collider>();
+            
             Height = enemyCollider.bounds.size.y;
             _enemyStats = new Dictionary<EnemyStatTypes, float>
             {
@@ -247,8 +244,8 @@ namespace Enemy
         
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("PlayerAttack") && _enemyControl.WasDamaged == false 
-                                                 && _enemyControl.IsDead == false)
+            if (other.CompareTag("PlayerAttack") && _isDamaged == false 
+                                                 && _enemyControl.CurrentState != EnemyStates.Dead)
             {
                 AudioManager.Instance.PlaySfx(AudioManager.Sfx.EnemyDamageSfx);
                 _flashOnHit.TriggerFlash();
@@ -267,9 +264,9 @@ namespace Enemy
 
         private IEnumerator Damaged(float duration)
         {
-            _enemyControl.WasDamaged = true;
+            _isDamaged = true;
             yield return new WaitForSeconds(duration);
-            _enemyControl.WasDamaged = false;
+            _isDamaged = false;
         }
 
         

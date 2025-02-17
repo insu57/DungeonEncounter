@@ -9,7 +9,7 @@ namespace Enemy
         private EnemyManager _enemyManager;
         private EnemyControl _enemyControl;
         private EnemyData _data;
-        private GameObject _projectilePrefab;//원거리 투사체
+        
         private PoolKeys _projectileKey;
         private TrailRenderer _trailRenderer;
         private Animator _animator;
@@ -32,7 +32,7 @@ namespace Enemy
             _data = _enemyManager.Data;
             _attackStartTime = _data.AttackStartFrame / _data.AttackFullFrame;
             _attackEndTime = _data.AttackEndFrame / _data.AttackFullFrame;
-            _projectilePrefab = _data.ProjectilePrefab;
+           
             _projectileKey = _data.ProjectileKey;
             _animator = _enemyManager.GetComponent<Animator>();
             _isShoot = false;
@@ -44,10 +44,11 @@ namespace Enemy
         {
             float animTime = Mathf.Repeat(_animator.GetCurrentAnimatorStateInfo(0).normalizedTime, 1.0f);
         
-            if(animTime > _attackEndTime || animTime < _attackStartTime || !_enemyControl.IsAttack)
+            if(animTime > _attackEndTime || animTime < _attackStartTime || _enemyControl.CurrentState != EnemyStates.Attack)
                 _isShoot = false;
             
-            if (_enemyControl.IsAttack && !_isShoot &&_attackStartTime <= animTime && animTime <= _attackEndTime
+            if (_enemyControl.CurrentState == EnemyStates.Attack 
+                && !_isShoot &&_attackStartTime <= animTime && animTime <= _attackEndTime
                 && _animator.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
             {
                 _isShoot = true;

@@ -63,7 +63,6 @@ namespace Player
 
         public override void Exit(PlayerControl player)
         {
-            //player.IsAttack = false;
             if(player.IsSkill) 
                 player.IsSkill = false;
         }

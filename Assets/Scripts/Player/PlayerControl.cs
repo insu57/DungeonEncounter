@@ -26,9 +26,6 @@ namespace Player
         private float _dodgeCoolTime;
         private bool _isDodgeCool;
         
-        private bool _isAttackCool;//공격 등 입력 쿨타임
-        private float _isAttackCoolTime;
-        
         private State<PlayerControl>[] _states;
         private StateMachine<PlayerControl> _stateMachine;
         
@@ -89,13 +86,6 @@ namespace Player
             yield return new WaitForSeconds(_dodgeCoolTime); //회피 쿨타임
             _isDodgeCool = false;
         }
-
-        private IEnumerator AttackCool()
-        {
-            _isAttackCool = true;
-            yield return new WaitForSeconds(_isAttackCoolTime);
-            _isAttackCool = false;
-        }
         
         private void Awake()
         {
@@ -122,9 +112,6 @@ namespace Player
             _dodgeDistance = 2.5f;
             _dodgeCoolTime = 0.5f;
             _isDodgeCool = false;
-            
-            _isAttackCool = false;
-            _isAttackCoolTime = 0.2f;
         
             _lookRotation = Quaternion.LookRotation(Vector3.back);
             _lookVector = Vector3.back;
@@ -171,27 +158,29 @@ namespace Player
             if (!EventSystem.current.IsPointerOverGameObject()) //UI 마우스 제한
             {
                 Cursor.visible = false;
-                if (Input.GetMouseButtonDown(0) && !_isAttackCool) //Mouse left click Attack 마우스 좌클릭 공격
+                if (CurrentState != PlayerStates.Attack)
                 {
-                    _moveVector = Vector3.zero; //공격 시 정지
-                    //IsAttack = true;
-                    ChangeState(PlayerStates.Attack);
-                    AudioManager.Instance.PlaySfx(AudioManager.Sfx.AttackSfx); //Sfx Play
-                }
+                    if (Input.GetMouseButtonDown(0)) //Mouse left click Attack 마우스 좌클릭 공격
+                    {
+                        _moveVector = Vector3.zero; //공격 시 정지
+                        //IsAttack = true;
+                        ChangeState(PlayerStates.Attack);
+                        AudioManager.Instance.PlaySfx(AudioManager.Sfx.AttackSfx); //Sfx Play
+                    }
 
-                if (Input.GetMouseButtonDown(1) && _playerManager.GetStat(PlayerStatTypes.Energy) >= 100f
-                                                && !_isAttackCool)
-                    //우클릭 스킬 공격, 에너지 100이상일때만
-                {
-                    _moveVector = Vector3.zero;
-                    //IsAttack = true;
-                    IsSkill = true;
-                    ChangeState(PlayerStates.Attack);
+                    if (Input.GetMouseButtonDown(1) && _playerManager.GetStat(PlayerStatTypes.Energy) >= 100f)
+                        //우클릭 스킬 공격, 에너지 100이상일때만
+                    {
+                        _moveVector = Vector3.zero;
+                        //IsAttack = true;
+                        IsSkill = true;
+                        ChangeState(PlayerStates.Attack);
                     
-                    _playerManager.UseSkill();//플레이어 스탯 에너지 소모
-                    //sound
-                    AudioManager.Instance.PlaySfx(AudioManager.Sfx.SkillSfx);
-                    AudioManager.Instance.PlayVoice(AudioManager.Voice.AttackVoice);
+                        _playerManager.UseSkill();//플레이어 스탯 에너지 소모
+                        //sound
+                        AudioManager.Instance.PlaySfx(AudioManager.Sfx.SkillSfx);
+                        AudioManager.Instance.PlayVoice(AudioManager.Voice.AttackVoice);
+                    }
                 }
             }
             else
@@ -230,8 +219,7 @@ namespace Player
             
             if (Input.GetKeyDown(KeyCode.I) || Input.GetKeyDown(KeyCode.Tab))
             {
-                AudioManager.Instance.PlaySfx(AudioManager.Sfx.InventoryOpenSfx);
-                _inventoryUIView.TogglePlayerMenu();
+                _playerManager.OnOpenPlayerMenu?.Invoke();
             }
             
             if (_playerManager.IsPlayerDead)

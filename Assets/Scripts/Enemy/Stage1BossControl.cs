@@ -38,7 +38,6 @@ public class Stage1BossControl : EnemyControl
             IsJumpAttack = true;
             _attackCount = 0;
             jumpAttackEffect.SetActive(true);
-            Debug.Log("Jump Attack"); //이펙트 이상..?
         }
         else
         {
@@ -67,17 +66,16 @@ public class Stage1BossControl : EnemyControl
         if (Agent.remainingDistance <= Agent.stoppingDistance && !Agent.pathPending) //Enemy 정지
         {
             Agent.isStopped = true;
-            IsMove = false;
             
             if (InAttackDelay) return;
             
-            IsAttack = true;
+            ChangeState(EnemyStates.Attack);
             bool isAttack = EnemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("Attack") ||
                             EnemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("JumpAttack");
             
             if (animTime >= 1f && isAttack)
             {
-                IsAttack = false;
+                ChangeState(EnemyStates.Idle);
                 StartCoroutine(AttackDelay(1f));//1f delay
             }
             
@@ -85,8 +83,7 @@ public class Stage1BossControl : EnemyControl
         else
         {
             Agent.isStopped = false;
-            IsMove = true;
-            IsAttack = false;
+            ChangeState(EnemyStates.Move);
         }
     }
     protected override void Awake()

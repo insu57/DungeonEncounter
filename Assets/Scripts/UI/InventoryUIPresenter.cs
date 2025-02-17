@@ -17,6 +17,7 @@ public class InventoryUIPresenter
         _inventoryManager = inventoryManager;
         _inventoryUIView = inventoryUIView;
 
+        _playerManager.OnOpenPlayerMenu += HandleOnOpenPlayerMenu;
         _inventoryUIView.OnInventoryOpen += HandleOnInventoryOpen;
         _inventoryUIView.OnCurrentWeapon += HandleShowCurrentWeapon;
         _inventoryUIView.OnCurrentEquipment += HandleShowCurrentEquipment;
@@ -56,9 +57,14 @@ public class InventoryUIPresenter
 
     }
 
+    private void HandleOnOpenPlayerMenu()
+    {
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.InventoryOpenSfx);
+        _inventoryUIView.TogglePlayerMenu();
+    }
+    
     private void HandlePlayerDeath()
     {
-        //
         _inventoryManager.ResetInventory();
         var defaultWeaponData = _playerManager.PlayerDefaultWeaponData;
         var defaultWeaponPrefab = _playerManager.PlayerDefaultWeaponData.GetItemPrefab();

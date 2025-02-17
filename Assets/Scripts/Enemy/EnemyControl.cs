@@ -21,13 +21,8 @@ namespace Enemy
         public Animator EnemyAnimator { private set; get; }
         private string _currentAnimation;
         private GameObject _player;
-        //protected PlayerManager PlayerManager;
         protected NavMeshAgent Agent;
-
-        public bool IsMove { set; get; }
-        public bool IsAttack { set; get; }
-        public bool WasDamaged { set; get; }
-        public bool IsDead { set; get; }
+        
         protected bool InAttackDelay;
 
         public void ChangeState(EnemyStates newState)
@@ -54,10 +49,6 @@ namespace Enemy
         protected virtual void OnEnable()
         {
             //초기화
-            IsAttack = false;
-            IsMove = false;
-            WasDamaged = false;
-            IsDead = false;
             InAttackDelay = false;
             ChangeState(EnemyStates.Idle);
         }
@@ -65,7 +56,7 @@ namespace Enemy
         protected virtual void Awake()
         {
             _player = GameObject.FindGameObjectWithTag("Player");
-            //PlayerManager = FindObjectOfType<PlayerManager>().GetComponent<PlayerManager>();
+           
             Agent = GetComponent<NavMeshAgent>();
             EnemyAnimator = GetComponent<Animator>();
 
@@ -83,10 +74,6 @@ namespace Enemy
             _stateMachine.Setup(this, States[EnemyStates.Idle]);
             _stateMachine.SetGlobalState(States[EnemyStates.Global]);
             
-            IsAttack = false;
-            IsMove = false;
-            WasDamaged = false;
-            IsDead = false;
             InAttackDelay = false;
         }
 
@@ -96,13 +83,13 @@ namespace Enemy
             if (Agent.remainingDistance <= Agent.stoppingDistance && !Agent.pathPending) //Enemy 정지
             {
                 Agent.isStopped = true;
-                IsMove = false;
             
                 if (InAttackDelay) return;
-                IsAttack = true;
+                
+                ChangeState(EnemyStates.Attack);
                 if (animTime >= 1f && EnemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
                 {
-                    IsAttack = false;
+                    ChangeState(EnemyStates.Idle);
                     StartCoroutine(AttackDelay(1f));//1f delay
                 }
             
@@ -110,15 +97,14 @@ namespace Enemy
             else
             {
                 Agent.isStopped = false;
-                IsMove = true;
-                IsAttack = false;
+                ChangeState(EnemyStates.Move);
             }
         }
         
         protected virtual void Update()
         {
             _stateMachine.Execute();
-            if (IsDead) return;
+            if (CurrentState == EnemyStates.Dead) return;
         
             Vector3 dir = _player.transform.position - transform.position;
             Quaternion targetRotation = Quaternion.LookRotation(dir);
