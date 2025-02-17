@@ -30,6 +30,7 @@ namespace Player
         private Dictionary<PlayerStatTypes, float> _playerStats;
         public event Action<PlayerStatTypes, float> OnStatChanged;
         public event Action<PlayerStatTypes, float> OnTemporaryItemEffect;//UI
+        private bool _isDamaged;
         public bool IsPlayerDead { get; private set; }
         public PlayerWeaponData PlayerDefaultWeaponData { get; private set; }
         private GameObject _equippedWeapon;
@@ -567,6 +568,7 @@ namespace Player
             };
             
             IsPlayerDead = false;
+            _isDamaged = false;
             
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
@@ -594,7 +596,7 @@ namespace Player
         {
             //피격판정 처리
             if ((other.CompareTag("EnemyMeleeAttack") || other.CompareTag("EnemyRangedAttack")) 
-                && _playerControl.IsDamaged == false && _playerControl.IsDodge == false)
+                && _playerControl.CurrentState != PlayerStates.Dodge && _isDamaged == false)
             {
                 //var health = GetStat(PlayerStatTypes.Health);
                 var damage = other.CompareTag("EnemyMeleeAttack") ?
@@ -640,10 +642,10 @@ namespace Player
 
         private IEnumerator Damaged(float duration)
         {
-            _playerControl.IsDamaged = true;
+            _isDamaged = true;
             hitEffect.SetActive(true);
             yield return new WaitForSeconds(duration);
-            _playerControl.IsDamaged = false;
+            _isDamaged = false;
             hitEffect.SetActive(false);
         }
     }

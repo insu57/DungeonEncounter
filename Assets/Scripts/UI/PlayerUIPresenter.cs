@@ -8,9 +8,7 @@ namespace UI
 
     {
         private readonly PlayerManager _playerManager;
-        //private readonly InventoryManager _inventoryManager;
         private readonly PlayerUIView _uiView;
-        
         
         public PlayerUIPresenter(PlayerManager playerManager ,PlayerUIView uiView) //presenter
         {
@@ -69,7 +67,6 @@ namespace UI
                     break;
             }
         }
-
         
         public void Dispose()
         {

@@ -8,7 +8,6 @@ namespace UI
 {
     public class EnemyWorldUIPresenter
     {
-        private readonly EnemySpawnManager _spawnManager;
         private readonly WorldUIView _view;
         private readonly EnemyManager _enemy;
         private readonly EnemyHealthBar _healthBar;
