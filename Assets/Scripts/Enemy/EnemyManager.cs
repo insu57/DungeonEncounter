@@ -67,7 +67,7 @@ namespace Enemy
             navMeshAgent.enabled = true;
         }
         
-        private void EnemyDeath()
+        protected virtual void EnemyDeath()
         {
             _isDamaged = false;
             _enemyControl.ChangeState(EnemyStates.Dead);
@@ -98,7 +98,7 @@ namespace Enemy
         }
         
         
-        private void DropItem()
+        protected void DropItem()
         {
             //Money min~max Consumable Chest
             //드랍테이블 등 데이터 입력 방식 변경 필요
