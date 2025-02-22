@@ -1,0 +1,12 @@
+{
+  "itemName": "괜찮은 검",
+  "description": "이 검은 꽤 괜찮은 물건입니다.",
+  "weaponType":  "Sword",
+  "attackType":  "Melee",
+  "rarity": "Uncommon",
+  "attackValue": 45,
+  "itemEffects":[],
+  "icon": "Resources/PlayerSword02Icon.png",
+  "isDefaultWeapon": false,
+  "prefab": "Resources/Prefabs/Item/PlayerSword02.prefab"
+}

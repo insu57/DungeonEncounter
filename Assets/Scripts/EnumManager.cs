@@ -1,7 +1,6 @@
 using System;
 using Player;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 [Serializable]
 public class ItemEffect
@@ -108,6 +107,19 @@ public static class EnumManager
             _ => Color.gray
         };
     }
+
+    public static Rarity StringToRarity(string rarityString)
+    {
+        return rarityString switch
+        {
+            "Common" => Rarity.Common,
+            "Uncommon" => Rarity.Uncommon,
+            "Rare" => Rarity.Rare,
+            "Epic" => Rarity.Epic,
+            "Legendary" => Rarity.Legendary,
+            _ => Rarity.Common
+        };
+    }
     
     public static string WeaponTypeToString(WeaponType type)
     {
@@ -122,7 +134,22 @@ public static class EnumManager
             WeaponType.Bow => "Bow",
             _ => type.ToString()
         };
-    }        
+    }
+
+    public static WeaponType StringToWeaponType(string type)
+    {
+        return type switch
+        {
+            "Sword" => WeaponType.Sword,
+            "Axe" => WeaponType.Axe,
+            "Hammer" => WeaponType.Hammer,
+            "Spear" => WeaponType.Spear,
+            "Staff" => WeaponType.Staff,
+            "Wand" => WeaponType.Wand,
+            "Bow" => WeaponType.Bow,
+            _ => WeaponType.Sword
+        };
+    }
     
     public static string AttackTypeToString(AttackType type)
     {
@@ -132,7 +159,17 @@ public static class EnumManager
             AttackType.Ranged => "Ranged",
             _ => type.ToString()
         };
-    }       
+    }
+
+    public static AttackType StringToAttackType(String type)
+    {
+        return type switch
+        {
+            "Melee" => AttackType.Melee,
+            "Ranged" => AttackType.Ranged,
+            _ => AttackType.Melee
+        };
+    }
     
     public static string ConsumableTypeToString(ConsumableType type)
     {

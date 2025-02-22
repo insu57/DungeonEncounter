@@ -1,3 +1,5 @@
+using System.Text;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 namespace Scriptable_Objects
@@ -6,31 +8,38 @@ namespace Scriptable_Objects
         menuName = "ScriptableObjects/PlayerEquipmentData", order = int.MaxValue)]
     public class PlayerEquipmentData : ScriptableObject, IItemData
     {
-        [SerializeField] private string equipmentName;
-        [SerializeField] private string description;
-        [SerializeField] private string type;
-        [SerializeField] private Rarity rarity;
-        [SerializeField] private int defenseValue;
-        [SerializeField] private ItemEffect[] itemEffect;
+        private class EquipmentData
+        {
+            public string itemName;
+            public string description;
+            public string type;
+            public Rarity rarity;
+            public float defenseValue;
+            public ItemEffect[] itemEffects;
+        }
+        
+        [SerializeField] private TextAsset jsonFile;
+        private EquipmentData data => JObject
+            .Parse(Encoding.UTF8.GetString(jsonFile.bytes)).ToObject<EquipmentData>();
+        
         [SerializeField] private Sprite icon;
         [SerializeField] private GameObject prefab;
         
-        public string Type => type;
-        public int DefenseValue => defenseValue;
-        public ItemTypes ItemType => ItemTypes.Equipment;
+        public string Type => data.type;
+        public float DefenseValue => data.defenseValue;
         public string GetName()
         {
-            return equipmentName;
+            return data.itemName;
         }
 
         public string GetDescription()
         {
-            return description;
+            return data.description;
         }
 
         public Rarity GetRarity()
         {
-            return rarity;
+            return data.rarity;
         }
 
         public Sprite GetIcon()
@@ -40,7 +49,7 @@ namespace Scriptable_Objects
 
         public ItemEffect[] GetEffects()
         {
-            return itemEffect;
+            return data.itemEffects;
         }
 
         public GameObject GetItemPrefab()

@@ -1,0 +1,12 @@
+{
+  "itemName": "매우 평범한 칼",
+  "description": "이 칼은 누가봐도 평범하네요.",
+  "weaponType":  "Sword",
+  "attackType":  "Melee",
+  "rarity": "Common",
+  "attackValue": 30,
+  "itemEffects":[],
+  "icon": "Resources/PlayerSword01Icon.png",
+  "isDefaultWeapon": false,
+  "prefab": "Resources/Prefabs/Item/PlayerSword01.prefab"
+}

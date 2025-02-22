@@ -6,8 +6,6 @@ using UnityEngine;
 public interface IItemData
 {
     //ItemDataInterface
-    public ItemTypes ItemType { get; }
-
     public string GetName();
     public string GetDescription();
     public Rarity GetRarity();

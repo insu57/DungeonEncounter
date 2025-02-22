@@ -264,7 +264,6 @@ namespace Player
                 {
                     ItemData = itemData,
                     ItemPrefab = itemPrefab,
-                    ItemType = itemData.ItemType,
                 });
                 Destroy(item);
             }

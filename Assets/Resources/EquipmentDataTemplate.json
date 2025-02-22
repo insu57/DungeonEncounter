@@ -1,0 +1,22 @@
+{
+  "itemName": "string",
+  "description": "string",
+  "type":  "",
+  "rarity": "",
+  "defenseValue": "",
+  "itemEffects":[
+	{
+	  "effectStat": "playerStatTypes",
+	  "effectCalculate": "CalculateType",
+	  "effectValue": "float",
+	  "effectDescription": "string",
+	  "effectDuration": "float",
+	  "isTickBased": "bool",
+	  "tickSecond": "float",
+	  "effectType": "EffectType",
+	  "useOtherStat": "bool"
+	}
+  ],
+  "icon": "path",
+  "prefab": "path"
+}

@@ -12,13 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc3a0f9c5c8eabb469e521f3f16b18ec, type: 3}
   m_Name: PlayerSword03
   m_EditorClassIdentifier: 
-  weaponName: Little Rusty  Sword
-  description: "\uC57D\uAC04 \uB179\uC2AC\uC5C8\uB2E4."
-  weaponType: 0
-  attackType: 0
-  rarity: 0
-  attackValue: 35
-  itemEffects: []
+  jsonFile: {fileID: 4900000, guid: 3fb538edd3befb64881c394fc7321579, type: 3}
   icon: {fileID: 21300000, guid: cb011e6b7c885f142932a3b234dea4c6, type: 3}
-  isDefaultWeapon: 0
   prefab: {fileID: 4771580841648920502, guid: dc16668c55231234aaff66522acde80c, type: 3}

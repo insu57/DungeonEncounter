@@ -1,4 +1,6 @@
 using System;
+using System.Text;
+using Newtonsoft.Json.Linq;
 using Player;
 using UnityEngine;
 
@@ -8,28 +10,34 @@ namespace Scriptable_Objects
         menuName = "ScriptableObjects/ConsumableItemData", order = int.MaxValue)]
     public class ConsumableItemData : ScriptableObject, IItemData
     {
-        [SerializeField] private string itemName;
-        [SerializeField] private string description;
-        [SerializeField] private ConsumableType type;
-        [SerializeField] private Rarity rarity;
-        [SerializeField] private ItemEffect[] itemData;
+        public class ConsumableData
+        {
+            public string itemName;
+            public string description;
+            public ConsumableType type;
+            public Rarity rarity;
+            public ItemEffect[] itemEffects;
+        }
+
+        [SerializeField] private TextAsset jsonFile;
+        private ConsumableData data => JObject
+            .Parse(Encoding.UTF8.GetString(jsonFile.bytes)).ToObject<ConsumableData>();
         [SerializeField] private Sprite icon;
         [SerializeField] private GameObject prefab;
-        public ConsumableType Type => type;
-        public ItemTypes ItemType => ItemTypes.Consumable;
+        public ConsumableType Type => data.type;
         public string GetName()
         {
-            return itemName;
+            return data.itemName;
         }
 
         public string GetDescription()
         {
-            return description;
+            return data.description;
         }
 
         public Rarity GetRarity()
         {
-            return rarity;
+            return data.rarity;
         }
 
         public Sprite GetIcon()
@@ -39,7 +47,7 @@ namespace Scriptable_Objects
 
         public ItemEffect[] GetEffects()
         {
-            return itemData;
+            return data.itemEffects;
         }
 
         public GameObject GetItemPrefab()

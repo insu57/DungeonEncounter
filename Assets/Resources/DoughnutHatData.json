@@ -1,0 +1,10 @@
+{
+  "itemName": "도넛모자",
+  "description": "맛있는 도넛입니다.",
+  "type":  "모자",
+  "rarity": "Uncommon",
+  "defenseValue": 20,
+  "itemEffects":[],
+  "icon": "path",
+  "prefab": "path"
+}

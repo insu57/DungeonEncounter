@@ -1,0 +1,10 @@
+{
+  "itemName": "쿠키모자",
+  "description": "이건 쿠키입니다.",
+  "type":  "모자",
+  "rarity": "Common",
+  "defenseValue": 10,
+  "itemEffects":[],
+  "icon": "path",
+  "prefab": "path"
+}

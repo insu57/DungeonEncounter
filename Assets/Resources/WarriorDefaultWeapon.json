@@ -1,0 +1,12 @@
+{
+  "itemName": "오래된 칼",
+  "description": "이건 오래되었네요.",
+  "weaponType":  "Sword",
+  "attackType":  "Melee",
+  "rarity": "Common",
+  "attackValue": 20,
+  "itemEffects":[],
+  "icon": "Resources/WarriorDefaultWeaponIcon.png",
+  "isDefaultWeapon": true,
+  "prefab": "Resources/Prefabs/Item/WarriorDefaultWeapon.prefab"
+}

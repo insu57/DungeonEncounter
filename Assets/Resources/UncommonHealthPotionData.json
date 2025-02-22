@@ -1,0 +1,21 @@
+{
+  "itemName": "고급 체력 포션",
+  "description": "쓸만한 체력 포션입니다.",
+  "type":  "Potion",
+  "rarity": "Uncommon",
+  "itemEffects":[
+	{
+	  "effectStat": "Health",
+	"effectCalculate": "Plus",
+	"effectValue": 80,
+	"effectDescription": "즉시 체력을 80만큼 회복합니다.",
+	"effectDuration": 0,
+	"isTickBased": false,
+	"tickSecond": 0,
+	"effectType": "Instant",
+	"useOtherStat": false
+	}
+  ],
+  "icon": "path",
+  "prefab": "path"
+}

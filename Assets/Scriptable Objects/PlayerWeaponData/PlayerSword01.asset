@@ -12,13 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc3a0f9c5c8eabb469e521f3f16b18ec, type: 3}
   m_Name: PlayerSword01
   m_EditorClassIdentifier: 
-  weaponName: Very Normal Sword
-  description: Very normal sword.
-  weaponType: 0
-  attackType: 0
-  rarity: 0
-  attackValue: 30
-  itemEffects: []
+  jsonFile: {fileID: 4900000, guid: fa0846c311f5a4740a603e6361cbbab5, type: 3}
   icon: {fileID: 21300000, guid: 799011a6803676d4a9c5279d3971d821, type: 3}
-  isDefaultWeapon: 0
   prefab: {fileID: 3213851043470871558, guid: dcf19aef1c8a2e04c9dde8894033af61, type: 3}

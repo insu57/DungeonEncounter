@@ -1,0 +1,12 @@
+{
+  "itemName": "약간 녹슨 칼",
+  "description": "살짝 녹슬었지만 쓸만하네요.",
+  "weaponType":  "Sword",
+  "attackType":  "Melee",
+  "rarity": "Common",
+  "attackValue": 35,
+  "itemEffects":[],
+  "icon": "Resources/PlayerSword03Icon.png",
+  "isDefaultWeapon": false,
+  "prefab": "Resources/Prefabs/Item/PlayerSword03.prefab"
+}

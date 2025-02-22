@@ -12,11 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 858e68581f5a4b04cb0c95cd4aa70528, type: 3}
   m_Name: CookieHat
   m_EditorClassIdentifier: 
-  equipmentName: Cookie Hat
-  description: this is cookie
-  type: hat(temP)
-  rarity: 0
-  defenseValue: 10
-  itemEffect: []
+  jsonFile: {fileID: 4900000, guid: 5fb06805c3f3bfe49bb0094e5699ab65, type: 3}
   icon: {fileID: 21300000, guid: 44607b4e7c524e94fa32a37fa8ac5a30, type: 3}
   prefab: {fileID: 4688187244948865697, guid: 12b913e8b4c00544eac9315b732121ab, type: 3}

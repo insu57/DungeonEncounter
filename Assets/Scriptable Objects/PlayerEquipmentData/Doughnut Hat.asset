@@ -12,11 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 858e68581f5a4b04cb0c95cd4aa70528, type: 3}
   m_Name: Doughnut Hat
   m_EditorClassIdentifier: 
-  equipmentName: Doughnut Hat
-  description: this is doughnut
-  type: hat(temp)
-  rarity: 1
-  defenseValue: 20
-  itemEffect: []
+  jsonFile: {fileID: 4900000, guid: e1ce11189a62956429019d9df59e79ab, type: 3}
   icon: {fileID: 21300000, guid: 927c9f60f52557a44a834871318c547f, type: 3}
   prefab: {fileID: 1162732315936075981, guid: 3c9b093113bb39746b68bbb2979baf5e, type: 3}

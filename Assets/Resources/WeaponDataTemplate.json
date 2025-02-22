@@ -1,0 +1,25 @@
+{
+  "itemName": "string",
+  "description": "string",
+  "weaponType":  "",
+  "attackType":  "",
+  "rarity": "",
+  "attackValue": "",
+  "itemEffects":[
+	{
+	  "effectStat": "playerStatTypes",
+	"effectCalculate": "CalculateType",
+	"effectValue": "float",
+	"effectDescription": "string",
+	"effectDuration": "float",
+	"isTickBased": "bool",
+	"tickSecond": "float",
+	"effectType": "EffectType",
+	"useOtherStat": "bool"
+	}
+  ],
+  "icon": "path",
+  "isDefaultWeapon": "bool",
+  "
+  "prefab": "path"
+}

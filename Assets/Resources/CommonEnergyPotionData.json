@@ -1,0 +1,21 @@
+{
+  "itemName": "일반 에너지 포션",
+  "description": "평범한 에너지 포션입니다.",
+  "type":  "Potion",
+  "rarity": "Common",
+  "itemEffects":[
+	{
+	  "effectStat": "Energy",
+	"effectCalculate": "Plus",
+	"effectValue": 5,
+	"effectDescription": "1초당 추가적으로 에너지를  5만큼 회복한다.",
+	"effectDuration": 60,
+	"isTickBased": true,
+	"tickSecond": 1,
+	"effectType": "Temporary",
+	"useOtherStat": false
+	}
+  ],
+  "icon": "path",
+  "prefab": "path"
+}

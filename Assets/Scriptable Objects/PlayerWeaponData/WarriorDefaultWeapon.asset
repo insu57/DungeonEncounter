@@ -22,3 +22,4 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 9789720d01d7e6749b83f04f331f7052, type: 3}
   isDefaultWeapon: 1
   prefab: {fileID: 5710825388350084945, guid: b48dac54f99fb3346ac11d045b9a3c99, type: 3}
+  jsonFile: {fileID: 4900000, guid: 25d6637340c7a214186989ff0f5a1fb2, type: 3}

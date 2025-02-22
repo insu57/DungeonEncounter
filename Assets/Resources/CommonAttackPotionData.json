@@ -1,0 +1,21 @@
+{
+  "itemName": "일반 공격력 포션",
+  "description": "평범한 공격력 포션입니다.",
+  "type":  "Potion",
+  "rarity": "Common",
+  "itemEffects":[
+	{
+	  "effectStat": "AttackValue",
+	"effectCalculate": "Plus",
+	"effectValue": 10,
+	"effectDescription": "공격력을 60초동안 10만큼 올립니다.",
+	"effectDuration": 60,
+	"isTickBased": false,
+	"tickSecond": 0,
+	"effectType": "Temporary",
+	"useOtherStat": false
+	}
+  ],
+  "icon": "path",
+  "prefab": "path"
+}

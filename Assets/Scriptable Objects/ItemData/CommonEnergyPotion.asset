@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a73577cd75dd7d4f9f57b1fdb1d8a56, type: 3}
   m_Name: CommonEnergyPotion
   m_EditorClassIdentifier: 
+  jsonFile: {fileID: 4900000, guid: 7bb007f54e70e3049a6f848981f0263c, type: 3}
   itemName: Common Energy Potion
   description: "\uC77C\uBC18 \uC5D0\uB108\uC9C0 \uD3EC\uC158"
   type: 0

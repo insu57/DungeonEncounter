@@ -1,0 +1,22 @@
+{
+  "itemName": "핫도그모자",
+  "description": "뜨거운 핫도그입니다.",
+  "type":  "모자",
+  "rarity": "Rare",
+  "defenseValue": 30,
+  "itemEffects":[
+	{
+		"effectStat": "MaxHealth",
+		"effectCalculate": "Plus",
+		"effectValue": 50,
+		"effectDescription": "최대 체력을 50만큼 추가합니다.",
+		"effectDuration": 0,
+		"isTickBased": false,
+		"tickSecond": 0,
+		"effectType": "Permanent",
+		"useOtherStat": false
+	}
+  ],
+  "icon": "path",
+  "prefab": "path"
+}

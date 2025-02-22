@@ -1,0 +1,21 @@
+{
+  "itemName": "일반 체력 포션",
+  "description": "평범한 체력 포션입니다.",
+  "type":  "Potion",
+  "rarity": "Common",
+  "itemEffects":[
+	{
+	  "effectStat": "Health",
+	"effectCalculate": "Plus",
+	"effectValue": 50,
+	"effectDescription": "즉시 체력을 50만큼 회복합니다.",
+	"effectDuration": 0,
+	"isTickBased": false,
+	"tickSecond": 0,
+	"effectType": "Instant",
+	"useOtherStat": false
+	}
+  ],
+  "icon": "path",
+  "prefab": "path"
+}

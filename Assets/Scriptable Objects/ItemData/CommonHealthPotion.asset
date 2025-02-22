@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a73577cd75dd7d4f9f57b1fdb1d8a56, type: 3}
   m_Name: CommonHealthPotion
   m_EditorClassIdentifier: 
+  jsonFile: {fileID: 4900000, guid: 1dadd7bf6bba01e4e9897a95e2b9a2fe, type: 3}
   itemName: CommonHealthPotion
   description: common health potion
   type: 0
