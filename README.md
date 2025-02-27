@@ -12,6 +12,9 @@ Dungeon Encounter는 Unity 쿼터뷰 RPG 프로젝트입니다.
 더욱 깊은 곳으로 들어가는 게임입니다.
 
 ---
+플레이 영상: https://www.youtube.com/watch?v=e3s4yO5Pbis
+
+---
 
 ## 조작
 
